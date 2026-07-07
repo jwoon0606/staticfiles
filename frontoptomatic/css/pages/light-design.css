@@ -1,0 +1,1166 @@
+/* ============================================================================
+ * light-design.css — Optomatic "Light Design" 페이지 전용 스타일
+ *
+ * 대상 디자인 (Optomatic_NEW_260601):
+ *   · 260428_light_design_UI_01 (node 4880:500)
+ *     상단 nav 의 "Light Design" 를 눌렀을 때 진입하는 화면(Step 1).
+ *
+ * 구성:
+ *   1) 히어로 띠(node 6431:12185) — 다크 사진 배경 + 큰 제목 + 링 마크
+ *   2) 위저드(node 4880:529)
+ *      · 스텝 헤더(node 4880:530): BACK | 진행 점(1·2·3) + 단계 라벨 | NEXT
+ *      · 안내문(node 4880:562) + 선택 카드(node 4894:4691): Exterior / Interior
+ *
+ * 토큰 의존: variables.css 를 먼저 불러오세요.
+ * 공통 컴포넌트: nav.css(로그인 상태 바) · footer.css(푸터) 재사용.
+ *
+ * 정직 고지(실측값 vs 토큰):
+ *   · 본문 좌우 패딩은 Figma 실측 96px (nav 184px·footer 136px 와 다른 값).
+ *     light-find-one 과 동일 흐름이라 동일한 --ld-gutter(96px)로 둡니다.
+ *   · 히어로 제목 96px·tracking -1.92px, 링 마크 100px, 위저드 gap 40px 등은
+ *     --space-* · --font-* 스케일에 없는 실측값이라 그대로 적습니다.
+ *   · 색상 매핑: 선택 카드 보더 #1a1b1b = --color-black,
+ *     비활성(BACK·점·미선택 카드) #b6bbc5 = --color-neutral-300.
+ *   · BACK 이 회색(비활성)인 것은 첫 단계라 뒤로 갈 곳이 없는 상태 표현입니다.
+ *     2·3단계 화면은 이 디자인 세트에 없어 BACK/NEXT 는 정적(href="#")입니다.
+ *   · 카드 선택 상태(선택=검정 보더+검정 글자 / 미선택=무보더+회색 글자)는
+ *     js/light-design.js 가 라디오처럼 토글합니다. 초기값은 Exterior.
+ * ========================================================================== */
+
+/* 페이지 루트: 본문 좌우 패딩 토큰 + 배경 */
+.light-design {
+  --ld-gutter: 96px;                                   /* Figma 실측 본문 좌우 패딩 */
+  background-color: var(--color-neutral-50);           /* #fbfdff */
+}
+
+/* 섹션 콘텐츠를 1440px 안에 가두는 공통 래퍼 (nav__inner 와 동일 모델) */
+.ld-inner {
+  width: 100%;
+  max-width: var(--content-max);                       /* 1440px */
+  margin: 0 auto;
+}
+
+/* ----------------------------------------------------------------------------
+ * 1) 히어로 띠 — node 6431:12185
+ *    Figma: bg 사진(object-cover), padding 40px 96px, items-end · space-between.
+ *    배경 사진이 어두워 그 위에 흰 텍스트/링. 사진 로딩 전 폴백은 다크 단색.
+ * -------------------------------------------------------------------------- */
+.ld-hero {
+  width: 100%;
+  background-color: var(--color-neutral-900);          /* #1a1b1b (이미지 폴백) */
+  background-image: url("../../assets/light-design-hero.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: var(--color-text-on-dark);                    /* #fbfdff */
+}
+.ld-hero .ld-inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-lg);                                /* 24px */
+  padding: 40px var(--ld-gutter);                      /* 40px 96px */
+}
+.ld-hero__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: clamp(40px, 7vw, 96px);                   /* Figma 96px → 유동 축소 */
+  font-weight: var(--font-weight-light);               /* 300 */
+  line-height: 1;                                       /* Figma: leading none */
+  letter-spacing: -1.92px;                              /* 실측 (스케일 외 값) */
+  color: inherit;
+}
+.ld-hero__mark {
+  flex-shrink: 0;
+  width: clamp(42px, 7vw, 100px);                      /* Figma 100px → 제목과 함께 축소 */
+  height: clamp(42px, 7vw, 100px);
+}
+
+/* ----------------------------------------------------------------------------
+ * 2) 위저드 — node 4880:529
+ *    Figma: padding 40px 96px 96px, 세로 스택, 항목 간격 40px.
+ * -------------------------------------------------------------------------- */
+.ld-wizard .ld-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;                                            /* Figma: gap 40 (스케일 외 값) */
+  padding: 40px var(--ld-gutter) 96px;                 /* 40px 96px 96px */
+}
+
+/* ── 스텝 헤더 (node 4880:530) ─────────────────────────────────────────────
+ *    BACK | (진행 점 + 단계 라벨) | NEXT — 양끝 정렬, 위쪽 정렬. */
+.ld-steps {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-lg);                                /* 24px */
+}
+
+/* BACK · NEXT — 텍스트 + 셰브론 (24px SemiBold). 셰브론 박스 40px. */
+.ld-steps__nav {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);                                /* 8px */
+  /* <button> 으로 동작하므로 기본 버튼 박스(배경/테두리/패딩) 리셋 — 링크처럼 보이게 */
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-subtitle);                /* 24px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-subtitle);      /* 0.48px */
+  text-decoration: none;
+  white-space: nowrap;
+}
+.ld-steps__nav svg {
+  display: block;
+  width: 40px;                                          /* Figma size-40 */
+  height: 40px;
+}
+/* 기본(활성): 검정. 링크로 동작하며 hover/포커스 시 파랑. */
+.ld-steps__nav {
+  color: var(--color-black);                           /* #1a1b1b */
+}
+.ld-steps__nav:hover,
+.ld-steps__nav:focus-visible {
+  color: var(--color-primary);                         /* #4428ff */
+}
+/* BACK: 셰브론은 왼쪽을 향함(180° 회전). */
+.ld-steps__nav--back svg {
+  transform: rotate(180deg);
+}
+/* 비활성(회색): 첫 단계의 BACK 처럼 갈 곳이 없을 때. <span aria-disabled>로 둠. */
+.ld-steps__nav--disabled,
+.ld-steps__nav--disabled:hover,
+.ld-steps__nav--disabled:focus-visible {
+  color: var(--color-neutral-300);                     /* #b6bbc5 */
+  cursor: default;
+}
+
+/* 가운데: 진행 점 + 단계 라벨 (세로 스택, gap 24) */
+.ld-steps__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);                                /* 24px */
+}
+/* 진행 점 줄: 원·연결점·원·연결점·원, 모두 16px 간격 */
+.ld-steps__progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);                                /* 16px */
+  margin: 0;
+  padding: 0;
+  list-style: none;                                    /* <ol> 기본 번호 마커 제거 */
+}
+/* 단계 원 — 40px, 보더 2px, 숫자 가운데(24px SemiBold) */
+.ld-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-subtitle);                /* 24px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1;
+}
+.ld-step--active {
+  color: var(--color-primary);                         /* #4428ff */
+}
+.ld-step--done {
+  color: var(--color-black);                           /* #1a1b1b — 완료한 단계 */
+}
+.ld-step--todo {
+  color: var(--color-neutral-300);                     /* #b6bbc5 */
+}
+/* 연결점 — 4px 회색 점 (원 사이 2개씩). 완료 구간은 검정(--done). */
+.ld-step-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--color-neutral-300);          /* #b6bbc5 */
+}
+.ld-step-dot--done {
+  background-color: var(--color-black);                /* #1a1b1b */
+}
+/* 단계 라벨 — "Step 1: …" 24px SemiBold #1a1b1b */
+.ld-steps__label {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-subtitle);                /* 24px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-subtitle);      /* 0.48px */
+  color: var(--color-black);                           /* #1a1b1b */
+  text-align: center;
+}
+
+/* ── 안내문 (node 4880:562) — 20px SemiBold, 가운데 ──────────────────────── */
+.ld-prompt {
+  margin: 0;
+  width: 100%;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body-lg);                 /* 20px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1;
+  letter-spacing: 0.4px;                                /* 실측 */
+  color: var(--color-black);                           /* #1a1b1b */
+  text-align: center;
+}
+
+/* ── 선택 카드 (node 4894:4691) ───────────────────────────────────────────
+ *    Exterior / Interior 두 장을 가로로 가운데 정렬, 간격 40px. */
+.ld-options {
+  display: flex;
+  align-items: stretch;                                /* 두 카드 높이 맞춤 */
+  justify-content: center;
+  gap: 40px;                                            /* Figma: gap 40 */
+  width: 100%;
+}
+/* 카드 — 400px 고정폭, padding 40px 32px, 세로 스택 gap 16, 가운데 정렬.
+ * <button> 기본 스타일 초기화. 선택/미선택 모두 같은 박스 크기를 유지하기 위해
+ * 미선택도 2px 투명 보더를 둡니다(선택 시 검정으로 바뀜). */
+.ld-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);                                /* 16px */
+  width: 400px;
+  padding: 40px var(--space-xl);                       /* 40px 32px */
+  border: 2px solid transparent;                       /* 미선택: 무보더(자리만 차지) */
+  background: transparent;
+  text-align: center;
+  cursor: pointer;
+  font-family: var(--font-latin);
+}
+.ld-card--selected {
+  border-color: var(--color-black);                    /* #1a1b1b */
+}
+.ld-card:focus-visible {
+  outline: 2px solid var(--color-primary);             /* #4428ff */
+  outline-offset: 2px;
+}
+/* 카드 제목 — 24px SemiBold, leading none. 미선택은 회색. */
+.ld-card__title {
+  font-size: var(--font-size-subtitle);                /* 24px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-subtitle);      /* 0.48px */
+  color: var(--color-neutral-300);                     /* 미선택 기본: #b6bbc5 */
+}
+/* 카드 설명 — 16px Regular, leading 1.2, 가운데. 미선택은 회색. */
+.ld-card__desc {
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-neutral-300);                     /* 미선택 기본: #b6bbc5 */
+}
+/* 선택 카드: 글자색 검정 */
+.ld-card--selected .ld-card__title,
+.ld-card--selected .ld-card__desc {
+  color: var(--color-black);                           /* #1a1b1b */
+}
+/* hover(미선택일 때만): 글자색을 살짝 진하게 — 선택 가능함을 시사 */
+.ld-card:not(.ld-card--selected):hover .ld-card__title,
+.ld-card:not(.ld-card--selected):hover .ld-card__desc {
+  color: var(--color-neutral-400);                     /* #85888e */
+}
+
+/* ============================================================================
+ * STEP 2 (node 4880:584) — Further Information
+ *   안내문 + 점선 드롭존 + 입력 필드(불릿 템플릿). 셋을 gap 24 로 묶음.
+ *   (Step 1 의 카드와 같은 위저드 안에 있지만, 이 묶음은 자체 gap 24 입니다.)
+ * ========================================================================== */
+
+/* 스크린리더 전용(시각적 숨김) — 파일 입력 라벨 접근성용 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 안내문 + 드롭존 + 필드 묶음 (node 4894:5089, gap 24) */
+.ld-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-lg);                                /* 24px */
+  width: 100%;
+}
+
+/* 점선 드롭존 (node 5091:1131) — 보더 2px dashed #5b5d62, radius 6px, padding 24 16 */
+.ld-drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--space-lg) var(--space-md);            /* 24px 16px */
+  border: 2px dashed var(--color-neutral-500);         /* #5b5d62 */
+  border-radius: 6px;                                  /* 실측 (radius 토큰 없음) */
+  background: transparent;
+}
+/* 드래그 진입 시 강조 (js/light-design.js 가 .is-dragover 토글) */
+.ld-drop.is-dragover {
+  border-color: var(--color-primary);                  /* #4428ff */
+  background-color: var(--color-neutral-100);          /* #ebeff9 */
+}
+.ld-drop__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);                                /* 8px */
+  text-align: center;
+}
+.ld-drop__icon {
+  display: block;
+  width: 48px;                                          /* Figma size-48 */
+  height: 48px;
+  color: var(--color-black);                           /* #1a1b1b */
+}
+/* 안내 문구 — 16px SemiBold, 여러 줄 (NDA 안내 포함) */
+.ld-drop__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-black);                           /* #1a1b1b */
+}
+.ld-drop__hint {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-caption);                 /* 14px */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-caption);       /* 0.28px */
+  color: var(--color-neutral-400);                     /* #85888e */
+}
+/* 선택된 파일명 (js 가 채움; 비어 있으면 숨김) */
+.ld-drop__file {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-caption);                 /* 14px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-primary);                         /* #4428ff */
+}
+.ld-drop__file:empty {
+  display: none;
+}
+
+/* BROWSE FILE (node 5091:1138) — 파란 버튼(라벨), padding 8 16, 16px SemiBold tracking 0.64 */
+.ld-browse {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) var(--space-md);            /* 8px 16px */
+  background-color: var(--color-primary);              /* #4428ff */
+  color: var(--color-text-on-dark);                    /* #fbfdff */
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1;
+  letter-spacing: 0.64px;                               /* 실측 */
+  white-space: nowrap;
+  cursor: pointer;
+}
+.ld-browse:hover,
+.ld-browse:focus-within,
+.ld-browse:focus-visible {
+  background-color: var(--color-black);                /* #1a1b1b */
+  outline: none;
+}
+
+/* 입력 필드 (node 6431:12406) — bg #ebeff9, padding 8 16, 풀폭.
+ * 내용은 사용자가 채울 항목을 안내하는 불릿 템플릿(회색 #85888e). */
+.ld-field {
+  width: 100%;
+}
+.ld-field__box {
+  width: 100%;
+  padding: var(--space-xs) var(--space-md);            /* 8px 16px */
+  background-color: var(--color-neutral-100);          /* #ebeff9 */
+}
+/* 추가 정보 입력 — Figma(node 126:7933)와 동일한 불릿 템플릿.
+ * disc 마커·회색 #85888e·semibold·line-height 1.2 를 그대로 쓰되 contenteditable 로 편집 가능.
+ * 파일 업로드 상태와 무관하게 항상 보이고 편집 가능(독립적). */
+.ld-field__list {
+  margin: 0;
+  padding-left: var(--space-lg);                       /* 디스크 마커 자리 (24px) */
+  list-style: disc;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-neutral-400);                     /* #85888e */
+}
+.ld-field__list li {
+  margin-bottom: 2px;                                  /* Figma mb-[2px] */
+}
+.ld-field__list li:last-child {
+  margin-bottom: 0;
+}
+/* 편집(contenteditable) — 클릭/포커스 시 파란 외곽선 없이 텍스트 커서(캐럿)만 깜빡인다. */
+.ld-field__list[contenteditable],
+.ld-field__list[contenteditable]:focus,
+.ld-field__list[contenteditable]:focus-visible {
+  outline: none;
+}
+/* 라벨은 편집 영역 안의 고정(편집 불가) 조각 — 회색 semibold 상속, 끝 공백 유지 */
+.ld-field__label {
+  white-space: pre;
+}
+
+/* ── 업로드된 파일 목록 (node 5091:1331) — 드롭존 안, BROWSE FILE 아래 ────────
+ *    업로드 완료 시 js/light-design.js 가 행을 채운다. 비어 있으면 숨김. */
+.ld-filelist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                                /* 8px */
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ld-filelist[hidden] {
+  display: none;
+}
+/* 파일 행 (node 5091:1332) — h32, padding 4 8, 양끝 정렬. hover 시 #ebeff9 강조 */
+.ld-fileitem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);                                /* 8px */
+  width: 100%;
+  height: 32px;
+  padding: var(--space-2xs) var(--space-xs);           /* 4px 8px */
+}
+.ld-fileitem:hover {
+  background-color: var(--color-neutral-100);          /* #ebeff9 */
+}
+.ld-fileitem__main {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                                /* 8px */
+  min-width: 0;                                         /* 긴 파일명 말줄임 허용 */
+}
+.ld-fileitem__icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  color: var(--color-black);                           /* #1a1b1b */
+}
+.ld-fileitem__name {
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-medium);              /* 500 (Figma Medium) */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-black);                           /* #1a1b1b */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ld-fileitem__remove {
+  flex-shrink: 0;
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-black);                           /* #1a1b1b */
+  cursor: pointer;
+}
+.ld-fileitem__remove svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+.ld-fileitem__remove:hover,
+.ld-fileitem__remove:focus-visible {
+  color: var(--color-primary);                         /* #4428ff */
+  outline: none;
+}
+
+/* ============================================================================
+ * 업로드 진행 모달 (node 7126:19050) — 파일 선택 시 표시
+ *   딤 오버레이(rgba(26,27,27,0.7)) + 가운데 다이얼로그(제목 + 진행 바 + 닫기).
+ *   동작은 js/light-design.js (파일 선택 시 열고 진행률 갱신).
+ *
+ *   정직 고지: Figma 는 1440×1355 프레임 안에서 모달을 absolute(top 계산)로
+ *   배치했지만, 실제로는 스크롤과 무관하게 보이도록 viewport 중앙 고정
+ *   (position: fixed + 중앙 정렬)으로 둡니다. 표준 모달 동작입니다.
+ * ========================================================================== */
+.ld-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;                                       /* nav(z 20) 위로 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);                            /* 16px (작은 화면 여백) */
+  background-color: rgba(26, 27, 27, 0.7);             /* #1a1b1b 70% */
+}
+/* hidden 속성으로 닫힘 표현 (display:flex 가 기본 hidden 을 덮으므로 명시) */
+.ld-modal-overlay[hidden] {
+  display: none;
+}
+
+/* 다이얼로그 (node 7126:19050) — 흰 박스, padding 16, 닫기 우상단 정렬 */
+.ld-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;                               /* 닫기(X) 오른쪽 */
+  gap: var(--space-md);                                /* 16px */
+  padding: var(--space-md);                            /* 16px */
+  background-color: var(--color-neutral-50);           /* #fbfdff */
+  overflow: clip;
+}
+/* 닫기(X) — 24px Material close */
+.ld-modal__close {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--color-black);                           /* #1a1b1b */
+  cursor: pointer;
+}
+.ld-modal__close svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+.ld-modal__close:hover,
+.ld-modal__close:focus-visible {
+  color: var(--color-primary);                         /* #4428ff */
+  outline: none;
+}
+
+/* 본문 (node 7126:19054) — 제목 + 진행 바, padding 40 80 80, gap 32 가운데 */
+.ld-modal__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xl);                                /* 32px */
+  padding: 40px 80px 80px;                             /* Figma 실측 (스케일 외) */
+}
+.ld-modal__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-subtitle);                /* 24px (node 7126:16125) */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-subtitle);      /* 0.48px */
+  color: var(--color-black);                           /* #1a1b1b */
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* 진행 바 (node 7126:19056) — 트랙 320×16 #d6dbe4, 채움 초록, 그 옆 % 텍스트 */
+.ld-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                                /* 8px */
+}
+.ld-progress__track {
+  width: 320px;                                         /* Figma 실측 */
+  height: 16px;
+  background-color: var(--color-neutral-200);          /* #d6dbe4 */
+  overflow: hidden;
+}
+.ld-progress__fill {
+  height: 16px;
+  width: 80%;                                           /* 기본값(디자인 스냅샷); js 가 갱신 */
+  background-color: var(--color-success);              /* #5ec841 */
+}
+.ld-progress__pct {
+  margin: 0;
+  /* 폭 고정: "0%"~"100%" 로 글자 수가 바뀌어도 진행 바 줄(=모달) 폭이
+   * 변하지 않도록 "100%" 가 들어갈 자리를 미리 확보한다. (요구사항 1) */
+  width: 3em;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-black);                           /* #1a1b1b */
+  white-space: nowrap;
+}
+
+/* ============================================================================
+ * 로그인 요청 모달 (node 7126:19235) — Step 3 의 DONE 을 로그아웃 상태에서
+ *   눌렀을 때 표시. 딤 오버레이(.ld-modal-overlay)·닫기(.ld-modal__close)는
+ *   업로드 모달과 공유하고, 다이얼로그 본문만 별도로 둔다.
+ * ========================================================================== */
+.ld-signin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);                                /* 8px */
+  width: 584px;                                         /* Figma 실측 */
+  max-width: 100%;
+  padding: var(--space-md);                            /* 16px */
+  background-color: var(--color-neutral-50);           /* #fbfdff */
+  overflow: clip;
+}
+/* 닫기(X) 행 — 우상단 정렬 */
+.ld-signin__close-row {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+/* 본문 — 안내문 + 버튼, padding 40, gap 24, 가운데 */
+.ld-signin__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);                                /* 24px */
+  width: 100%;
+  padding: 40px;                                        /* Figma 실측 (스케일 외) */
+}
+.ld-signin__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-subtitle);                /* 24px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-subtitle);      /* 0.48px */
+  color: var(--color-black);                           /* #1a1b1b */
+  text-align: center;
+}
+/* SIGN IN NOW — 아웃라인 버튼(1px 검정 보더 + 검정 글자), px16 py8 */
+.ld-signin__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) var(--space-md);            /* 8px 16px */
+  border: 1px solid var(--color-black);                /* #1a1b1b */
+  background: none;
+  color: var(--color-black);                           /* #1a1b1b */
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-medium);              /* 500 */
+  line-height: 1;
+  letter-spacing: 0.64px;                               /* 실측 */
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+}
+.ld-signin__btn:hover,
+.ld-signin__btn:focus-visible {
+  background-color: var(--color-black);                /* #1a1b1b */
+  color: var(--color-text-on-dark);                    /* #fbfdff */
+  outline: none;
+}
+
+/* ============================================================================
+ * STEP 3 (node 5956:8387) — Service Options: 서비스 티어 카드
+ *   Basic / Standard / Premium 3장. Standard 가 기본 선택(검정 보더 + 검정
+ *   글자/체크). 헤더 배경색은 티어 고유색(회색/보라/검정)으로 고정이며,
+ *   선택 표시는 "카드 보더 + 글자·체크 색(회색→검정)" 으로 한다.
+ *   선택 전환은 js/light-design.js 가 라디오처럼 처리.
+ * ========================================================================== */
+.ld-tiers {
+  display: flex;
+  align-items: stretch;                                /* 카드 높이 맞춤 */
+  gap: var(--space-lg);                                /* 24px */
+  width: 100%;
+}
+/* 카드 — flex-1 균등 분배, 세로 스택 gap 16, padding 16. <button> 초기화.
+ * 미선택도 1px 투명 보더로 두어 선택(검정 보더) 시 크기 변화 없게. */
+.ld-tier {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-md);                                /* 16px */
+  padding: var(--space-md);                            /* 16px */
+  border: 1px solid transparent;
+  background: none;
+  text-align: left;
+  font-family: var(--font-latin);
+  cursor: pointer;
+}
+.ld-tier--selected {
+  border-color: var(--color-black);                    /* #1a1b1b */
+}
+.ld-tier:focus-visible {
+  outline: 2px solid var(--color-primary);             /* #4428ff */
+  outline-offset: 2px;
+}
+/* 선택 불가 카드 — 흐리게 + 클릭 불가 커서 */
+.ld-tier[disabled],
+.ld-tier[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+/* 헤더 — 티어명 32px Regular 흰색, 가운데. 배경은 티어 고유색(고정). */
+.ld-tier__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--space-md);                            /* 16px */
+}
+.ld-tier__name {
+  font-size: var(--font-size-h3);                      /* 32px */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1;
+  color: var(--color-text-on-dark);                    /* #fbfdff */
+  white-space: nowrap;
+}
+.ld-tier--basic .ld-tier__header {
+  background-color: var(--color-neutral-400);          /* #85888e */
+}
+.ld-tier--standard .ld-tier__header {
+  background-color: var(--color-primary);              /* #4428ff */
+}
+.ld-tier--premium .ld-tier__header {
+  background-color: var(--color-black);                /* #1a1b1b */
+}
+/* 기능 목록 — gap 8. 행: 체크 + 라벨. 미선택 회색, 선택 카드 검정. */
+.ld-tier__list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xs);                                /* 8px */
+  width: 100%;
+}
+.ld-tier__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                                /* 8px */
+  color: var(--color-neutral-400);                     /* #85888e (미선택 기본) */
+}
+.ld-tier--selected .ld-tier__item {
+  color: var(--color-black);                           /* #1a1b1b */
+}
+.ld-tier__check {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;                                         /* fill=currentColor → 글자색 따라감 */
+}
+.ld-tier__label {
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-medium);              /* 500 */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: inherit;
+  white-space: nowrap;
+}
+
+/* ============================================================================
+ * 완료/확인 페이지 (node 4894:4605, UI_08) — 로그인 상태에서 DONE 후 표시
+ *   감사 인사 + 요청 메타(이름/번호/일자) + Step 1·2·3 요약 + "더 써보기" 섹션.
+ *   light-design-complete.html 가 이 클래스들을 사용. nav·히어로·푸터는 공유.
+ * ========================================================================== */
+.ld-done .ld-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;                                            /* Figma gap 40 */
+  padding: 40px var(--ld-gutter) 96px;                 /* 40 96 96 */
+}
+
+/* 감사 인사 (node 4894:4637) — 가운데, SemiBold */
+.ld-thanks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);                                /* 16px */
+  width: 100%;
+  text-align: center;
+  color: var(--color-black);
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+}
+.ld-thanks__title {
+  margin: 0;
+  font-size: var(--font-size-subtitle);                /* 24px */
+  letter-spacing: var(--letter-spacing-subtitle);      /* 0.48px */
+}
+.ld-thanks__sub {
+  margin: 0;
+  font-size: 18px;                                      /* Figma 실측 (스케일 외) */
+  letter-spacing: 0.36px;                               /* 실측 */
+}
+
+/* 요청 메타 (node 6431:13972) — 라벨(w136 SemiBold) + 값(Regular) */
+.ld-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                                /* 8px */
+  width: 100%;
+  color: var(--color-black);
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+}
+.ld-meta__row {
+  display: flex;
+  gap: var(--space-md);                                /* 16px */
+  align-items: flex-start;
+  width: 100%;
+}
+.ld-meta__label {
+  flex-shrink: 0;
+  width: 136px;                                         /* Figma 실측 */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+}
+.ld-meta__value {
+  flex: 1 1 0;
+  min-width: 0;
+  font-weight: var(--font-weight-regular);             /* 400 */
+}
+
+/* 단계 요약 (node 4894:4644 / 4656 / 4648) — 라벨 20px SemiBold + 내용 */
+.ld-recap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-md);                                /* 16px */
+  width: 100%;
+}
+.ld-recap__label {
+  margin: 0;
+  width: 100%;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body-lg);                 /* 20px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1;
+  letter-spacing: 0.4px;                                /* 실측 */
+  color: var(--color-black);
+}
+/* Step 1 — 선택값 보더 박스 */
+.ld-recap__box {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--space-xs) var(--space-sm);            /* 8px 12px */
+  border: 1px solid var(--color-black);                /* #1a1b1b */
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-black);
+}
+/* Step 2 — 업로드 파일 요약(아이콘 + 이름 + 다운로드) + 설명 */
+.ld-recap__files {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                                /* 8px */
+  width: 100%;
+}
+.ld-recap__file {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                                /* 8px */
+}
+.ld-recap__file-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  color: var(--color-black);
+}
+.ld-recap__file-name {
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-medium);              /* 500 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-black);
+  white-space: nowrap;
+}
+.ld-recap__download {
+  flex-shrink: 0;
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-black);
+  cursor: pointer;
+}
+.ld-recap__download:hover,
+.ld-recap__download:focus-visible {
+  color: var(--color-primary);                         /* #4428ff */
+  outline: none;
+}
+.ld-recap__desc {
+  margin: 0;
+  width: 100%;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-black);
+}
+/* 사용자가 작성한 추가 정보(읽기전용) — 줄바꿈/들여쓰기 보존 (#ebeff9 박스) */
+.ld-recap__remarks {
+  margin: 0;
+  width: 100%;
+  padding: var(--space-xs) var(--space-md);            /* 8px 16px */
+  background-color: var(--color-neutral-100);          /* #ebeff9 */
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.6;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-black);                           /* #1a1b1b */
+  white-space: pre-wrap;                               /* 줄바꿈 보존 + 자동 줄바꿈 */
+  word-break: break-word;
+}
+/* Step 3 — 선택 티어 요약(헤더 바 + 체크 항목들) */
+.ld-recap__tier {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                                /* 8px */
+  width: 100%;
+}
+.ld-recap__tier-head {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--space-xs) var(--space-sm);            /* 8px 12px */
+  background-color: var(--color-primary);              /* #4428ff */
+  border: 1px solid var(--color-neutral-400);          /* #85888e */
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-medium);              /* 500 */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-text-on-dark);                    /* #fbfdff */
+}
+/* 티어별 헤더 배경색 — Step 3 카드와 동일하게 맞춤 */
+.ld-recap__tier--basic .ld-recap__tier-head {
+  background-color: var(--color-neutral-400);          /* #85888e */
+}
+.ld-recap__tier--standard .ld-recap__tier-head {
+  background-color: var(--color-primary);              /* #4428ff */
+}
+.ld-recap__tier--premium .ld-recap__tier-head {
+  background-color: var(--color-black);                /* #1a1b1b */
+}
+.ld-recap__feature {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                                /* 8px */
+  color: var(--color-black);                           /* 체크·라벨 검정 */
+}
+.ld-recap__check {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;                                         /* fill=currentColor */
+}
+.ld-recap__feature-label {
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-medium);              /* 500 */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: inherit;
+  white-space: nowrap;
+}
+
+/* "더 써보기" 섹션 (node 6431:14003) — 연한 배경 + Light Find 카드 2장 */
+.ld-more {
+  width: 100%;
+  background-color: var(--color-neutral-100);          /* #ebeff9 */
+}
+.ld-more .ld-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;                                            /* Figma gap 40 */
+  padding: 40px var(--ld-gutter) 96px;                 /* 40 96 96 */
+}
+.ld-more__intro {
+  margin: 0;
+  width: 100%;
+  font-family: var(--font-latin);
+  font-size: 18px;                                      /* Figma 실측 (스케일 외) */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.2;
+  letter-spacing: 0.36px;                               /* 실측 */
+  color: var(--color-black);
+  text-align: center;
+}
+.ld-more__cards {
+  display: flex;
+  gap: var(--space-xl);                                /* 32px */
+  justify-content: center;
+  width: 100%;
+}
+.ld-more__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);                                /* 32px */
+  width: 400px;                                         /* Figma 실측 */
+  padding: var(--space-xl);                            /* 32px */
+}
+.ld-more__ring {
+  flex-shrink: 0;
+  width: 201px;                                         /* Figma 실측(200.986) */
+  height: 201px;
+}
+.ld-more__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);                                /* 16px */
+  text-align: center;
+  color: var(--color-black);
+}
+.ld-more__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-h3);                      /* 32px */
+  font-weight: var(--font-weight-medium);              /* 500 */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-h3);            /* 0.64px */
+}
+.ld-more__desc {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+}
+/* Try It Now — 아웃라인 버튼(1px 검정), 20px Medium tracking 0.8 */
+.ld-more__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) var(--space-md);            /* 8px 16px */
+  border: 1px solid var(--color-black);                /* #1a1b1b */
+  background: none;
+  color: var(--color-black);
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body-lg);                 /* 20px */
+  font-weight: var(--font-weight-medium);              /* 500 */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-body-lg);       /* 0.8px */
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+}
+.ld-more__btn:hover,
+.ld-more__btn:focus-visible {
+  background-color: var(--color-black);                /* #1a1b1b */
+  color: var(--color-text-on-dark);                    /* #fbfdff */
+  outline: none;
+}
+
+/* ----------------------------------------------------------------------------
+ * 모바일 레이아웃 — 1024px 미만 (layout.css 와 동일 기준)
+ *   정직 고지: 이 페이지의 모바일 전용 Figma 디자인은 세트에 없습니다.
+ *   layout.css 모바일 전환 가이드(좌우 여백 16px, 가로→세로, 간격 축소)를
+ *   따른 합리적 기본값입니다.
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .light-design {
+    --ld-gutter: var(--page-gutter-mobile);            /* 16px */
+  }
+
+  .ld-hero .ld-inner {
+    padding: var(--space-xl) var(--ld-gutter);         /* 32px 16px */
+  }
+
+  .ld-wizard .ld-inner {
+    gap: var(--space-xl);                              /* 32px */
+    padding: var(--space-xl) var(--ld-gutter) var(--space-3xl); /* 32 16 80 */
+  }
+
+  /* 스텝 헤더: BACK/NEXT 를 양옆, 가운데 묶음은 아래로 — 세로 2줄 배치 */
+  .ld-steps {
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .ld-steps__center {
+    order: 3;
+    flex-basis: 100%;                                  /* 다음 줄 전체 폭 */
+    margin-top: var(--space-md);                       /* 16px */
+  }
+  .ld-steps__nav {
+    font-size: var(--font-size-body-lg);               /* 24 → 20 */
+  }
+  .ld-steps__nav svg {
+    width: 32px;
+    height: 32px;
+  }
+  .ld-steps__label {
+    font-size: var(--font-size-body-lg);               /* 24 → 20 */
+  }
+
+  .ld-prompt {
+    font-size: var(--font-size-body);                  /* 20 → 16 */
+  }
+
+  /* 카드: 가로 → 세로 스택, 폭은 화면에 맞춤 */
+  .ld-options {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-lg);                              /* 24px */
+  }
+  .ld-card {
+    width: 100%;
+  }
+
+  /* 업로드 모달: 좁은 화면에서 본문 패딩·진행 바 폭 축소
+   * (제목은 데스크톱부터 24px 라 별도 축소 없음) */
+  .ld-modal__body {
+    padding: var(--space-lg) var(--space-lg) var(--space-xl); /* 24 24 32 */
+  }
+  .ld-progress__track {
+    width: min(240px, 60vw);
+  }
+
+  /* 서비스 티어: 가로 3열 → 세로 스택 */
+  .ld-tiers {
+    flex-direction: column;
+  }
+
+  /* 완료 페이지 "더 써보기" 카드: 가로 2열 → 세로 스택 */
+  .ld-more__cards {
+    flex-direction: column;
+    align-items: center;
+  }
+  .ld-more__card {
+    width: 100%;
+    max-width: 400px;
+  }
+}

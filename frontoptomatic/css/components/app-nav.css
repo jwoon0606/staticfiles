@@ -1,0 +1,150 @@
+/* ============================================================================
+ * app-nav.css — 제품(앱) 상단바
+ * Figma: Nav bar_desktop (node 6050:13641)
+ *
+ * 마케팅 사이트 nav(nav.css)와는 별개인 "로그인 후 앱" 네비게이션입니다.
+ *   · 왼쪽:  로고 | Light Find(현재 페이지=파란 알약) · Light Design
+ *   · 오른쪽: EN 박스 | 알림(notifications) | 계정(account_circle)
+ *   · SIGN IN / 햄버거 없음.
+ *
+ * 토큰 의존: variables.css (색·폰트·--content-max)
+ *
+ * 반응형 주의(정직 고지):
+ *   이 노드는 데스크톱(1440) 디자인만 제공되었습니다. 1024px 미만 규칙은
+ *   layout.css 의 공통 가이드(여백 축소·간격 축소)를 따른 "적응(adaptation)"
+ *   이며, 별도의 모바일 디자인에서 추출한 값이 아닙니다.
+ * ========================================================================== */
+
+.app-nav {
+  width: 100%;
+  background: var(--color-neutral-50);            /* #fbfdff */
+  border-bottom: 1px solid var(--color-black);    /* #1a1b1b */
+}
+
+.app-nav__inner {
+  max-width: var(--content-max);                  /* 1440px */
+  margin: 0 auto;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 184px;                             /* Figma: py8 / px184 */
+}
+
+/* 왼쪽 묶음: 로고 + 탭 2개 (gap 64) -------------------------------------- */
+.app-nav__left {
+  display: flex;
+  align-items: center;
+  gap: 64px;
+}
+.app-nav__logo {
+  display: flex;
+  flex-shrink: 0;
+}
+.app-nav__logo img {
+  width: 162px;
+  height: 36px;
+}
+
+/* 탭: 단일 행 UI 텍스트 (20px / semibold / tracking 0.4px) */
+.app-nav__tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);       /* 600 */
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: 0.4px;
+  color: var(--color-black);                       /* #1a1b1b */
+  text-decoration: none;
+  white-space: nowrap;
+}
+/* 현재 페이지 탭: 파란 배경 알약 */
+.app-nav__tab--active {
+  background: var(--color-primary);               /* #4428ff */
+  color: var(--color-neutral-50);                 /* #fbfdff */
+}
+
+/* 오른쪽 묶음: EN · 알림 · 계정 (gap 32) -------------------------------- */
+.app-nav__right {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+/* EN 언어 박스 (테두리 + 회색 텍스트) */
+.app-nav__lang {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 8px;
+  border: 1px solid var(--color-neutral-500);     /* #5b5d62 */
+  background: none;
+  color: var(--color-neutral-500);
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+}
+
+/* 아이콘 버튼 (알림 / 계정) — 40×40, currentColor 로 색 제어 */
+.app-nav__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-neutral-500);                /* #5b5d62 */
+  cursor: pointer;
+}
+.app-nav__icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+/* 로그아웃 상태 전용 SIGN IN 링크 (auth.js 가 표시 제어). nav__signin 과 동일 스타일 */
+.app-nav__signin {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: 0.4px;
+  color: var(--color-neutral-500);                /* #5b5d62 */
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+}
+.app-nav__signin:hover,
+.app-nav__signin:focus-visible {
+  color: var(--color-black);                      /* #1a1b1b */
+}
+
+/* ----------------------------------------------------------------------------
+ * 모바일 (<1024px) — 적응 규칙 (위 정직 고지 참고)
+ *   여백 184→16, 간격 축소. 매우 좁은 화면에서는 보조 탭을 숨겨 가로 넘침 방지.
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .app-nav__inner {
+    padding: 8px 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .app-nav__left  { gap: 16px; }
+  .app-nav__right { gap: 16px; }
+  .app-nav__tab   { padding: 6px 10px; font-size: 16px; }
+  .app-nav__lang  { font-size: 16px; }
+}
+
+@media (max-width: 559.98px) {
+  /* 좁은 화면: 보조 탭(Light Design) 숨김 */
+  .app-nav__tab--secondary { display: none; }
+}

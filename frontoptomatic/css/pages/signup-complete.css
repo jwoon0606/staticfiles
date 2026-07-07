@@ -1,0 +1,207 @@
+/* ============================================================================
+ * signup-complete.css — 회원가입 완료 페이지 (Sign up complete)
+ * Figma: Optomatic_NEW_260601 / 260429_sign_in_UI_04 (node 5219:3584)
+ *
+ * 토큰 의존: variables.css → reset → typography → layout
+ *           → nav → footer 다음에 마지막으로 불러오세요.
+ *
+ * 구성:
+ *   1) su-done-hero      — "Welcome aboard" 배경 사진 + 큰 제목 (login/signup 과 동일 이미지)
+ *   2) su-done-success   — "Successfully signed up!" + 안내문 + 아웃라인 버튼
+ *   3) su-done-meanwhile — #ebeff9 밴드: 안내 문구 + 사진 5장 가로 갤러리
+ *
+ * 정직 고지(디자인 실측과 다른 점):
+ *   · 좌우 여백은 Figma 실측 96px (전용 변수 --done-gutter).
+ *   · 제목 "Welcome aboard" 96px / -1.92px (login/signup hero 와 동일 실측).
+ *   · 본문 40px·24px 는 --font-size 스케일과 달라 실측값을 직접 적습니다.
+ *   · 버튼 letter-spacing 0.64px 는 스케일 외 실측값.
+ *   · 갤러리 5장: Figma 는 각 사진을 mask 로 잘라 배치(셀 236.8×296px, gap 16).
+ *     동일 효과를 위해 셀마다 flex:1 + height 296px + object-fit:cover 로 구현했습니다.
+ *     (마스크 오프셋까지 픽셀 단위로 재현하지 않고 cover 중앙 정렬로 근사 — 고지)
+ *   · 사진은 Figma 에서 받은 원본 이미지를 그대로 사용(직접 그리지 않음).
+ * ========================================================================== */
+
+.su-done {
+  --done-gutter: 96px;          /* 페이지 좌우 여백 (Figma 실측) */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background-color: var(--color-neutral-50);   /* #fbfdff */
+}
+
+/* ----------------------------------------------------------------------------
+ * 1) HERO — "Welcome aboard" (배경 사진 위 큰 제목)
+ *    Figma node 6469:21520 — px 96 / py 40, 배경 Frame116(이미 어둡게 합성됨)
+ * -------------------------------------------------------------------------- */
+.su-done-hero {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: var(--content-max);               /* 1440px */
+  padding: 40px var(--done-gutter);            /* 상하 40 / 좌우 96 */
+  overflow: hidden;
+  background-color: var(--color-neutral-900);  /* 이미지 로드 전 폴백 */
+  color: var(--color-text-on-dark);            /* #fbfdff */
+}
+.su-done-hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.su-done-hero__title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-light);       /* 300 */
+  font-size: 96px;                             /* Figma 실측 */
+  line-height: 1;
+  letter-spacing: -1.92px;                     /* Figma 실측 */
+}
+
+/* ----------------------------------------------------------------------------
+ * 2) SUCCESS — 완료 메시지 + 버튼
+ *    Figma node 5219:3606 — pt 84 pb 96 px 96, gap 40, items-center
+ * -------------------------------------------------------------------------- */
+.su-done-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;                                   /* Figma 실측 */
+  width: 100%;
+  max-width: var(--content-max);
+  padding: 84px var(--done-gutter) 96px;       /* 상 84 / 좌우 96 / 하 96 */
+  background-color: var(--color-neutral-50);   /* #fbfdff */
+  text-align: center;
+}
+.su-done-success__title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);     /* 400 */
+  font-size: 40px;                             /* Figma 실측 */
+  line-height: 1.2;
+  color: var(--color-black);                   /* #1a1b1b */
+}
+.su-done-success__desc {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);     /* 400 */
+  font-size: 24px;                             /* Figma 실측 */
+  line-height: 1.2;
+  color: var(--color-black);                   /* #1a1b1b */
+}
+/* "24 hours" — semibold + primary */
+.su-done-success__desc .accent {
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  color: var(--color-primary);                 /* #4428ff */
+}
+
+/* 아웃라인 버튼 — Figma node 6469:21516 (border #1a1b1b, w 600) */
+.su-done-success__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 600px;                            /* Figma 실측 */
+  padding: var(--space-xs) var(--space-md);     /* 8px 16px */
+  border: 1px solid var(--color-black);        /* #1a1b1b */
+  background-color: transparent;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1;
+  letter-spacing: 0.64px;                      /* Figma 실측 */
+  color: var(--color-black);                   /* #1a1b1b */
+  text-align: center;
+  text-decoration: none;                       /* a 태그 기본 밑줄 제거 (Figma 밑줄 없음) */
+  cursor: pointer;
+}
+.su-done-success__btn:hover {
+  background-color: var(--color-black);        /* 반전 (상호작용 힌트) */
+  color: var(--color-text-on-dark);            /* #fbfdff */
+}
+.su-done-success__btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ----------------------------------------------------------------------------
+ * 3) MEANWHILE — #ebeff9 밴드 + 사진 갤러리
+ *    Figma node 5219:3609 — bg #ebeff9, pt 40 pb 96 px 96, gap 32
+ * -------------------------------------------------------------------------- */
+.su-done-meanwhile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);                         /* 32px */
+  width: 100%;
+  max-width: var(--content-max);
+  padding: 40px var(--done-gutter) 96px;       /* 상 40 / 좌우 96 / 하 96 */
+  background-color: var(--color-neutral-100);  /* #ebeff9 */
+}
+.su-done-meanwhile__title {
+  width: 100%;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);     /* 400 */
+  font-size: 24px;                             /* Figma 실측 */
+  line-height: 1.2;
+  color: var(--color-black);                   /* #1a1b1b */
+  text-align: center;
+}
+
+/* 사진 갤러리 — Figma node 6469:21523 (flex gap 16, 5장 균등) */
+.su-done-gallery {
+  display: flex;
+  gap: var(--space-md);                         /* 16px */
+  width: 100%;
+}
+.su-done-gallery__img {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 296px;                               /* Figma 셀 높이 실측 */
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* ----------------------------------------------------------------------------
+ * 모바일 — 1024px 미만
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .su-done-hero {
+    padding: var(--space-xl) var(--page-gutter-mobile);  /* 32px 16px */
+  }
+  .su-done-hero__title {
+    font-size: 48px;                           /* 96 → 48 */
+    letter-spacing: -0.96px;
+  }
+
+  .su-done-success {
+    padding: var(--space-2xl) var(--page-gutter-mobile);  /* 48px 16px */
+    gap: var(--space-lg);                       /* 24px */
+  }
+  .su-done-success__title {
+    font-size: 28px;                           /* 40 → 28 */
+  }
+  .su-done-success__desc {
+    font-size: 18px;                           /* 24 → 18 */
+  }
+
+  .su-done-meanwhile {
+    padding: var(--space-xl) var(--page-gutter-mobile) var(--space-2xl);  /* 32 16 48 */
+  }
+  .su-done-meanwhile__title {
+    font-size: 18px;                           /* 24 → 18 */
+  }
+
+  /* 갤러리: 가로 스크롤 스트립으로 전환(작은 화면에서 5장 균등은 너무 작음) */
+  .su-done-gallery {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .su-done-gallery__img {
+    flex: 0 0 70%;                             /* 한 장이 화면의 70% */
+    height: 220px;
+    scroll-snap-align: start;
+  }
+}

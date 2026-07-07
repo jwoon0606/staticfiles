@@ -1,0 +1,377 @@
+/* ============================================================================
+ * edit-profile.css — Optomatic "Edit profile" 페이지 전용 스타일
+ *
+ * 대상 디자인 (Optomatic_NEW_260601):
+ *   · 260428_dashboard_UI_05 (node 5091:10250)
+ *     대시보드에서 "edit profile" 버튼을 눌렀을 때 진입하는 프로필 수정 화면.
+ *
+ * 구성:
+ *   1) Welcome 띠 (Frame 116, node 6467:17438) — 대시보드와 동일한 다크 사진 배경
+ *      + "Edit profile" 대형 제목. (배경 이미지 dashboard-hero.png 재사용)
+ *   2) 본문 (Frame 106, node 5091:10277) — 좌우 96px / 상하 40px, 블록 gap 40px
+ *      · Account Information * : Email(읽기전용) / New Password * / Confirm Password *
+ *      · Personal Information  : Name / Company(읽기전용) / Company Location
+ *      · Business Card         : 점선 드롭존 (computer_arrow_up + 안내문)
+ *      · CANCEL / SAVE 버튼 (가로 2열)
+ *
+ * 토큰 의존: variables.css 를 먼저 불러오세요.
+ * 공통 컴포넌트: nav.css(로그인 상태 바) · footer.css(푸터) 재사용.
+ *
+ * 정직 고지(실측값 vs 토큰):
+ *   · 본문 좌우 패딩 96px (대시보드/Light Find 와 동일, --ep-gutter).
+ *   · 섹션 제목 20px SemiBold·tracking 0.4px, 라벨 폭 208px, 입력행 높이 35px,
+ *     입력 배경 #ebeff9(=neutral-100), 플레이스홀더/읽기전용 텍스트 #85888e
+ *     (=neutral-400), 필수표시 * 색 #ee1b5e(=magenta/danger),
+ *     드롭존 보더 2px dashed #5b5d62(=neutral-500)·radius 6px,
+ *     버튼 20px Medium·tracking 0.8px·CANCEL #b6bbc5(=neutral-300)·
+ *     SAVE #4428ff(=blue) 모두 Figma 실측값입니다.
+ *   · Welcome 제목 96px·tracking -1.92px 는 대시보드와 동일.
+ *
+ * 정직 고지(디자인과의 차이):
+ *   · 비밀번호 칸은 디자인상 검은 "******"(채워진 값)으로 보이지만, 기능적으로는
+ *     빈 <input type="password"> + 회색 플레이스홀더 "••••••" 로 구현했습니다
+ *     (브라우저가 실제 입력을 점으로 마스킹). 색이 디자인(검정 값) 대신 회색
+ *     플레이스홀더인 점만 다릅니다.
+ *   · SAVE/CANCEL 은 백엔드가 없어 둘 다 dashboard.html 로 돌아갑니다(목업).
+ *
+ * 반응형: Figma 는 PC(1440)만 제공. 1024px 미만은 layout.css 공통 가이드대로
+ *   라벨→입력을 세로로 쌓고, 좌우 패딩 96→16px, 버튼을 세로로 쌓습니다.
+ * ========================================================================== */
+
+/* 스크린리더 전용(시각적 숨김) — 파일 입력 라벨 등 접근성용
+   (light-find 의 .sr-only 와 동일하나, 이 페이지는 light-find CSS 를 안 불러오므로 재정의) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 페이지 루트: 본문 좌우 패딩 토큰 + 배경 */
+.edit-profile {
+  --ep-gutter: 96px;                           /* Figma 실측 본문 좌우 패딩 */
+  background-color: var(--color-neutral-50);   /* #fbfdff */
+}
+
+/* 섹션 콘텐츠를 1440px 안에 가두는 공통 래퍼 */
+.ep-inner {
+  width: 100%;
+  max-width: var(--content-max);               /* 1440px */
+  margin: 0 auto;
+}
+
+/* ----------------------------------------------------------------------------
+ * 1) Welcome 띠 — Frame 116 (node 6467:17438) — 대시보드 띠와 동일
+ * -------------------------------------------------------------------------- */
+.ep-hero {
+  width: 100%;
+  background-color: var(--color-neutral-900);  /* #1a1b1b (이미지 폴백) */
+  background-image: url("../../assets/dashboard-hero.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: var(--color-text-on-dark);            /* #fbfdff */
+}
+.ep-hero .ep-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 176px;                           /* Figma 띠 높이 */
+  padding: 40px var(--ep-gutter);              /* 40px 96px */
+}
+.ep-hero__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: clamp(40px, 7vw, 96px);           /* Figma 96px → 유동 축소 */
+  font-weight: var(--font-weight-light);       /* 300 */
+  line-height: 1;
+  letter-spacing: -1.92px;
+  color: inherit;
+}
+
+/* ----------------------------------------------------------------------------
+ * 2) 본문 — Frame 106 (node 5091:10277): padding 40px 96px, 세로 gap 40px
+ * -------------------------------------------------------------------------- */
+.ep-body .ep-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;                                   /* Figma: gap 40 (스케일 외 값) */
+  padding: 40px var(--ep-gutter);              /* 40px 96px */
+}
+.ep-form {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* ── 섹션 (Account Information / Personal Information) ────────────────────────
+ *    제목(20px) + 입력행 묶음. 제목→내용 간격 24px. */
+.ep-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);                        /* 24px */
+}
+/* Business Card 섹션은 제목→드롭존 간격이 16px */
+.ep-section--tight {
+  gap: var(--space-md);                        /* 16px */
+}
+.ep-section__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body-lg);         /* 20px */
+  line-height: 1;                              /* Figma: leading none */
+  letter-spacing: 0.4px;                       /* Figma 실측 (20px 제목 tracking) */
+  color: var(--color-text);                    /* #1a1b1b */
+}
+/* 필수 항목 표시 * — 마젠타 */
+.ep-req {
+  color: var(--color-danger);                  /* #ee1b5e */
+}
+
+/* ── 입력행 묶음 (Frame 170): 좌측 24px 들여쓰기, 행 간격 16px ───────────────── */
+.ep-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                        /* 16px */
+  padding-left: var(--space-lg);               /* 24px 들여쓰기 */
+  width: 100%;
+}
+/* 한 행: 라벨(208px) + gap 16 + 입력/값(나머지). 높이 35px, 세로 가운데. */
+.ep-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);                        /* 16px */
+  min-height: 35px;
+  width: 100%;
+}
+.ep-row__label {
+  flex-shrink: 0;
+  width: 208px;                                /* Figma 실측 라벨 폭 */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body-lg);         /* 20px */
+  line-height: 1;
+  letter-spacing: 0.4px;                       /* Figma 실측 */
+  color: var(--color-text);                    /* #1a1b1b */
+}
+.ep-row__field {
+  flex: 1 0 0;                                  /* 1248 - 24 - 208 - 16 ≈ 1000px */
+  min-width: 0;
+}
+
+/* 편집 가능한 입력칸: 배경 #ebeff9, padding 8/16, 16px Regular. */
+.ep-input {
+  display: block;
+  width: 100%;
+  padding: 8px var(--space-md);                /* 8px 16px */
+  border: none;
+  background-color: var(--color-neutral-100);  /* #ebeff9 */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);     /* 400 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-text);                    /* 입력값: #1a1b1b */
+}
+.ep-input::placeholder {
+  color: var(--color-neutral-400);             /* #85888e */
+  opacity: 1;                                  /* Firefox 기본 투명도 보정 */
+}
+.ep-input:focus-visible {
+  outline: 2px solid var(--color-primary);     /* 키보드 포커스 표시 */
+  outline-offset: -2px;
+}
+
+/* 읽기전용 값(Email, Company): 배경 없음, 회색 텍스트. */
+.ep-readonly {
+  display: block;
+  padding: 8px var(--space-md);                /* 8px 16px (입력칸과 동일 정렬) */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);     /* 400 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-neutral-400);             /* #85888e */
+}
+
+/* ── Business Card 드롭존 (Frame 125, node 5091:10308) ───────────────────────
+ *    2px 점선 보더 #5b5d62, radius 6px, 세로 가운데 정렬, 항목 gap 8px. */
+.ep-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);                        /* 16px (안내 ↔ 파일 행) */
+  width: 100%;
+  padding: var(--space-md);                    /* 16px */
+  border: 2px dashed var(--color-neutral-500); /* #5b5d62 */
+  border-radius: 6px;                          /* Figma 실측 */
+  text-align: center;
+}
+/* 드래그 오버 / hover 시 강조 (교체 가능함을 암시) */
+.ep-dropzone:hover,
+.ep-dropzone.is-dragover {
+  border-color: var(--color-primary);          /* #4428ff */
+}
+/* 클릭 영역(파일 선택) — 아이콘 + 안내문 묶음 */
+.ep-dropzone__zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);                        /* 8px */
+  width: 100%;
+  cursor: pointer;
+}
+/* 현재/선택된 파일 행 — 아이콘 + 파일명 + 제거 버튼 */
+.ep-dropzone__file-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);                        /* 8px */
+  width: 100%;
+  padding: var(--space-2xs) var(--space-xs);   /* 4px 8px */
+}
+.ep-dropzone__file-row[hidden] {
+  display: none;
+}
+.ep-dropzone__file-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                        /* 8px */
+  min-width: 0;
+}
+.ep-dropzone__file-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  color: var(--color-text);                    /* #1a1b1b */
+}
+.ep-dropzone__file-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-text);                    /* #1a1b1b */
+  text-decoration: underline;
+}
+.ep-dropzone__remove {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-text);
+  cursor: pointer;
+}
+.ep-dropzone__icon {
+  width: 48px;
+  height: 48px;
+  color: var(--color-text);                    /* #1a1b1b (인라인 SVG currentColor) */
+}
+.ep-dropzone__title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-text);                    /* #1a1b1b */
+}
+.ep-dropzone__hint {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);     /* 400 */
+  font-size: var(--font-size-caption);         /* 14px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-caption); /* 0.28px */
+  color: var(--color-neutral-400);             /* #85888e */
+}
+/* 마지막 안내문: 588px 폭으로 가운데 묶음 */
+.ep-dropzone__note {
+  max-width: 588px;                            /* Figma 실측 */
+}
+
+/* ── CANCEL / SAVE 버튼 (Frame 25539, node 6469:19351) ──────────────────────
+ *    가로 2열(각 flex-1), gap 24px. 20px Medium·흰 글자. */
+.ep-actions {
+  display: flex;
+  gap: var(--space-lg);                        /* 24px */
+  width: 100%;
+}
+.ep-btn {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px var(--space-md);                /* 8px 16px */
+  border: none;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-body-lg);         /* 20px */
+  line-height: 1;                              /* Figma: leading none */
+  letter-spacing: var(--letter-spacing-body-lg); /* 0.8px */
+  color: var(--color-text-on-dark);            /* #fbfdff */
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.ep-btn--cancel {
+  background-color: var(--color-neutral-300);  /* #b6bbc5 */
+}
+.ep-btn--cancel:hover {
+  background-color: var(--color-neutral-400);  /* #85888e — 약간 진하게 */
+}
+.ep-btn--save {
+  background-color: var(--color-primary);      /* #4428ff */
+}
+.ep-btn--save:hover {
+  background-color: var(--color-primary-hover); /* #2914b2 */
+}
+
+/* ----------------------------------------------------------------------------
+ * 반응형 — 1024px 미만 (layout.css 공통 가이드 적용)
+ *   · 좌우 패딩 96 → 16px
+ *   · 입력행: 라벨 위 / 입력 아래로 세로 쌓기, 들여쓰기 제거
+ *   · 버튼: 세로 쌓기
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .ep-hero .ep-inner,
+  .ep-body .ep-inner {
+    padding-left: var(--page-gutter-mobile);   /* 16px */
+    padding-right: var(--page-gutter-mobile);
+  }
+
+  .ep-rows {
+    padding-left: 0;
+  }
+  .ep-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2xs);                      /* 4px */
+  }
+  .ep-row__label {
+    width: auto;
+  }
+
+  .ep-actions {
+    flex-direction: column;
+  }
+}

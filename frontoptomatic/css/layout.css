@@ -1,0 +1,51 @@
+/* ============================================================================
+ * layout.css — Optomatic 공통 레이아웃 · 반응형 규칙
+ *
+ * 토큰 의존: variables.css (--content-max, --page-gutter, --page-gutter-mobile)
+ * 를 먼저 불러오세요.
+ *
+ * ── 반응형 기준 ──────────────────────────────────────────────────────────
+ *   Figma 기준: PC 1440px / 모바일 320px.
+ *   breakpoint는 1024px 단일 기준 2단계로만 갑니다.
+ *     · 1024px 이상  = PC 레이아웃   (좌우 여백 136px)
+ *     · 1024px 미만  = 모바일 레이아웃 (좌우 여백 16px)
+ *   태블릿 전용 디자인이 없어서 중간(태블릿) 단계 없이 2단계로만 운영합니다.
+ *   태블릿 디자인이 추가되면 768px~1024px 구간 미디어쿼리를 여기 추가하세요.
+ *
+ * ── 모바일 전환 공통 가이드 ─────────────────────────────────────────────
+ *   1024px 미만으로 내려갈 때 각 컴포넌트가 따라야 할 공통 규칙:
+ *     · 가로 배치 → 세로 쌓기   (flex-direction: row → column)
+ *     · 좌우 여백  136px → 16px (--page-gutter → --page-gutter-mobile)
+ *     · 내부 padding·gap 축소    (데스크톱 값 대비 한 단계 줄이기)
+ *     · 폭 고정값(width) 제거 → width: 100% / auto 로 흐르게
+ *   개별 컴포넌트는 자신의 css에서 위 가이드를 따르되,
+ *   페이지 좌우 여백은 아래 .container 한 곳에서만 관리합니다.
+ * ========================================================================== */
+
+/* ----------------------------------------------------------------------------
+ * .container — 페이지 콘텐츠 폭·좌우 여백 공통 래퍼
+ *   width 100% + max-width 1440px + 가운데 정렬.
+ *   좌우 padding으로 PC 136px / 모바일 20px 여백을 만듭니다.
+ *   (max-width보다 넓은 화면에서도 여백이 유지되도록 padding 방식 사용)
+ * -------------------------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: var(--content-max);             /* 1440px */
+  margin: 0 auto;                            /* 가운데 정렬 */
+  padding-left: var(--page-gutter);          /* PC: 136px */
+  padding-right: var(--page-gutter);
+}
+
+/* 모바일 레이아웃 — 1024px 미만 (2단계 중 모바일 단계) */
+@media (max-width: 1023.98px) {
+  .container {
+    padding-left: var(--page-gutter-mobile);  /* 모바일: 20px */
+    padding-right: var(--page-gutter-mobile);
+  }
+}
+
+/* 단일 페이지 위저드: 숨긴 단계 패널([data-step][hidden])은 확실히 비표시.
+   섹션에 display 를 거는 페이지 CSS 가 생겨도 hidden 이 항상 우선하도록 보장. */
+[data-step][hidden] {
+  display: none !important;
+}

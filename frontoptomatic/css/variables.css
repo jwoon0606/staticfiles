@@ -1,0 +1,146 @@
+/* ============================================================================
+ * Optomatic — Design Tokens (variables.css)
+ * Source: Figma "Optomatic_BI_v1" (node 4213:229)
+ * https://www.figma.com/design/JYPrmrNsYkqxVUFDDDgKGq/...?node-id=4213-229
+ *
+ * NOTE (정직 고지):
+ *   - 이 Figma 노드에는 바인딩된 Figma 변수(Variables)가 없습니다.
+ *     get_variable_defs 호출 결과는 빈 객체 {} 였습니다.
+ *   - 아래 값들은 변수가 아니라, 디자인의 실제 원시 값(raw values)을
+ *     get_design_context로 읽어서 토큰화한 것입니다.
+ *   - 이 보드는 absolute 배치 기반의 브랜드 아이덴티티 보드라
+ *     auto-layout 간격(gap/padding)이나 corner-radius 토큰이
+ *     디자인에 정의되어 있지 않습니다. (해당 섹션의 설명 참고)
+ * ========================================================================== */
+
+:root {
+  /* ------------------------------------------------------------------ */
+  /* COLORS — 색상                                                       */
+  /* ------------------------------------------------------------------ */
+
+  /* Brand / Primary
+     (color swatch 행에서 추출: white, black, blue, magenta, green) */
+  --color-white: #ffffff;          /* "white" 스와치 (bg-white) */
+  --color-black: #1a1b1b;          /* 실제 본문 텍스트색이자 그레이스케일 최저 단계 */
+  --color-blue: #4428ff;           /* "blue" 스와치 (브랜드 메인 액센트) */
+  --color-magenta: #ee1b5e;        /* "magenta" 스와치 */
+  --color-green: #5ec841;          /* 초록 스와치 (Figma 라벨은 "magenta"로 오기되어 있음) */
+
+  /* Neutral / Grayscale ramp
+     (8단계 그레이스케일 행, 밝음 → 어두움 순) */
+  --color-neutral-50: #fbfdff;     /* off-white (어두운 배경 위 텍스트색으로도 사용) */
+  --color-neutral-100: #ebeff9;
+  --color-neutral-200: #d6dbe4;
+  --color-neutral-300: #b6bbc5;
+  --color-neutral-400: #85888e;
+  --color-neutral-500: #5b5d62;
+  --color-neutral-600: #323334;
+  --color-neutral-900: #1a1b1b;    /* = --color-black */
+
+/* Semantic aliases — 용도 기준 (컴포넌트는 이걸 참조) */
+--color-primary: var(--color-blue);      /* 버튼/링크/강조 메인색 */
+--color-primary-hover: #2914b2;          /* primary 버튼 hover (Figma 실측, --color-blue 보다 어두움) */
+--color-danger: var(--color-magenta);    /* 에러/경고 (input 빨간 보더 등) */
+--color-success: var(--color-green);     /* 완료/성공 상태 */
+
+  /* Semantic */
+  --color-text: #1a1b1b;           /* 기본 텍스트 */
+  --color-text-on-dark: #fbfdff;   /* 어두운 배경 위 텍스트 */
+  --color-bg: #ffffff;
+
+  /* Annotation / guide (로고 그리드 치수 라벨 r, r/2, 4r 에 쓰인 색) */
+  --color-guide: #2a86ff;
+
+  /* ------------------------------------------------------------------ */
+  /* TYPOGRAPHY — 폰트                                                   */
+  /* ------------------------------------------------------------------ */
+
+  /* Font families */
+  --font-latin: "Manrope", sans-serif;                      /* 라틴 */
+  --font-korean: "Asta Sans", "Pretendard", sans-serif;     /* 한글: 아스타 산스 → Pretendard 폴백 */
+  --font-sans: "Manrope", "Asta Sans", "Pretendard", sans-serif;
+
+  /* Font weights (Manrope / Asta Sans 공통 스케일) */
+  --font-weight-extralight: 200;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* Font sizes — 랜딩페이지 실측값 (px). 교체된 항목은 기존 BI견본 값을 주석으로 보존 */
+  --font-size-display: 118px;      /* BI견본 대제목 ("Manrope"/"아스타 산스") — 랜딩 미사용 */
+  --font-size-h1: 112px;           /* 히어로 "Light Find" (weight 300) */ /* 기존 BI견본: 78px */
+  --font-size-h2: 48px;            /* 섹션 제목 (weight 500) */ /* 기존 BI견본: 48px (동일) */
+  --font-size-h3: 32px;            /* 카드 제목 (weight 500) */ /* 기존 BI견본: 42px */
+  --font-size-subtitle: 24px;      /* 리드문/부제 (weight 500) — 신규 */
+  --font-size-title: 40px;         /* BI견본 태그라인 "Find & design your lights" — 랜딩 미사용 */
+  --font-size-body-lg: 20px;       /* 버튼·메뉴·라벨 (weight 500~600) — 신규 */
+  --font-size-body: 16px;          /* 본문 (weight 400) */ /* 기존 BI견본: 30px */
+  --font-size-label: 24px;         /* BI견본 "Optomatic" 캡션 / 그리드 라벨 — 랜딩 미사용 */
+  --font-size-caption: 14px;       /* 푸터 링크·회사정보 (weight 300) */ /* 기존 BI견본: 16px */
+
+  /* Line heights */
+  --line-height-tight: 1.2;        /* Manrope (라틴) */
+  --line-height-korean: 1.4;       /* Asta Sans (한글) */
+
+  /* Letter spacing — 랜딩페이지 실측값 (px) */
+  --letter-spacing-h1: -2.24px;        /* 히어로 */ /* 기존 BI견본: -1.56px */
+  --letter-spacing-h2: 0;              /* 섹션 제목 — 신규 */
+  --letter-spacing-h3: 0.64px;         /* 카드 제목 — 신규 */
+  --letter-spacing-subtitle: 0.48px;   /* 리드문/부제 — 신규 */
+  --letter-spacing-body-lg: 0.8px;     /* 버튼·메뉴·라벨 — 신규 */
+  --letter-spacing-body: 0.32px;       /* 본문 — 신규 */
+  --letter-spacing-caption: 0.28px;    /* 푸터 */ /* 기존 BI견본: -0.32px */
+  /* --- 아래는 BI견본 전용 (랜딩 미사용) --- */
+  --letter-spacing-display: -2.36px;   /* 118px */
+  --letter-spacing-label: -0.48px;     /* 24px */
+  --letter-spacing-wide-sm: 0.6px;     /* 30px 한글 본문 */
+  --letter-spacing-wide-md: 0.8px;     /* 40px 태그라인 */
+  --letter-spacing-wide-lg: 0.84px;    /* 42px 글자 견본 */
+
+  /* ------------------------------------------------------------------ */
+  /* SPACING — 간격                                                      */
+  /* ------------------------------------------------------------------ */
+  /* 주의: BI 보드(node 4213:229)는 absolute 배치라 간격 토큰이 없었습니다.
+   * 아래 스케일은 footer_desktop(node 5888:210, EN)의 auto-layout
+   * 실측값(gap/padding)을 4px 기반 t-shirt 스케일로 토큰화한 것입니다.
+   * Figma에 바인딩된 Variables는 여전히 없으며(get_variable_defs = {}),
+   * 이 값들은 raw 값에서 추출한 것입니다. */
+  --space-2xs: 4px;
+  --space-xs: 8px;    /* 푸터: 링크/회사정보 행 간격 (gap) */
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;   /* 푸터: BACK TO TOP 텍스트–아이콘 간격 (gap) */
+  --space-2xl: 48px;
+  --space-3xl: 80px;  /* 푸터: 본문 영역 상하 패딩 (padding-y) */
+
+  /* 푸터 레이아웃 전용 (4px 스케일에 깔끔히 안 떨어지는 실측값) */
+  --space-footer-gutter: 136px;   /* 본문 영역 좌우 패딩 (padding-x) = --page-gutter */
+  --space-footer-col-gap: 90px;   /* 로고·링크·회사정보·SNS 컬럼 간격 (gap) */
+
+  /* ------------------------------------------------------------------ */
+  /* LAYOUT / RESPONSIVE — 공통 레이아웃·반응형                          */
+  /* ------------------------------------------------------------------ */
+  /* Figma 기준: PC 1440px / 모바일 320px.
+   * breakpoint는 1024px 단일 기준 2단계 (PC / 모바일).
+   * 태블릿 전용 디자인이 없어서 중간 단계 없이 2단계로만 갑니다.
+   * 실제 미디어쿼리는 layout.css에서 사용 (CSS 변수는 @media 조건에
+   * 직접 쓸 수 없어, breakpoint 값은 참고용 토큰으로만 둡니다). */
+  --content-max: 1440px;          /* 콘텐츠 최대 폭 (Figma PC 기준 폭) */
+  --page-gutter: 136px;           /* PC 좌우 여백 (좌우 padding) */
+  --page-gutter-mobile: 16px;     /* 모바일 좌우 여백 (좌우 padding) — Figma 모바일 footer(node 5888:526) 기준 */
+  --breakpoint: 1024px;           /* PC ↔ 모바일 분기점 (참고용; @media엔 직접 못 씀) */
+
+  /* ------------------------------------------------------------------ */
+  /* RADIUS — 모서리 반경                                                 */
+  /* ------------------------------------------------------------------ */
+  /* 주의: footer_desktop 노드에는 corner-radius 값이 하나도 없습니다.
+   * (퍼플 바·로고·링크 모두 radius 0) → --radius-* 토큰을 추측으로
+   * 만들지 않았습니다. radius가 실제로 쓰이는 컴포넌트가 나오면
+   * 그때 이 섹션에 토큰을 추가하세요.
+   * 참고: BI 보드의 "r", "r/2", "r/4", "4r" 표기는 border-radius가 아니라
+   * 로고 형태를 그리기 위한 그리드 단위(logo construction unit)입니다. */
+}

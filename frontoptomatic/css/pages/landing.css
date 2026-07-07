@@ -1,0 +1,743 @@
+/* ============================================================================
+ * pages/landing.css — 랜딩 페이지(index.html) 전용 스타일
+ *
+ * 토큰 의존: variables.css 를 먼저 불러오세요.
+ * 로드 순서상 가장 마지막(우선순위 최상)에 link 됩니다.
+ *
+ * ── 공통 규칙 ───────────────────────────────────────────────────────────────
+ *   · <section class="landing-section landing-*"> = 배경 풀폭 (가로 전체)
+ *   · 내부 .container = 콘텐츠를 max 1440px 로 가두고 좌우 여백 부여
+ *   · 반응형: 1024px 단일 breakpoint (PC / 모바일 2단계)
+ *   · 색/간격/폰트는 토큰(var(--...)) 참조
+ *   · file:// 더블클릭 호환 (외부 의존성 없음)
+ *
+ * ── 좌우 거터(184px) 결정 사유 ──────────────────────────────────────────────
+ *   layout.css 의 .container 기본 거터는 136px(--page-gutter, footer 기준)지만,
+ *   랜딩 구간은 184px 로 덮어씁니다. 이유:
+ *     · Figma 랜딩 섹션 실측이 모두 184px (px-[184px])
+ *     · nav(.nav__inner)도 184px(--nav-gutter)를 사용 → 랜딩 본문을 184px로 맞춰야
+ *       nav 로고/메뉴의 좌측 라인과 히어로/섹션 콘텐츠 좌측 라인이 수직 정렬됨.
+ *       (136px로 두면 nav 대비 콘텐츠가 48px 안쪽으로 어긋나 보임)
+ *   footer 만 자체 디자인상 136px 를 유지합니다(기존 컴포넌트 값 보존).
+ * ========================================================================== */
+
+/* ----------------------------------------------------------------------------
+ * 랜딩 좌우 거터: .container(136px)를 랜딩 구간에서만 184px 로 덮어쓰기.
+ *   (.container 의 max-width·센터링·반응형 기능은 그대로 재사용)
+ * -------------------------------------------------------------------------- */
+.landing-section > .container {
+  padding-left: var(--nav-gutter, 184px);   /* nav 와 동일 라인 (184px) */
+  padding-right: var(--nav-gutter, 184px);
+}
+
+/* 공통: 모든 랜딩 섹션 = 배경 풀폭 */
+.landing-section {
+  width: 100%;
+  position: relative;
+}
+
+/* ----------------------------------------------------------------------------
+ * 공통 타이포 — 섹션 제목/부제 (색은 섹션에서 inherit)
+ * -------------------------------------------------------------------------- */
+.section-title {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-h2);            /* 48px */
+  font-weight: var(--font-weight-medium);    /* 500 */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-h2);  /* 0 */
+  color: inherit;
+  margin: 0;
+}
+
+.section-subtitle {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body-lg);       /* 20px */
+  font-weight: var(--font-weight-regular);   /* 400 */
+  line-height: 1.2;
+  letter-spacing: 0.4px;                      /* 20px 본문 실측 (전용 토큰 없음) */
+  color: inherit;
+  margin: 0;
+}
+
+/* ----------------------------------------------------------------------------
+ * 공통 버튼 — 아웃라인형 (READ MORE / DOWNLOAD PDF / Find My Light 등)
+ * -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);                       /* 8px */
+  padding: var(--space-xs) var(--space-lg);   /* 8px 24px */
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body-lg);        /* 20px */
+  font-weight: var(--font-weight-semibold);   /* 600 */
+  letter-spacing: var(--letter-spacing-body-lg); /* 0.8px */
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.btn--medium {                                 /* 패딩 px16 + weight 500 */
+  padding-left: var(--space-md);               /* 16px */
+  padding-right: var(--space-md);
+  font-weight: var(--font-weight-medium);      /* 500 */
+}
+
+.btn--outline {
+  border-color: var(--color-black);
+  color: var(--color-black);
+}
+.btn--outline:hover {
+  background: var(--color-black);
+  color: var(--color-text-on-dark);
+}
+
+.btn--outline-light {                          /* 다크 배경용 (흰 보더/글자) */
+  border-color: var(--color-text-on-dark);
+  color: var(--color-text-on-dark);
+}
+.btn--outline-light:hover {
+  background: var(--color-text-on-dark);
+  color: var(--color-black);
+}
+
+.btn__caret {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* ============================================================================
+ * PROMO BAR — 상단 파란 공지 띠 (Figma node 6661:10503)
+ * ========================================================================== */
+.promo {
+  width: 100%;
+  background: var(--color-primary);            /* #4428ff */
+  color: var(--color-text-on-dark);            /* #fbfdff */
+}
+.promo__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xl);                        /* 32px */
+  padding: var(--space-xs) var(--space-xl);    /* 8px 32px */
+  text-align: center;
+}
+.promo__text {
+  margin: 0;
+  font-size: var(--font-size-body);            /* 16px */
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  line-height: 1;
+}
+.promo__text-strong {
+  font-weight: var(--font-weight-semibold);    /* 600 */
+}
+.promo__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);                        /* 8px */
+  padding: var(--space-2xs) var(--space-md);   /* 4px 16px */
+  background: var(--color-neutral-50);         /* #fbfdff */
+  color: var(--color-primary);
+  border-radius: 16px;
+  font-size: var(--font-size-body);            /* 16px */
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-body);
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+.promo__cta:hover {
+  background: var(--color-primary-50, #ebe9ff); /* 살짝 푸른 틴트로 흰 알약 유지 */
+}
+.promo__cta-arrow {
+  width: 20px;
+  height: 20px;
+}
+
+/* ============================================================================
+ * 1) 히어로 — 6슬라이드 캐러셀 (Figma slides 6555/6617*, 전경 6661:10599)
+ *    배경: Light Find 3 + Light Design 3 (각 사진+주석+하단 그라데이션 합성 이미지)
+ *    전경: 제목/리드/설명/CTA — 슬라이드에 따라 Light Find ↔ Light Design 전환 (js/hero.js)
+ * ========================================================================== */
+.landing-hero {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--color-neutral-900);  /* 이미지 로드 전 폴백 */
+  color: var(--color-text-on-dark);
+  overflow: hidden;
+}
+/* 배경 슬라이드 스택 */
+.hero__slides {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.hero__slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.hero__slide.is-active { opacity: 1; }
+/* 하단 가독성 스크림 (Figma Rectangle124: #1a1b1b → 투명, 전경 텍스트 영역) */
+.landing-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to top, rgba(26, 27, 27, 0.75), rgba(26, 27, 27, 0.15) 45%, rgba(26, 27, 27, 0) 70%);
+  pointer-events: none;
+}
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--space-md);                        /* 16px */
+  min-height: 640px;
+  padding-block: 40px;                         /* 상하 40px (좌우는 거터 184px) */
+  position: relative;
+  z-index: 2;                                  /* 슬라이드/스크림 위 */
+}
+.hero__body {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-lg);                        /* 24px */
+  width: 100%;
+}
+.hero__text {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);                        /* 32px */
+}
+.hero__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: clamp(48px, 9vw, 112px);          /* h1 112px → 유동 축소 */
+  font-weight: var(--font-weight-light);       /* 300 */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-h1);    /* -2.24px */
+}
+.hero__copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                        /* 16px */
+}
+.hero__lead {
+  margin: 0;
+  font-size: var(--font-size-subtitle);        /* 24px */
+  font-weight: var(--font-weight-medium);      /* 500 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-subtitle); /* 0.48px */
+}
+.hero__desc {
+  margin: 0;
+  font-size: var(--font-size-body);            /* 16px */
+  font-weight: var(--font-weight-regular);
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+}
+.hero__cta {
+  flex-shrink: 0;
+  align-self: flex-end;
+  background: var(--color-primary);
+  color: var(--color-text-on-dark);
+  padding: var(--space-xs) var(--space-md);    /* 8px 16px */
+  font-size: var(--font-size-subtitle);        /* 24px */
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  letter-spacing: 0.96px;                       /* 24px 버튼 실측 (전용 토큰 없음) */
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+.hero__cta:hover {
+  background: var(--color-primary-hover);      /* #2914b2 (Figma node 6212:17766) */
+}
+
+/* 캐러셀 좌/우 화살표 */
+.hero__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  display: inline-flex;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: var(--color-text-on-dark);
+  opacity: 0.9;
+  cursor: pointer;
+}
+.hero__arrow svg { width: 40px; height: 40px; display: block; }
+.hero__arrow:hover { opacity: 1; }
+.hero__arrow--prev { left: var(--space-lg); }   /* 24px */
+.hero__arrow--next { right: var(--space-lg); }
+
+/* 슬라이드 인디케이터 도트 (Figma node 7126:10060 "Group 84")
+ *   모든 도트 동일한 8px 원, 흰색. 활성=opacity 1 / 비활성=opacity 0.5.
+ *   중심간 20px = 8px 도트 + 12px gap. */
+.hero__dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);                        /* 12px */
+}
+.hero__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: var(--color-text-on-dark);       /* #fbfdff */
+  opacity: 0.5;                                /* 비활성 */
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+.hero__dot:hover { opacity: 0.8; }
+.hero__dot.is-active { opacity: 1; }           /* 활성: 크기 동일, 불투명도만 */
+
+/* ============================================================================
+ * 2) About us (Figma node 6661:10621)
+ * ========================================================================== */
+.about__inner {
+  display: flex;
+  align-items: flex-end;
+  gap: 40px;                                   /* 전용 간격 (토큰 없음) */
+  padding-block: 72px;                         /* 섹션 상하 (토큰 없음) */
+  color: var(--color-text);
+}
+.about__text {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                        /* 16px */
+}
+.about__lead {
+  margin: 0;
+  font-size: var(--font-size-subtitle);        /* 24px */
+  font-weight: var(--font-weight-medium);      /* 500 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-subtitle); /* 0.48px */
+}
+.about__inner .btn { flex-shrink: 0; }
+
+/* ============================================================================
+ * 3) Our services (Figma node 6661:10627)
+ * ========================================================================== */
+.services__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);                        /* 32px */
+  padding-block: 72px;
+  color: var(--color-text);
+}
+.services__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                        /* 16px */
+}
+.services__video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;                         /* 1072×603 ≈ 16:9 */
+  overflow: hidden;
+}
+.services__video-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.services__video::before {                      /* 어두운 오버레이 rgba(0,0,0,.5) */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+.services__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(251, 253, 255, 0.92);
+  color: var(--color-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.services__play svg { width: 32px; height: 32px; margin-left: 3px; }
+
+.services__cards {
+  display: flex;
+  gap: var(--space-lg);                        /* 24px */
+}
+.service-card {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);                        /* 24px */
+  padding: 56px var(--space-xl);               /* 56px 32px */
+  text-align: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.service-card__icon {
+  width: 201px;
+  max-width: 60%;
+  height: auto;
+  transition: filter 0.2s ease;
+}
+.service-card__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);                        /* 16px */
+}
+.service-card__title {
+  margin: 0;
+  font-size: var(--font-size-h3);              /* 32px */
+  font-weight: var(--font-weight-medium);      /* 500 */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-h3);    /* 0.64px */
+}
+.service-card__desc {
+  margin: 0;
+  max-width: 440px;
+  font-size: var(--font-size-body);            /* 16px */
+  font-weight: var(--font-weight-regular);
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+}
+
+/* --- 카드 hover 상태 (Figma node 6212:17742 / 17754) ---------------------------
+ * 카드 영역 hover: 배경 다크 반전 + 아이콘/글자 흰색 + 버튼 흰 아웃라인
+ * 버튼 hover:      버튼 흰색 채움 + 다크 텍스트 (단계적)
+ * (터치 기기에는 hover 가 없어 기본 상태 유지) */
+.service-card:hover {
+  background-color: var(--color-neutral-900);  /* #1a1b1b */
+  color: var(--color-text-on-dark);
+}
+.service-card:hover .service-card__title,
+.service-card:hover .service-card__desc {
+  color: var(--color-text-on-dark);
+}
+.service-card:hover .service-card__icon {
+  filter: brightness(0) invert(1);             /* 검정 stroke → 흰색 */
+}
+/* 데스크톱/모바일 문구 토글 (기본=데스크톱; 모바일 변형은 @media 에서 표시)
+ * 주의: hover 시에는 텍스트를 바꾸지 않음 (텍스트 유지 → 카드 높이·버튼 위치 고정) */
+.is-mobile,
+.service-card__desc--mobile,
+.ld-beta { display: none; }
+/* 카드 hover 시 버튼: 흰 아웃라인 (node 6212:17742) */
+.service-card:hover .btn--outline {
+  border-color: var(--color-text-on-dark);
+  color: var(--color-text-on-dark);
+  background: transparent;
+}
+/* 버튼 자체 hover: 흰 채움 + 다크 텍스트 (node 6212:17754) */
+.service-card .btn--outline:hover {
+  background: var(--color-text-on-dark);
+  color: var(--color-black);
+  border-color: var(--color-text-on-dark);
+}
+
+/* ============================================================================
+ * 4) Brand Partners — 다크 배경
+ *    접힘: 행1만 표시 (Figma node 7126:14004)
+ *    펼침: VIEW MORE 누르면 행2~4 표시 (Figma node 7126:11211)
+ * ========================================================================== */
+.landing-partners {
+  background-color: var(--color-neutral-900);  /* #1a1b1b */
+}
+.partners__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xl);                        /* 32px (헤더↔그리드↔버튼) */
+  padding-block: 72px;
+  color: var(--color-text-on-dark);
+}
+.partners__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                        /* 16px */
+}
+
+/* 로고 그리드: 행들을 세로로, 행 간격 16px (Figma 실측) */
+.partners__grid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                        /* 16px */
+}
+/* 각 행: 104px 프레임, 로고 세로 중앙 + 가로 자동분배(space-between) */
+.partners__row {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 104px;                           /* Figma 로고 프레임 높이 */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2xl);                       /* 48px (줄바꿈 시 최소 간격) */
+}
+.partners__row img {
+  height: var(--logo-h, 40px);                 /* 로고별 실측 높이 (인라인 --logo-h) */
+  width: auto;
+  display: block;
+}
+
+/* 펼치기: 추가 행은 기본 숨김, .is-expanded 일 때 표시 */
+.partners__row--extra { display: none; }
+.landing-partners.is-expanded .partners__row--extra { display: flex; }
+
+/* 모바일 접힘 전용 미리보기: 데스크톱에서는 숨김 (그리드 사용) */
+.partners__mobile-preview {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: none;
+}
+
+.partners__more {
+  align-self: center;                          /* 가로 중앙 (간격은 부모 gap 32px) */
+}
+/* 펼침 시 캐럿 위로 회전 */
+.partners__more .btn__caret { transition: transform 0.2s ease; }
+.landing-partners.is-expanded .partners__more .btn__caret { transform: rotate(180deg); }
+
+/* ============================================================================
+ * 5) More about us (Figma node 6661:11689)
+ * ========================================================================== */
+.more__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);                        /* 32px */
+  padding-block: 72px;
+  color: var(--color-text);
+}
+.more__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                        /* 16px */
+}
+.more__gallery {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  gap: var(--space-md);                        /* 16px */
+}
+.more__gallery li { flex: 1 1 0; min-width: 0; }
+.more__gallery img {
+  width: 100%;
+  aspect-ratio: 4 / 5;                          /* 201.6×252 ≈ 4:5 */
+  object-fit: cover;
+  display: block;
+}
+
+/* ============================================================================
+ * 6) Even more about us (Figma node 6661:11709)
+ * ========================================================================== */
+.even-more__inner {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-xl);                        /* 32px */
+  padding-block: 72px;
+  color: var(--color-text);
+}
+.even-more__text {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                        /* 16px */
+}
+.even-more__inner .btn { flex-shrink: 0; }
+
+/* ============================================================================
+ * 모바일 — 1024px 미만 (Figma 모바일 디자인 없음 → 합리적 기본값)
+ *   공통: 좌우 거터 16px, 가로 배치 → 세로 쌓기, 섹션 상하 패딩 축소
+ * ========================================================================== */
+@media (max-width: 1023.98px) {
+  /* 좌우 거터: 랜딩 override 를 모바일 값(16px)으로 되돌림 */
+  .landing-section > .container {
+    padding-left: var(--page-gutter-mobile);   /* 16px */
+    padding-right: var(--page-gutter-mobile);
+  }
+
+  /* 프로모 바: 모바일 디자인에 없음 → 숨김 */
+  .promo { display: none; }
+
+  /* ── 모바일 타이포그래피 (Figma 320px 프레임 실측 4755:*) ─────────────────
+   * 제목 30px Regular · 부제 16px(0.32) · 버튼 16px(0.64) · 헤더 간격 8 · 패딩 40 */
+  .section-title {
+    font-size: 30px;
+    font-weight: var(--font-weight-regular);     /* 400 (데스크톱 Medium → Regular) */
+    letter-spacing: 0;
+  }
+  .section-subtitle {
+    font-size: var(--font-size-body);            /* 16px (데스크톱 20) */
+    line-height: 1;
+    letter-spacing: 0.32px;
+  }
+  .btn {
+    font-size: var(--font-size-body);            /* 16px (데스크톱 20) */
+    letter-spacing: 0.64px;                      /* 0.8 → 0.64 */
+  }
+  /* 섹션 상하 패딩 40, 내부 블록 간격 24, 헤더(제목↔부제) 간격 8 */
+  .about__inner,
+  .services__inner,
+  .partners__inner,
+  .more__inner,
+  .even-more__inner { padding-block: 40px; }
+  .services__inner,
+  .more__inner { gap: var(--space-lg); }         /* 32 → 24 */
+  .services__head,
+  .partners__head,
+  .more__head,
+  .about__text,
+  .even-more__text { gap: var(--space-xs); }     /* 16 → 8 */
+  /* About 리드: 18px Medium (Figma 4755:7762) */
+  .about__lead {
+    font-size: 18px;
+    font-weight: var(--font-weight-medium);
+    line-height: 1.2;
+    letter-spacing: 0;
+  }
+
+  /* 히어로 (Figma 모바일 4755:7743): 화살표 숨김, 콘텐츠 하단 세로, 타이포 축소
+   * 제목 48px ExtraLight(-0.96) · 리드 18px Medium(0.36) · 설명 16px(0.32)
+   * 버튼 16px SemiBold(0.64) · 제목↔리드↔설명 8 · 텍스트↔버튼 24 · 패딩 py24 */
+  .hero__arrow { display: none; }
+  .hero__inner {
+    min-height: 480px;
+    padding-block: var(--space-lg);            /* 24px (py24) */
+    gap: var(--space-lg);                       /* 콘텐츠↔도트 24 */
+  }
+  .hero__body { flex-direction: column; align-items: flex-start; gap: var(--space-lg); }  /* 텍스트↔버튼 24 */
+  .hero__text { gap: var(--space-xs); }         /* 제목↔리드 8 */
+  .hero__copy { gap: var(--space-xs); }         /* 리드↔설명 8 */
+  .hero__title {
+    font-size: 48px;
+    font-weight: 200;                            /* ExtraLight (데스크톱 Light 300) */
+    letter-spacing: -0.96px;
+  }
+  .hero__lead { font-size: 18px; letter-spacing: 0.36px; }    /* (Medium 유지) */
+  .hero__desc { font-size: var(--font-size-body); letter-spacing: 0.32px; color: #fff; }  /* 16px, #fff (Figma) */
+  .hero__cta {
+    align-self: flex-start;
+    font-size: var(--font-size-body);            /* 16px (데스크톱 24) */
+    letter-spacing: 0.64px;                      /* 0.96 → 0.64 */
+  }
+  /* 도트 4px (Figma 44×4) */
+  .hero__dots { gap: var(--space-2xs); }         /* 4px */
+  .hero__dot { width: 4px; height: 4px; }
+
+  /* About / Even more: 세로 쌓기 */
+  .about__inner,
+  .even-more__inner { flex-direction: column; align-items: flex-start; gap: var(--space-lg); }
+
+  /* 데스크톱/모바일 문구 토글: 모바일 변형 표시, 데스크톱 변형 숨김 */
+  .is-desktop,
+  .service-card__desc--default { display: none; }
+  .is-mobile,
+  .service-card__desc--mobile { display: block; }
+  .ld-beta { display: inline; }
+
+  /* Services (Figma 4755:7765): 비디오 정사각 + 카드 가로(아이콘 60 좌 / 텍스트·버튼 우)
+   * 카드 제목 20px Medium(0.4) · 설명 14px(0.28) · 텍스트 간격 8 */
+  .services__video { aspect-ratio: 1 / 1; }      /* 16:9 → 1:1 (Figma 306×306) */
+  .services__cards { flex-direction: column; gap: var(--space-lg); }
+  .service-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas: "icon text" "icon btn";
+    column-gap: var(--space-md);                 /* 16px */
+    row-gap: var(--space-xs);                     /* 8px (텍스트↔버튼) */
+    align-items: start;
+    text-align: left;
+    padding: 0;
+  }
+  .service-card__icon { grid-area: icon; width: 60px; max-width: 60px; height: 60px; align-self: start; }
+  .service-card__text { grid-area: text; align-items: flex-start; text-align: left; gap: var(--space-xs); }
+  .service-card__title {
+    font-size: var(--font-size-body-lg);         /* 20px (데스크톱 32) */
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.4px;
+  }
+  .service-card__desc {
+    max-width: none;
+    font-size: var(--font-size-caption);         /* 14px (데스크톱 16) */
+    line-height: 1.2;
+    letter-spacing: 0.28px;
+  }
+  .service-card .btn { grid-area: btn; justify-self: start; align-self: start; }
+
+  /* Partners (Figma 4755:7789 / Frame 138): 패딩 40/16, VIEW MORE 좌측 정렬 */
+  .partners__inner { padding-block: 40px; }
+  .partners__more { align-self: flex-start; }   /* 좌측 (데스크톱 중앙 → 모바일 좌) */
+
+  /* 접힘: 큐레이션 4종 미리보기 — 좌측정렬 2×2, 행16/열32, 로고 26px 자연폭.
+     col1=auto(로고폭) / col2=1fr → 2번째 로고가 col1 끝+32 에서 시작 (Figma 실측) */
+  .partners__mobile-preview {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-md) var(--space-xl);       /* 행 16 / 열 32 */
+    justify-items: start;
+    align-items: center;
+    width: 100%;
+  }
+  .partners__mobile-preview img { height: 26px; width: auto; display: block; }
+  .partners__grid { display: none; }            /* 접힘 시 전체 그리드 숨김 */
+
+  /* 펼침: 미리보기 숨기고 전체 19종 2열 그리드 (좌측정렬·자연폭) */
+  .landing-partners.is-expanded .partners__mobile-preview { display: none; }
+  .landing-partners.is-expanded .partners__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-md) var(--space-xl);       /* 행 16 / 열 32 */
+  }
+  .partners__row { display: contents; }
+  .partners__row--extra { display: none; }
+  .landing-partners.is-expanded .partners__row--extra { display: contents; }
+  .partners__row li { min-width: 0; }
+  .partners__row img {
+    display: block;
+    width: 100%;                  /* 셀 폭 채움 (intrinsic 폭 압력 제거 → 넘침 방지) */
+    height: 26px;
+    object-fit: contain;
+    object-position: left;        /* 로고 좌측 정렬 */
+  }
+
+  /* More about us (Figma 4755:8831): 이미지 2×2 그리드(4장), 간격 8 */
+  .more__gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xs);                       /* 8px (Figma) */
+  }
+  .more__gallery li { flex: initial; min-width: 0; }
+  .more__gallery li:nth-child(5) { display: none; }  /* 모바일은 4장 (2×2) */
+}

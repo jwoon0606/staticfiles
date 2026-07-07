@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Optomatic — Light Find · Ceiling height</title>
+
+  <!-- ==========================================================================
+       Light Find — 설정 위저드 Step 1: Ceiling height
+       light-find.html 에서 필수 항목(Project/Space/Lighting) 선택 후 NEXT → 진입.
+       Figma: 260426_light_find_UI_06 (node 6363:19883)
+
+       CSS 로드 순서: variables → reset → typography → layout
+         → 공통 컴포넌트(nav, footer)
+         → light-find.css(promo·hero·셸 공유) → light-find-config.css(위저드 전용)
+       ========================================================================= -->
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/typography.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components/nav.css" />
+  <link rel="stylesheet" href="css/components/footer.css" />
+  <link rel="stylesheet" href="css/pages/light-find.css" />
+  <link rel="stylesheet" href="css/pages/light-find-config.css" />
+</head>
+<body class="light-find">
+
+  <!-- NAV — 마케팅/제품 공통 상단바 (로그인 상태는 auth.js 가 data-auth 로 전환) -->
+  <header class="nav" lang="en">
+    <div class="nav__inner">
+      <!-- 왼쪽: 로고 + 메뉴 -->
+      <div class="nav__left">
+        <a class="nav__logo" href="index.html" aria-label="Optomatic — home">
+          <img src="assets/logo-optomatic-horizontal.svg" alt="Optomatic" width="162" height="36" />
+        </a>
+
+        <nav class="nav__menu" id="nav-menu" aria-label="Primary" hidden>
+          <a class="nav__menu-link" href="light-find.html" aria-current="page" data-i18n="nav.lightFind">Light Find</a>
+          <a class="nav__menu-link" href="light-design.html" data-i18n="nav.lightDesign">Light Design</a>
+          <a class="nav__menu-link nav__menu-link--mobile" href="login.html" data-i18n="nav.signIn2" data-auth="out">Sign in</a>
+          <button type="button" class="nav__menu-lang nav__menu-link--mobile" aria-label="Change language, current: English">
+            <span data-i18n="nav.lang">EN</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- 오른쪽: 언어 · 알림 · 프로필 · 햄버거 -->
+      <div class="nav__right">
+        <div class="nav__lang-wrap">
+          <button
+            type="button"
+            class="nav__lang"
+            data-nav-toggle
+            aria-haspopup="true"
+            aria-controls="nav-lang-menu"
+            aria-expanded="false"
+            aria-label="Change language, current: English"
+          >
+            <span class="nav__lang-current" data-i18n="nav.lang">EN</span>
+          </button>
+
+          <ul class="nav__lang-menu" id="nav-lang-menu" role="menu" hidden>
+            <li role="none">
+              <button type="button" class="nav__lang-option" role="menuitem" data-lang="en" data-lang-label="EN" aria-current="true">
+                <img class="nav__lang-flag" src="assets/flag-en.svg" alt="" width="20" height="20" />
+                <span data-i18n="nav.langOption.en">EN - English</span>
+              </button>
+            </li>
+            <li role="none">
+              <button type="button" class="nav__lang-option" role="menuitem" data-lang="kr" data-lang-label="KR" aria-current="false">
+                <img class="nav__lang-flag" src="assets/flag-kr.svg" alt="" width="20" height="20" />
+                <span data-i18n="nav.langOption.kr">KR - 한국어</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 로그아웃 상태 전용: SIGN IN 링크 (auth.js 가 표시 제어) -->
+        <a class="nav__signin" href="login.html" data-i18n="nav.signIn" data-auth="out">SIGN IN</a>
+
+        <!-- 알림 벨 (Material "notifications" filled) -->
+        <button
+          type="button"
+          class="nav__icon-btn"
+          data-account-icon="notifications"
+          data-auth="in"
+          style="display: none"
+          aria-pressed="false"
+          aria-label="Notifications"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5S10.5 3.17 10.5 4v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="currentColor" />
+          </svg>
+        </button>
+
+        <!-- 프로필 (Material "account_circle" filled) -->
+        <button
+          type="button"
+          class="nav__icon-btn"
+          data-account-icon="profile"
+          data-auth="in"
+          style="display: none"
+          aria-pressed="false"
+          aria-label="Account"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="currentColor" />
+          </svg>
+        </button>
+
+        <!-- 햄버거(dehaze) — 모바일 전용. 동작은 js/nav.js -->
+        <button
+          type="button"
+          class="nav__toggle"
+          data-nav-toggle
+          aria-controls="nav-menu"
+          aria-expanded="false"
+          aria-label="Open menu"
+          data-label-open="Open menu"
+          data-label-close="Close menu"
+        >
+          <svg class="nav__toggle-icon nav__toggle-icon--open" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M3 7V5H21V7H3ZM3 19V17H21V19H3ZM3 13V11H21V13H3Z" fill="currentColor" />
+          </svg>
+          <svg class="nav__toggle-icon nav__toggle-icon--close" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z" fill="currentColor" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- PROMO BAR (Figma node 6363:18855) -->
+  <aside class="promo" aria-label="Announcement">
+    <div class="promo__inner">
+      <p class="promo__text">
+        <strong class="promo__text-strong">Light Find one (beta)</strong>
+        is ready for your experiment.
+      </p>
+      <a class="promo__cta" href="light-find-one.html">
+        <span>TRY IT NOW</span>
+        <svg class="promo__cta-arrow" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+          <path d="M13.125 10.75H4V9.25H13.125L8.9375 5.0625L10 4L16 10L10 16L8.9375 14.9375L13.125 10.75Z" fill="currentColor" />
+        </svg>
+      </a>
+    </div>
+  </aside>
+
+  <main>
+    <!-- HERO (Figma node 5851:1234) -->
+    <section class="lf-hero" aria-label="Light Find">
+      <div class="lf-inner">
+        <h1 class="lf-hero__title">Light Find</h1>
+        <img class="lf-hero__target" src="assets/light-find-target.svg" alt="" width="96" height="96" />
+      </div>
+    </section>
+
+    <!-- 위저드 — Step 1: Ceiling height (Figma node 6363:19900) -->
+    <section class="lfc" aria-label="Light Find configuration">
+      <div class="lf-inner lfc__inner">
+
+        <!-- 브레드크럼: 앞 화면에서 선택한 경로
+             정직 고지: 정적 구현이라 Figma 예시(Residential/Bedroom/General light/
+             Recessed downlight)를 그대로 표기합니다. 실제 선택값 연동은 미구현. -->
+        <nav class="lfc-crumbs" aria-label="Your selections">
+          <span class="lfc-crumb">Korea, Republic of</span>
+          <span class="lfc-sep" aria-hidden="true">/</span>
+          <span class="lfc-crumb">
+            <svg class="lfc-crumb__icon" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+              <path d="M7.5 34.1667V18.2042L4.14 20.7779L2.88458 19.1113L7.5 15.5833V11.0042H9.59417V13.9658L20 6.04167L37.1154 19.1283L35.86 20.7692L32.5 18.2042V34.1667H21.7842V24.765H18.2158V34.1667H7.5ZM7.5 8.97458C7.5 7.83069 7.88736 6.85736 8.66208 6.05458C9.43653 5.25181 10.4344 4.85041 11.6558 4.85041C12.3092 4.85041 12.8161 4.65125 13.1767 4.25292C13.5375 3.85431 13.7179 3.37681 13.7179 2.82042H15.8121C15.8121 3.95292 15.4294 4.92347 14.6642 5.73208C13.8986 6.54042 12.8958 6.94458 11.6558 6.94458C11.0142 6.94458 10.5101 7.14097 10.1437 7.53375C9.77736 7.92653 9.59417 8.40681 9.59417 8.97458H7.5Z" fill="currentColor" />
+            </svg>
+            Residential
+          </span>
+          <span class="lfc-sep" aria-hidden="true">/</span>
+          <span class="lfc-crumb">
+            <svg class="lfc-crumb__icon" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+              <path d="M8.44042 27.8396H10.5062V25.2138H29.4937V27.8396H31.5596V21.3354C31.5596 20.8682 31.4101 20.3751 31.1112 19.8562C30.8121 19.3374 30.4246 18.9274 29.9488 18.6263V15.7842C29.9488 14.9608 29.6892 14.2896 29.17 13.7704C28.6506 13.2512 27.9792 12.9917 27.1558 12.9917H21.9037C21.4701 12.9917 21.0932 13.0669 20.7729 13.2175C20.4529 13.3681 20.1896 13.5797 19.9829 13.8525C19.7762 13.5797 19.5111 13.3681 19.1875 13.2175C18.8639 13.0669 18.4851 12.9917 18.0513 12.9917H12.8442C12.0208 12.9917 11.3494 13.2512 10.83 13.7704C10.3108 14.2896 10.0512 14.9608 10.0512 15.7842V18.6263C9.57542 18.9274 9.18792 19.3374 8.88875 19.8562C8.58986 20.3751 8.44042 20.8682 8.44042 21.3354V27.8396ZM10.5062 23.4296V21.7288C10.5062 21.2338 10.6603 20.8322 10.9683 20.5242C11.2764 20.2161 11.6779 20.0621 12.1729 20.0621H27.8271C28.3221 20.0621 28.7236 20.2161 29.0317 20.5242C29.3397 20.8322 29.4937 21.2338 29.4937 21.7288V23.4296H10.5062ZM11.8354 18.2779V15.2883C11.8354 15.1461 11.8853 15.0251 11.985 14.9254C12.0847 14.8257 12.2058 14.7758 12.3483 14.7758H18.6004C18.7429 14.7758 18.864 14.8257 18.9637 14.9254C19.0635 15.0251 19.1133 15.1461 19.1133 15.2883V18.2779H11.8354ZM20.8975 18.2779V15.2883C20.8975 15.1461 20.9456 15.0251 21.0417 14.9254C21.1378 14.8257 21.2607 14.7758 21.4104 14.7758H27.6517C27.7942 14.7758 27.9153 14.8257 28.015 14.9254C28.1147 15.0251 28.1646 15.1461 28.1646 15.2883V18.2779H20.8975ZM6.77375 35.8333C6.05569 35.8333 5.44167 35.5783 4.93167 35.0683C4.42167 34.5583 4.16667 33.9443 4.16667 33.2262V6.77375C4.16667 6.05569 4.42167 5.44167 4.93167 4.93167C5.44167 4.42167 6.05569 4.16667 6.77375 4.16667H33.2262C33.9443 4.16667 34.5583 4.42167 35.0683 4.93167C35.5783 5.44167 35.8333 6.05569 35.8333 6.77375V33.2262C35.8333 33.9443 35.5783 34.5583 35.0683 35.0683C34.5583 35.5783 33.9443 35.8333 33.2262 35.8333H6.77375Z" fill="currentColor" />
+            </svg>
+            Bedroom
+          </span>
+          <span class="lfc-sep" aria-hidden="true">/</span>
+          <span class="lfc-crumb">General light</span>
+          <span class="lfc-sep" aria-hidden="true">/</span>
+          <span class="lfc-crumb">
+            <svg class="lfc-crumb__icon" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+              <path d="M30.1217 16.4358L28.6475 14.9104L31.8783 11.7308L33.3525 13.205L30.1217 16.4358ZM3.75 32.7138V30.6196H36.25V32.7138H3.75ZM18.9529 11.8592V7.37167H21.0471V11.8592H18.9529ZM9.87833 16.4017L6.68167 13.1537L8.15583 11.6796L11.4037 14.9275L9.87833 16.4017ZM9.26292 25.8333C9.45514 23 10.579 20.625 12.6346 18.7083C14.6901 16.7917 17.1453 15.8333 20 15.8333C22.8547 15.8333 25.3099 16.7917 27.3654 18.7083C29.421 20.625 30.5449 23 30.7371 25.8333H9.26292Z" fill="currentColor" />
+            </svg>
+            Recessed downlight
+          </span>
+        </nav>
+
+        <!-- 스텝 인디케이터: BACK · (점+제목) · NEXT -->
+        <div class="lfc-steps">
+          <a class="lfc-nav lfc-nav--back" href="light-find.html">
+            <svg class="lfc-nav__icon" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+              <path d="M22.1071 19.9829L14.1583 12.0233L15.6496 10.5321L25.0896 19.9829L15.6496 29.4229L14.1583 27.9317L22.1071 19.9829Z" fill="currentColor" />
+            </svg>
+            <span>BACK</span>
+          </a>
+
+          <div class="lfc-progress">
+            <ol class="lfc-dots" aria-label="Step 1 of 4">
+              <li class="lfc-dot is-active" aria-current="step">1</li>
+              <li class="lfc-tick" aria-hidden="true"></li>
+              <li class="lfc-tick" aria-hidden="true"></li>
+              <li class="lfc-dot">2</li>
+              <li class="lfc-tick" aria-hidden="true"></li>
+              <li class="lfc-tick" aria-hidden="true"></li>
+              <li class="lfc-dot">3</li>
+              <li class="lfc-tick" aria-hidden="true"></li>
+              <li class="lfc-tick" aria-hidden="true"></li>
+              <li class="lfc-dot">4</li>
+            </ol>
+            <p class="lfc-steptitle">Step 1: Ceiling height</p>
+          </div>
+
+          <button type="button" class="lfc-nav lfc-nav--next">
+            <span>NEXT</span>
+            <svg class="lfc-nav__icon" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+              <path d="M22.1071 19.9829L14.1583 12.0233L15.6496 10.5321L25.0896 19.9829L15.6496 29.4229L14.1583 27.9317L22.1071 19.9829Z" fill="currentColor" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- 선택 카드: Ceiling height (Standard 기본 선택) -->
+        <div class="lfc-cards" role="group" aria-label="Ceiling height">
+          <button type="button" class="lfc-card is-selected">
+            <span class="lfc-card__figure">
+              <img src="assets/lf-ceiling-standard.png" alt="" />
+            </span>
+            <span class="lfc-card__text">
+              <span class="lfc-card__title">Standard</span>
+              <span class="lfc-card__range">2300 ≤ CH ≤ 2600 mm</span>
+            </span>
+          </button>
+
+          <button type="button" class="lfc-card">
+            <span class="lfc-card__figure">
+              <img src="assets/lf-ceiling-high.png" alt="" />
+            </span>
+            <span class="lfc-card__text">
+              <span class="lfc-card__title">High</span>
+              <span class="lfc-card__range">2600 ≤ CH ≤ 3000 mm</span>
+            </span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER (file:// 호환을 위해 마크업 직접 삽입) -->
+  <footer class="footer" lang="en">
+    <button type="button" class="footer__top" data-back-to-top aria-label="Back to top">
+      <span class="footer__top-label" data-i18n="footer.backToTop">BACK TO TOP</span>
+      <svg class="footer__top-icon" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+        <path d="M11.6667 23.3333L20 14.9721L28.3333 23.3333H11.6667Z" fill="currentColor" />
+      </svg>
+    </button>
+
+    <div class="footer__main">
+      <a class="footer__logo" href="index.html" aria-label="Optomatic — home">
+        <img src="assets/logo-optomatic.svg" alt="Optomatic" width="168" height="188" />
+      </a>
+
+      <nav class="footer__nav" aria-label="Footer">
+        <ul class="footer__links">
+          <li><a href="#" data-i18n="footer.nav.services">Services</a></li>
+          <li><a href="#" data-i18n="footer.nav.about">About us</a></li>
+          <li><a href="#" data-i18n="footer.nav.terms">Terms and conditions</a></li>
+          <li><a href="#" data-i18n="footer.nav.privacy">Privacy policy</a></li>
+          <li class="footer__link--mobile"><a href="#" data-i18n="footer.nav.cookie">Cookie policy</a></li>
+          <li class="footer__link--mobile"><a href="#" data-i18n="footer.nav.downloads">Downloads</a></li>
+          <li class="footer__link--mobile"><a href="#" data-i18n="footer.nav.imprint">Imprint</a></li>
+        </ul>
+      </nav>
+
+      <address class="footer__company">
+        <p>
+          <span class="footer__label" data-i18n="footer.company.company.label">Company:</span>
+          <span class="footer__value" data-i18n="footer.company.company.value"> Optomatic Inc. </span>
+          <span class="footer__sep">|</span>
+          <span class="footer__label" data-i18n="footer.company.ceo.label">CEO:</span>
+          <span class="footer__value" data-i18n="footer.company.ceo.value"> HAYOUNG JU</span>
+        </p>
+        <p>
+          <span class="footer__label" data-i18n="footer.company.bizNo.label">Business Registration No.</span>
+          <span class="footer__value" data-i18n="footer.company.bizNo.value"> 860-81-04071</span>
+        </p>
+        <p>
+          <span class="footer__label" data-i18n="footer.company.corpNo.label">Corporate Registration No.</span>
+          <span class="footer__value" data-i18n="footer.company.corpNo.value"> 110111-0939619</span>
+        </p>
+        <p>
+          <span class="footer__label" data-i18n="footer.company.mailOrderNo.label">Mail-Order Business Registration No.</span>
+          <span class="footer__value" data-i18n="footer.company.mailOrderNo.value"> 제 2026-서울송파-0938호</span>
+        </p>
+        <p>
+          <span class="footer__label" data-i18n="footer.company.email.label">Email:</span>
+          <span class="footer__value" data-i18n="footer.company.email.value"> mail@optomatic.com </span>
+          <span class="footer__sep">|</span>
+          <span class="footer__label" data-i18n="footer.company.phone.label">Phone:</span>
+          <span class="footer__value" data-i18n="footer.company.phone.value"> +82 2 575 1607</span>
+        </p>
+        <p>
+          <span class="footer__label" data-i18n="footer.company.address.label">Address:</span>
+          <span class="footer__value" data-i18n="footer.company.address.value">
+            #501, 513 Yeongdong-daero, Gangnam-gu, Seoul, 06164, Republic of Korea
+          </span>
+        </p>
+      </address>
+
+      <ul class="footer__social">
+        <li>
+          <a class="footer__social-link" href="#" aria-label="Optomatic on Instagram">
+            <svg class="footer__social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M15.9092 0C18.7776 0.00497987 18.8896 0.0292949 19.4502 0.110352C20.607 0.277284 21.5782 0.738661 22.3721 1.49707C22.8167 1.92503 23.1226 2.34388 23.3984 2.9043C23.7347 3.58924 23.9009 4.2375 23.9766 5.20117C23.9928 5.40796 24 8.69913 24 11.9922C24 15.2837 23.9928 18.5797 23.9766 18.7881C23.9018 19.7365 23.7369 20.3904 23.4111 21.0625C22.7633 22.3992 21.5726 23.374 20.1348 23.7451C19.6133 23.8799 19.1413 23.9432 18.3291 23.9814C18.0376 23.9962 15.0073 24 11.9775 24C8.94706 24 5.91857 23.9905 5.62109 23.9775C4.91985 23.9443 4.3735 23.8744 3.87891 23.7471C2.45025 23.3778 1.2375 22.3876 0.602539 21.0693C0.270391 20.3808 0.11333 19.7514 0.0302734 18.751C0.00627196 18.4666 0.000976562 17.0023 0.000976562 11.9951C0.000976508 10.3082 -0.000864794 9.05036 0.000976562 8.09473C0.00577569 5.22796 0.0291418 5.11302 0.110352 4.55176C0.277457 3.39582 0.738727 2.42328 1.5 1.63281C1.91808 1.1993 2.34178 0.889846 2.87891 0.623047C3.57585 0.275987 4.21608 0.113799 5.24414 0.0283203C5.52998 0.00472098 6.99652 0 12.0039 0H15.9092ZM12.0029 3.07324C9.58098 3.07325 9.27664 3.08368 8.3252 3.12695C7.37527 3.17042 6.72654 3.32051 6.15918 3.54102C5.5723 3.76876 5.0741 4.07354 4.57812 4.56934C4.08198 5.0648 3.77744 5.56239 3.54883 6.14844C3.32764 6.71549 3.17657 7.36386 3.13379 8.3125C3.09122 9.26361 3.08008 9.56861 3.08008 11.9902C3.08008 14.4111 3.09166 14.7143 3.13477 15.665C3.17846 16.6143 3.32836 17.2631 3.54883 17.8301C3.77691 18.4164 4.08206 18.9137 4.57812 19.4092C5.07391 19.9051 5.57172 20.2107 6.1582 20.4385C6.72591 20.659 7.37453 20.8091 8.32422 20.8525C9.276 20.8958 9.57994 20.9062 12.0029 20.9062C14.4264 20.9062 14.7299 20.8958 15.6816 20.8525C16.6316 20.8091 17.2809 20.659 17.8486 20.4385C18.4352 20.2108 18.932 19.9051 19.4277 19.4092C19.924 18.9136 20.2294 18.4163 20.458 17.8301C20.6773 17.263 20.8284 16.6147 20.873 15.666C20.9158 14.715 20.9268 14.4115 20.9268 11.9902C20.9268 9.56889 20.9158 9.26433 20.873 8.31348C20.8284 7.36441 20.6773 6.71628 20.458 6.14941C20.2294 5.56295 19.9241 5.06495 19.4277 4.56934C18.9315 4.0735 18.435 3.76854 17.8477 3.54102C17.2789 3.32061 16.6303 3.17043 15.6807 3.12695C14.729 3.08368 14.4257 3.07325 12.0029 3.07324ZM11.2041 4.67969C11.4415 4.67932 11.7064 4.67969 12.0039 4.67969C14.3864 4.67969 14.6695 4.68872 15.6104 4.73145C16.48 4.77122 16.9521 4.91607 17.2666 5.03809C17.683 5.19968 17.9799 5.39307 18.292 5.70508C18.6043 6.01714 18.7979 6.31442 18.96 6.73047C19.0821 7.0444 19.228 7.51638 19.2676 8.38574C19.3103 9.32564 19.3193 9.60808 19.3193 11.9873C19.3193 14.3669 19.3103 14.6499 19.2676 15.5898C19.2278 16.4592 19.0821 16.9312 18.96 17.2451C18.7982 17.6611 18.6043 17.9577 18.292 18.2695C17.9798 18.5815 17.6831 18.7749 17.2666 18.9365C16.9525 19.0591 16.4799 19.2034 15.6104 19.2432C14.6697 19.2859 14.3864 19.2949 12.0039 19.2949C9.62157 19.2949 9.33904 19.2859 8.39844 19.2432C7.52853 19.203 7.05593 19.0576 6.74121 18.9355C6.32506 18.774 6.02799 18.5805 5.71582 18.2686C5.40356 17.9565 5.20995 17.6604 5.04785 17.2441C4.92572 16.9302 4.77983 16.4582 4.74023 15.5889C4.69748 14.649 4.68945 14.3664 4.68945 11.9854C4.68945 9.6046 4.69749 9.32354 4.74023 8.38379C4.78 7.51476 4.92575 7.04283 5.04785 6.72852C5.20958 6.3124 5.40351 6.01423 5.71582 5.70215C6.0279 5.39037 6.32514 5.19705 6.74121 5.03516C7.05574 4.91255 7.52851 4.76749 8.39844 4.72754C9.2216 4.69039 9.54105 4.6796 11.2041 4.67773V4.67969ZM12.0039 7.41113C9.47343 7.41133 7.42188 9.46154 7.42188 11.9902C7.42211 14.5187 9.47358 16.5682 12.0039 16.5684C14.5344 16.5684 16.5857 14.5188 16.5859 11.9902C16.5859 9.46143 14.5345 7.41113 12.0039 7.41113ZM12.0039 9.01758C13.6465 9.01758 14.9785 10.3486 14.9785 11.9902C14.9783 13.6315 13.6464 14.9619 12.0039 14.9619C10.3614 14.9617 9.03051 13.6313 9.03027 11.9902C9.03027 10.3488 10.3613 9.01777 12.0039 9.01758ZM16.7676 6.16016C16.1764 6.16016 15.6963 6.63956 15.6963 7.23047C15.6965 7.82106 16.1765 8.2998 16.7676 8.2998C17.3585 8.29969 17.8377 7.82099 17.8379 7.23047C17.8379 6.63982 17.3586 6.16028 16.7676 6.16016Z" />
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a class="footer__social-link" href="#" aria-label="Optomatic on Pinterest">
+            <svg class="footer__social-icon" viewBox="48 0 24 24" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M60.0087 0C53.3731 0 47.9997 5.3734 47.9997 12.009C47.9997 17.0939 51.1552 21.4395 55.627 23.1886C55.5188 22.2329 55.4287 20.7904 55.6631 19.7446C55.8795 18.8069 57.0695 13.7761 57.0695 13.7761C57.0695 13.7761 56.7089 13.0548 56.7089 11.991C56.7089 10.314 57.6826 9.06987 58.8727 9.06987C59.9005 9.06987 60.3873 9.84523 60.3873 10.7648C60.3873 11.7926 59.7382 13.3434 59.3956 14.7678C59.1071 15.9579 59.9906 16.9316 61.1807 16.9316C63.3085 16.9316 64.9493 14.6777 64.9493 11.432C64.9493 8.56499 62.8757 6.54545 59.9366 6.54545C56.5286 6.54545 54.5091 9.10593 54.5091 11.7566C54.5091 12.7844 54.9057 13.9023 55.4106 14.4974C55.5008 14.6236 55.5188 14.7137 55.5008 14.84C55.4106 15.2186 55.2123 16.0301 55.1762 16.1923C55.1221 16.4087 54.9959 16.4628 54.7795 16.3546C53.2829 15.6514 52.3453 13.4696 52.3453 11.7025C52.3453 7.91585 55.1041 4.43576 60.2792 4.43576C64.4444 4.43576 67.6721 7.41097 67.6721 11.3599C67.6721 15.4891 65.0575 18.8249 61.4512 18.8249C60.2431 18.8249 59.0891 18.1938 58.6924 17.4545C58.6924 17.4545 58.0973 19.7446 57.9531 20.3035C57.6826 21.3494 56.9433 22.6476 56.4565 23.4591C57.5744 23.8017 58.7645 24 60.0087 24C66.6443 24 72.0177 18.6266 72.0177 11.991C72.0177 5.3734 66.6443 0 60.0087 0Z" />
+            </svg>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="js/auth.js" defer></script>
+  <script src="js/nav.js" defer></script>
+  <script src="js/footer.js" defer></script>
+  <script src="js/light-find-config.js" defer></script>
+</body>
+</html>

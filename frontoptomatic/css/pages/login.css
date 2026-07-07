@@ -1,0 +1,289 @@
+/* ============================================================================
+ * login.css — 로그인 페이지 (Sign in)
+ * Figma: Optomatic_NEW_260601 / 260428_dashboard_UI_01 (node 5091:13082)
+ *
+ * 토큰 의존: variables.css(--color-*, --font-*, --space-*) → reset → typography
+ *           → layout → nav → footer 다음에 마지막으로 불러오세요.
+ *
+ * 구성:
+ *   1) login-hero  — "Welcome back" 배경 사진 + 큰 제목
+ *   2) login-form  — 이메일/비밀번호 입력 + 옵션 행 + SIGN IN 버튼 + 회원가입 안내
+ *
+ * 정직 고지(디자인 실측과 다른 점):
+ *   · 이 페이지의 좌우 여백은 Figma 실측 96px 입니다(.container 의 136px,
+ *     nav 의 184px 와 다름). 페이지 고유 값이라 토큰을 덮어쓰지 않고
+ *     여기 전용 변수(--login-gutter)로 둡니다.
+ *   · 제목 "Welcome back" 은 96px / letter-spacing -1.92px 로,
+ *     기존 --font-size-h1(112px)/-2.24px 스케일과 달라 실측값을 직접 적습니다.
+ *   · letter-spacing 0.64px(버튼) 는 --letter-spacing-* 스케일에 없어 실측값 사용.
+ *   · Figma 두 번째 입력칸의 placeholder 는 "Optomatic Headquaters in Seoul"
+ *     이지만, 이는 입력 컴포넌트의 기본 더미 텍스트가 그대로 남은 것으로 보입니다.
+ *     로그인 폼 맥락상 두 번째 칸은 비밀번호이므로 placeholder 를 "Password"
+ *     (type=password)로 구현했습니다.
+ * ========================================================================== */
+
+/* 스크린리더 전용(시각적 숨김) — 폼 입력 라벨 등 접근성용 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.login {
+  --login-gutter: 96px;          /* 페이지 좌우 여백 (Figma 실측) */
+  --login-field-width: 600px;    /* 입력/버튼 폭 (Figma 고정 600px) */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background-color: var(--color-neutral-50);   /* #fbfdff */
+}
+
+/* ----------------------------------------------------------------------------
+ * 1) HERO — "Welcome back" (배경 사진 위 큰 제목)
+ *    Figma node 6467:17159 — px 96 / py 40, 배경 Frame116(이미 어둡게 합성됨)
+ * -------------------------------------------------------------------------- */
+.login-hero {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: var(--content-max);               /* 1440px */
+  padding: 40px var(--login-gutter);           /* 상하 40 / 좌우 96 */
+  overflow: hidden;
+  background-color: var(--color-neutral-900);  /* 이미지 로드 전 폴백 */
+  color: var(--color-text-on-dark);            /* #fbfdff */
+}
+/* 배경 사진 — 섹션 전체를 덮음(absolute). 사진 자체가 어둡게 합성돼 있어
+ * 별도 스크림 없이 흰 제목 가독성이 확보됩니다. */
+.login-hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.login-hero__title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-light);       /* 300 (Manrope Light) */
+  font-size: 96px;                             /* Figma 실측 (h1 토큰 112px 와 다름) */
+  line-height: 1;
+  letter-spacing: -1.92px;                     /* Figma 실측 */
+}
+
+/* ----------------------------------------------------------------------------
+ * 2) FORM — 입력 + 옵션 + 버튼
+ *    Figma node 5091:13109 — bg #fbfdff, padding 96, gap 40, 가운데 정렬
+ * -------------------------------------------------------------------------- */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;                                   /* 그룹 간격 (Figma 실측) */
+  width: 100%;
+  max-width: var(--content-max);
+  padding: var(--login-gutter);                /* 96px 사방 */
+  background-color: var(--color-neutral-50);   /* #fbfdff */
+}
+
+.login-form__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+}
+
+/* 입력 그룹 (이메일 + 비밀번호 + 옵션 행) */
+.login-form__fields {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-lg);                        /* 24px */
+  width: 100%;
+  max-width: var(--login-field-width);         /* 600px */
+}
+
+/* 입력 필드 — Figma input field (node 6467:17181 등) */
+.field {
+  width: 100%;
+}
+.field__input {
+  width: 100%;
+  padding: var(--space-md);                    /* 16px */
+  border: 1px solid var(--color-neutral-400);  /* #85888e */
+  background-color: var(--color-neutral-50);   /* #fbfdff */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);     /* 400 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-black);                   /* 입력값 색 */
+}
+.field__input::placeholder {
+  color: var(--color-neutral-400);             /* #85888e (Figma placeholder 색) */
+  opacity: 1;                                  /* Firefox 기본 흐림 제거 */
+}
+.field__input:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);          /* #4428ff (포커스 강조) */
+}
+
+/* 옵션 행 — Remember me | Forgot password (Figma node 5091:13166, justify-between) */
+.login-form__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Remember me 체크박스 — Figma check_box_outline_blank(20px) + 라벨 */
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);                        /* 8px */
+  cursor: pointer;
+}
+/* 실제 input 은 숨기고(접근성 위해 제거하지 않음) 커스텀 박스로 표시 */
+.checkbox__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.checkbox__box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-black);        /* #1a1b1b (Material outline blank) */
+  border-radius: 2px;
+  background-color: transparent;
+  color: var(--color-text-on-dark);            /* 체크표시 색 */
+}
+/* 체크된 상태: 파란 배경 + 흰 체크 표시 */
+.checkbox__input:checked + .checkbox__box {
+  background-color: var(--color-primary);      /* #4428ff */
+  border-color: var(--color-primary);
+}
+.checkbox__check {
+  width: 14px;
+  height: 14px;
+  opacity: 0;                                  /* 기본 숨김 */
+}
+.checkbox__input:checked + .checkbox__box .checkbox__check {
+  opacity: 1;
+}
+/* 키보드 포커스 가시성 (input 은 숨겨져 있으므로 박스에 표시) */
+.checkbox__input:focus-visible + .checkbox__box {
+  outline: 2px solid var(--color-black);
+  outline-offset: 2px;
+}
+.checkbox__label {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-black);                   /* #1a1b1b */
+}
+
+/* Forgot password 링크 — Figma node 5091:13172 (#4428ff, underline) */
+.login-form__forgot {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-primary);                 /* #4428ff */
+  text-decoration: underline;
+  white-space: nowrap;
+}
+.login-form__forgot:hover {
+  color: var(--color-primary-hover);           /* #2914b2 */
+}
+
+/* 액션 그룹 (SIGN IN 버튼 + 회원가입 안내) — Figma node 5091:13173 */
+.login-form__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);                        /* 24px */
+  width: 100%;
+  max-width: var(--login-field-width);         /* 600px */
+}
+
+/* SIGN IN 버튼 — Figma button(node 6467:17189), bg #4428ff full-width */
+.login-form__submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--space-xs) var(--space-md);    /* 8px 16px */
+  border: none;
+  background-color: var(--color-primary);      /* #4428ff */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1;
+  letter-spacing: 0.64px;                      /* Figma 실측 (스케일 외 값) */
+  color: var(--color-text-on-dark);            /* #fbfdff */
+  cursor: pointer;
+}
+.login-form__submit:hover {
+  background-color: var(--color-primary-hover);/* #2914b2 */
+}
+.login-form__submit:focus-visible {
+  outline: 2px solid var(--color-black);
+  outline-offset: 2px;
+}
+
+/* 회원가입 안내 — Figma node 5091:13176 */
+.login-form__signup {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-black);                   /* #1a1b1b */
+  text-align: center;
+}
+.login-form__signup a {
+  color: var(--color-primary);                 /* #4428ff */
+  text-decoration: underline;
+}
+.login-form__signup a:hover {
+  color: var(--color-primary-hover);           /* #2914b2 */
+}
+
+/* ----------------------------------------------------------------------------
+ * 모바일 — 1024px 미만 (layout 공통 가이드: 여백·폰트 축소)
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .login-hero {
+    padding: var(--space-xl) var(--page-gutter-mobile);  /* 32px 16px */
+  }
+  .login-hero__title {
+    font-size: 48px;                           /* 96 → 48 (모바일 축소) */
+    letter-spacing: -0.96px;
+  }
+
+  .login-form {
+    padding: 40px var(--page-gutter-mobile);   /* 40px 16px */
+    gap: var(--space-xl);                       /* 40 → 32 */
+  }
+  .login-form__inner {
+    gap: var(--space-xl);
+  }
+}

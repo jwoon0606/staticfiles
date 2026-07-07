@@ -1,0 +1,241 @@
+/* ============================================================================
+ * coming-soon.css — Optomatic "Coming Soon" 페이지 전용 스타일
+ *
+ * 대상 디자인 (Optomatic_NEW_260601):
+ *   · Desktop - 188 (node 5169:11000)  — 기본형 (이메일 입력 없음)        → coming-soon.html
+ *   · Desktop - 189 (node 5169:12171)  — 이메일 입력 + GET NOTIFIED      → coming-soon-notify.html
+ *   · Desktop - 204 (node 5293:136)    — GET NOTIFIED 후 "Thank you…" 상태 → notify 페이지 제출 상태
+ *   · iPhone SE - 5 (node 5169:12216)  — 기본형 모바일
+ *   · iPhone SE - 6 (node 5169:13351)  — 이메일 입력 모바일
+ *   · iPhone SE - 7 (node 5191:2 / 5191:19) — 모바일 햄버거 열림(언어 EN 박스만)
+ *
+ * 토큰 의존: variables.css 를 먼저 불러오세요.
+ * 공통 컴포넌트: nav.css(상단 바) · footer.css(푸터) 를 재사용합니다.
+ *   coming soon 의 상단 바는 메뉴 링크·SIGN IN 없이 [로고 + 언어(EN)] 만
+ *   남긴 nav 의 부분집합이라, nav.css 를 그대로 재사용합니다(마크업만 축소).
+ *
+ * 정직 고지(실측값 vs 토큰):
+ *   · 본문 영역 좌우 패딩은 Figma 실측 184px(= nav 와 동일)입니다.
+ *     공통 --page-gutter(136px)와 다른 값이라 페이지 전용 --cs-gutter 로 둡니다.
+ *   · "Coming Soon" 140px(데스크톱)은 Figma 가 한 줄(whitespace-nowrap) 기준
+ *     1440px 폭에서만 정의됩니다. 1024~1440 중간 폭에는 전용 디자인이 없어,
+ *     가로 오버플로 대신 자연 줄바꿈(2줄, 가운데 정렬)을 허용했습니다.
+ *   · 색상 매핑: 입력 배경 #ebeff9 = --color-neutral-100,
+ *     플레이스홀더 #85888e = --color-neutral-400, 배경 #fbfdff = --color-neutral-50.
+ * ========================================================================== */
+
+/* 스크린리더 전용(시각적 숨김) — 폼 입력 라벨 등 접근성용 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 스티키 푸터: body 를 세로 flex 로 만들어 본문이 늘어나고 푸터가 바닥에 붙음 */
+.cs-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--color-neutral-50);          /* #fbfdff (Figma 루트 배경) */
+
+  /* 폰트 스무딩: macOS 크롬 기본(서브픽셀)은 글자를 더 굵게 렌더해 Figma 와
+   * 다르게 보입니다. grayscale 스무딩으로 맞춰 Figma 시안의 두께와 일치시킴.
+   * (특히 Email Address 플레이스홀더 SemiBold 가 굵어 보이던 차이 해소) */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ----------------------------------------------------------------------------
+ * 본문 영역 — "Coming Soon" + 설명 (+ 이메일 폼 / 감사 메시지)
+ *   Figma: gap 40px, padding 120px 184px, 가운데 정렬, 높이 hug(데스크톱 780px)
+ *   여기서는 flex:1 로 nav~footer 사이를 채워 화면 높이에 맞춥니다.
+ * -------------------------------------------------------------------------- */
+.coming-soon {
+  --cs-gutter: 184px;                                  /* Figma 실측 데스크톱 좌우 패딩 */
+
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2xl);                               /* 48px? → 아래에서 40px 로 보정 */
+  gap: 40px;                                           /* Figma 실측 (스케일 외 값) */
+  padding: 120px var(--cs-gutter);
+  text-align: center;
+  color: var(--color-black);                           /* #1a1b1b */
+}
+
+/* 제목 + 설명 묶음 (Figma: 데스크톱은 gap 40 한 흐름, 모바일은 gap 16 묶음) */
+.coming-soon__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;                                           /* 데스크톱: 제목↔설명 40 */
+  width: 100%;                                         /* 폭을 컨테이너로 고정 → 제목이 hug 폭으로 넘치지 않고 줄바꿈 */
+}
+
+/* "Coming Soon" — Manrope Medium 140px / line 1.2
+ * width:100% 로 묶음(intro) 폭을 채워 hug 폭 오버플로 없이 줄바꿈되게 함
+ * (intro 가 align-items:flex-start 일 때 자식이 hug 되어 넘치는 것을 방지) */
+.coming-soon__title {
+  width: 100%;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);              /* 500 */
+  font-size: 140px;
+  line-height: 1.2;
+  letter-spacing: 0;                                   /* Figma: tracking 없음 */
+  color: inherit;
+}
+
+/* 설명 — Manrope Regular 28px / line 1.2 (.body 16px 규칙을 덮어씀) */
+.coming-soon__desc,
+.coming-soon__desc p {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);             /* 400 */
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: 0;
+  color: inherit;
+}
+.coming-soon__desc {
+  width: 100%;
+}
+
+/* 감사 메시지 — Manrope SemiBold 28px / line 1.2 (Desktop-204) */
+.coming-soon__thanks {
+  width: 100%;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: 0;
+  color: inherit;
+}
+
+/* ----------------------------------------------------------------------------
+ * 이메일 등록 폼 — 입력 + GET NOTIFIED
+ *   Figma 데스크톱: gap 16, 입력 폭 544px, 버튼 hug(가운데)
+ * -------------------------------------------------------------------------- */
+.coming-soon__form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);                                /* 16px */
+}
+
+/* 입력칸 — bg #ebeff9, padding 8 16, 폭 544. 플레이스홀더 #85888e 20px SemiBold */
+.coming-soon__input {
+  width: 544px;
+  max-width: 100%;
+  padding: var(--space-xs) var(--space-md);            /* 8px 16px */
+  border: none;
+  background-color: var(--color-neutral-100);          /* #ebeff9 */
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body-lg);                 /* 20px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: 0.4px;                               /* 실측 */
+  color: var(--color-black);                           /* 입력값 색 */
+}
+.coming-soon__input::placeholder {
+  color: var(--color-neutral-400);                     /* #85888e */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  opacity: 1;                                          /* Firefox 기본 투명도 해제 */
+}
+.coming-soon__input:focus-visible {
+  outline: 2px solid var(--color-black);
+  outline-offset: 2px;
+}
+
+/* GET NOTIFIED 버튼 — 보더 박스, padding 8 24, 20px Medium tracking 0.8 */
+.coming-soon__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) var(--space-lg);            /* 8px 24px */
+  border: 1px solid var(--color-black);                /* #1a1b1b */
+  background: transparent;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body-lg);                 /* 20px */
+  font-weight: var(--font-weight-medium);              /* 500 */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-body-lg);       /* 0.8px */
+  color: var(--color-black);                           /* #1a1b1b */
+  white-space: nowrap;
+  cursor: pointer;
+}
+.coming-soon__submit:hover,
+.coming-soon__submit:focus-visible {
+  background-color: var(--color-black);                /* #1a1b1b */
+  color: var(--color-text-on-dark);                    /* #fbfdff */
+  outline: none;
+}
+
+/* 상태 토글: 작성자 display 규칙이 UA [hidden] 보다 우선하므로 명시적 숨김 필요 */
+.coming-soon__form[hidden],
+.coming-soon__thanks[hidden] {
+  display: none;
+}
+
+/* ----------------------------------------------------------------------------
+ * 모바일 레이아웃 — 1024px 미만 (layout.css 와 동일 기준)
+ *   Figma 모바일(320px): 본문 좌측 정렬·아래 정렬, 좌우 16 / 상하 80,
+ *   제목 64px(Coming / Soon 2줄), 설명 20px, 폼 gap 8 · 풀폭.
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .coming-soon {
+    align-items: flex-start;
+    justify-content: flex-end;                         /* Figma: justify-end */
+    gap: 40px;
+    padding: var(--space-3xl) var(--page-gutter-mobile); /* 80px 16px */
+    text-align: left;
+  }
+
+  .coming-soon__intro {
+    align-items: flex-start;
+    gap: var(--space-md);                              /* 모바일: 제목↔설명 16 */
+  }
+
+  .coming-soon__title {
+    font-size: 64px;
+    line-height: 1;                                    /* Figma: leading none */
+  }
+
+  .coming-soon__desc,
+  .coming-soon__desc p {
+    font-size: var(--font-size-body-lg);               /* 20px */
+  }
+  /* 모바일은 자연 줄바꿈(Figma) — 데스크톱용 강제 <br> 제거 */
+  .coming-soon__desc br {
+    display: none;
+  }
+
+  .coming-soon__thanks {
+    font-size: var(--font-size-body-lg);               /* 20px */
+  }
+
+  /* 폼·입력·버튼 모두 풀폭, 간격 8 */
+  .coming-soon__form {
+    gap: var(--space-xs);                              /* 8px */
+    width: 100%;
+  }
+  .coming-soon__input {
+    width: 100%;
+    font-size: var(--font-size-body);                  /* 16px */
+    letter-spacing: var(--letter-spacing-body);        /* 0.32px */
+    text-align: center;                                /* Figma: 모바일 플레이스홀더 가운데 */
+  }
+  .coming-soon__submit {
+    width: 100%;
+    font-size: var(--font-size-body);                  /* 16px */
+    letter-spacing: 0.64px;                            /* 실측 */
+  }
+}

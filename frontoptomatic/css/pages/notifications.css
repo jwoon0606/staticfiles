@@ -1,0 +1,255 @@
+/* ============================================================================
+ * notifications.css — Optomatic 알림 페이지 전용 스타일
+ *
+ * 대상 디자인 (Optomatic_NEW_260601):
+ *   · 260429_dashboard_UI_13 (node 6469:24709)
+ *     로그인 상태에서 nav 의 알림(벨) 아이콘을 눌렀을 때 나오는 화면.
+ *
+ * 구성:
+ *   1) Notifications 띠 (Frame 116, node 6469:24711)
+ *      — 다크 사진 배경 + "Notifications" 대형 제목. (대시보드 Welcome 띠와 동일 모델)
+ *   2) 본문 (Frame 106, node 6469:24713) — 좌우 96px / 상하 40px, 블록 gap 24px
+ *      · 필터 행 (Frame 25530): 정렬/필터 드롭다운 칩 2개
+ *      · Unread 그룹 (Frame 25532): 제목 + 알림 항목들
+ *      · Read 그룹 (Frame 25529): 제목 + 알림 항목들(회색 처리)
+ *
+ * 토큰 의존: variables.css 를 먼저 불러오세요.
+ * 공통 컴포넌트: nav.css(로그인 상태 바) · footer.css(푸터) 재사용.
+ *
+ * 정직 고지(실측값 vs 토큰):
+ *   · 본문 좌우 패딩은 Figma 실측 96px (dashboard 와 동일, --notif-gutter).
+ *   · 제목 96px·tracking -1.92px·leading none, 띠 높이 176px 은 스케일 외 실측값.
+ *   · 알림 항목 아이콘 48px, 항목 좌우 패딩 16px·상하 8px, 항목 내부 gap 24px,
+ *     텍스트 줄 간격 8px, 제목/본문 16px(leading 1.2), 날짜 14px 은 Figma 실측.
+ *   · 읽음(Read) 텍스트·아이콘·날짜와 "안읽음 날짜" 색은 #a3a5aa (Figma 실측,
+ *     neutral-400 #85888e 와 미세하게 다른 raw 값이라 그대로 사용).
+ *   · 필터 칩 보더·아이콘·글자는 #1a1b1b(=neutral-900). 칩 라벨 폭은 Figma 실측
+ *     300px / 200px 고정.
+ *
+ * 반응형: Figma 는 PC(1440) 만 제공. 1024px 미만은 좌우 패딩 96→16px,
+ *   필터 칩은 줄바꿈, 칩 라벨 고정폭 해제.
+ * ========================================================================== */
+
+/* 페이지 루트: 본문 좌우 패딩 토큰 + 배경 */
+.notif {
+  --notif-gutter: 96px;                        /* Figma 실측 본문 좌우 패딩 */
+  background-color: var(--color-neutral-50);   /* #fbfdff */
+}
+
+/* 섹션 콘텐츠를 1440px 안에 가두는 공통 래퍼 (nav__inner 와 동일 모델) */
+.notif-inner {
+  width: 100%;
+  max-width: var(--content-max);               /* 1440px */
+  margin: 0 auto;
+}
+
+/* ----------------------------------------------------------------------------
+ * 1) Notifications 띠 — Frame 116 (node 6469:24711)
+ *    Figma: bg 사진(object-cover), padding 40px 96px, items-start · justify-center.
+ *    배경 사진이 어두워 그 위에 흰 텍스트. 사진 로딩 전 폴백은 다크 단색.
+ * -------------------------------------------------------------------------- */
+.notif-hero {
+  width: 100%;
+  background-color: var(--color-neutral-900);  /* #1a1b1b (이미지 폴백) */
+  background-image: url("../../assets/notifications-hero.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: var(--color-text-on-dark);            /* #fbfdff */
+}
+.notif-hero .notif-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 176px;                           /* Figma 띠 높이 */
+  padding: 40px var(--notif-gutter);           /* 40px 96px */
+}
+.notif-hero__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: clamp(40px, 7vw, 96px);           /* Figma 96px → 유동 축소 */
+  font-weight: var(--font-weight-light);       /* 300 */
+  line-height: 1;                              /* Figma: leading none */
+  letter-spacing: -1.92px;                     /* 실측 (스케일 외 값) */
+  color: inherit;
+}
+
+/* ----------------------------------------------------------------------------
+ * 2) 본문 — Frame 106 (node 6469:24713)
+ *    Figma: padding 40px 96px. 안쪽 Frame 124 는 세로 스택, 블록 간격 24px.
+ * -------------------------------------------------------------------------- */
+.notif-body .notif-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);                        /* 24px (Frame 124 gap) */
+  padding: 40px var(--notif-gutter);           /* 40px 96px */
+}
+
+/* ── 필터 행 — Frame 25530 (node 6469:24715) : 칩 2개, 사이 gap 24px ────────── */
+.notif-filters {
+  display: flex;
+  gap: var(--space-lg);                        /* 24px */
+}
+
+/* 칩 (Frame 102 / Frame 131): border 1px #1a1b1b, padding 4px 8px, gap 8px.
+ *   [라벨 영역(고정폭)] [arrow_drop_down 24px] */
+.notif-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);                        /* 8px */
+  padding: var(--space-2xs) var(--space-xs);   /* 4px 8px */
+  border: 1px solid var(--color-neutral-900);  /* #1a1b1b */
+  background: transparent;
+  color: var(--color-neutral-900);             /* #1a1b1b (아이콘·글자 공통) */
+  cursor: pointer;
+}
+
+/* 칩 라벨 영역 — Figma 고정폭(300 / 200). 정렬 아이콘 + 텍스트. */
+.notif-filter__main {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);                        /* 8px */
+}
+.notif-filter--sort .notif-filter__main  { width: 300px; }   /* Figma 실측 */
+.notif-filter--scope .notif-filter__main { width: 200px; }   /* Figma 실측 */
+
+.notif-filter__label {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 (Manrope Medium) */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.4;                            /* Figma leading 1.4 */
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  white-space: nowrap;
+}
+
+/* 필터 칩 인라인 아이콘 — currentColor(#1a1b1b)를 따름 */
+.notif-filter__icon {
+  display: block;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+/* ── 그룹 (Unread / Read) — Frame 25532 / 25529 : 제목 + 목록, gap 16px ─────── */
+.notif-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                        /* 16px */
+}
+.notif-group__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1;                              /* Figma: leading none */
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-neutral-900);             /* Unread #1a1b1b */
+}
+/* Read 그룹: 제목·항목 전체가 옅은 회색(#a3a5aa) */
+.notif-group--read .notif-group__title {
+  color: #a3a5aa;                              /* Figma 실측 */
+}
+
+/* 항목 목록 — 각 항목 사이 간격은 그룹 gap 16px 으로 처리 */
+.notif-list {
+  list-style: none;                            /* reset.css 는 마커를 지우지 않음 */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                        /* 16px */
+}
+
+/* 알림 항목 — Frame 25528 등 (node 6469:24909 …)
+ *   flex 행, gap 24px, padding 8px 16px, 아이콘(48px) + 텍스트 블록.
+ *   항목의 color 가 인라인 아이콘(currentColor)과 제목/본문 글자색을 함께 결정. */
+.notif-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);                        /* 24px */
+  padding: var(--space-xs) var(--space-md);    /* 8px 16px */
+  color: var(--color-neutral-900);            /* Unread #1a1b1b */
+}
+/* Read 항목: 아이콘·제목·본문 모두 #a3a5aa */
+.notif-group--read .notif-item {
+  color: #a3a5aa;                              /* Figma 실측 */
+}
+
+/* 아이콘 (send / alarm) 48px — currentColor 로 항목 색을 따름 */
+.notif-item__icon {
+  display: block;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+}
+
+/* 텍스트 블록 (Frame 25528): 세로 스택, 줄 간격 8px, 가로 가변(flex:1) */
+.notif-item__body {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                        /* 8px */
+}
+
+/* 제목 줄 — 16px, leading 1.2. 굵기는 인라인 <strong>(Bold) / 기본(Medium)로 구분.
+ *   기본 weight 는 Medium, 강조 부분만 Bold. */
+.notif-item__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 (기본 텍스트) */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  color: inherit;
+}
+.notif-item__title strong {
+  font-weight: var(--font-weight-bold);        /* 700 (강조: 이름/프로젝트명) */
+}
+
+/* 본문(메시지) 줄 — 16px, leading 1.2, 한 줄 말줄임 */
+.notif-item__text {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.notif-item__text strong {
+  font-weight: var(--font-weight-bold);        /* 700 ([Project name] 강조) */
+}
+
+/* 날짜 줄 — 14px, leading 1.2, 항상 옅은 회색(#a3a5aa) */
+.notif-item__date {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-caption);         /* 14px */
+  line-height: 1.2;
+  color: #a3a5aa;                              /* Figma 실측 (Read/Unread 공통) */
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------------------------
+ * 반응형 — 1024px 미만
+ *   · 본문 좌우 패딩 96px → 16px
+ *   · 필터 칩 줄바꿈, 라벨 고정폭 해제(내용 폭으로)
+ *   · 긴 메시지는 계속 말줄임
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .notif-hero .notif-inner,
+  .notif-body .notif-inner {
+    padding-left: var(--page-gutter-mobile);   /* 16px */
+    padding-right: var(--page-gutter-mobile);
+  }
+
+  .notif-filters {
+    flex-wrap: wrap;
+  }
+  .notif-filter--sort .notif-filter__main,
+  .notif-filter--scope .notif-filter__main {
+    width: auto;                               /* 고정폭 해제 */
+  }
+}

@@ -1,0 +1,598 @@
+/* ============================================================================
+ * signup.css — 회원가입 페이지 (Sign up)
+ * Figma: Optomatic_NEW_260601 / 260428_dashboard_UI_02 (node 5091:10329)
+ *
+ * 토큰 의존: variables.css(--color-*, --font-*, --space-*) → reset → typography
+ *           → layout → nav → footer 다음에 마지막으로 불러오세요.
+ *
+ * 구성:
+ *   1) signup-hero  — "Welcome back" 배경 사진 + 큰 제목 (login 과 동일 구조)
+ *   2) signup-form  — Account / Personal / Business Card 그룹 + SIGN UP 버튼
+ *
+ * 정직 고지(디자인 실측과 다른 점):
+ *   · 좌우 여백은 Figma 실측 96px(.container 136px, nav 184px 와 다름).
+ *     페이지 고유 값이라 토큰을 덮어쓰지 않고 전용 변수(--signup-gutter)로 둡니다.
+ *   · 제목 "Welcome back" 은 96px / letter-spacing -1.92px (login 과 동일 실측).
+ *     디자인 노드가 회원가입인데도 히어로 카피가 "Welcome back" 입니다.
+ *     디자인을 그대로 전사했습니다(임의로 바꾸지 않음).
+ *   · 라벨/그룹 제목 20px 의 letter-spacing 0.4px, 버튼 0.8px 는
+ *     --letter-spacing-* 스케일에 없어 실측값을 직접 적습니다.
+ *   · Account Information 입력칸은 채움형(bg #ebeff9, 보더 없음),
+ *     Job Type 만 보더형(#85888e + arrow_drop_down)으로 디자인과 일치시켰습니다.
+ *   · Password / Confirm Password 의 placeholder 는 디자인(node 6469:20845,
+ *     6469:20849)과 동일하게 "******" 로 표시합니다. type=password 라 실제 입력 시
+ *     점(•)으로 가려지고, 비어 있을 때만 힌트로 "******" 가 회색으로 보입니다.
+ *   · 아이콘(computer_arrow_up 48px, arrow_drop_down 20px)은 Figma 에서 받은
+ *     SVG 에셋을 그대로 사용합니다(직접 그리지 않음).
+ * ========================================================================== */
+
+/* 스크린리더 전용(시각적 숨김) — 파일 input 등 접근성용 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.signup {
+  --signup-gutter: 96px;       /* 페이지 좌우 여백 (Figma 실측) */
+  --signup-label-w: 208px;     /* 라벨 컬럼 폭 (Figma 실측) */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background-color: var(--color-neutral-50);   /* #fbfdff */
+}
+
+/* ----------------------------------------------------------------------------
+ * 1) HERO — "Welcome back" (배경 사진 위 큰 제목)
+ *    Figma node 6467:17432 — px 96 / py 40, 배경 Frame116(이미 어둡게 합성됨)
+ *    login-hero 와 동일 이미지/스펙 → assets/login-hero.png 재사용
+ * -------------------------------------------------------------------------- */
+.signup-hero {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: var(--content-max);               /* 1440px */
+  padding: 40px var(--signup-gutter);          /* 상하 40 / 좌우 96 */
+  overflow: hidden;
+  background-color: var(--color-neutral-900);  /* 이미지 로드 전 폴백 */
+  color: var(--color-text-on-dark);            /* #fbfdff */
+}
+.signup-hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.signup-hero__title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-light);       /* 300 (Manrope Light) */
+  font-size: 96px;                             /* Figma 실측 */
+  line-height: 1;
+  letter-spacing: -1.92px;                     /* Figma 실측 */
+}
+
+/* ----------------------------------------------------------------------------
+ * 2) FORM — 그룹들 + 액션
+ *    Figma node 5091:10356 — px 96 py 40, gap 40, items-start
+ * -------------------------------------------------------------------------- */
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xl);                         /* 40px? → 그룹 간 40 (아래에서 보정) */
+  width: 100%;
+  max-width: var(--content-max);
+  padding: 40px var(--signup-gutter);          /* 상하 40 / 좌우 96 */
+  background-color: var(--color-neutral-50);   /* #fbfdff */
+}
+.signup-form__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;                                   /* 그룹 간격 (Figma 실측) */
+  width: 100%;
+}
+
+/* 그룹 (Account / Personal / Business Card) — Figma node 5091:10357 등 */
+.signup-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-lg);                         /* 24px (제목 ↔ 필드) */
+  width: 100%;
+}
+.signup-group--card {
+  gap: var(--space-md);                         /* 16px (Business Card 그룹은 16) */
+}
+
+/* 그룹 제목 — semibold 20px, tracking 0.4px, #1a1b1b */
+.signup-group__title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body-lg);         /* 20px */
+  line-height: 1;
+  letter-spacing: 0.4px;                        /* Figma 실측 (스케일 외) */
+  color: var(--color-black);                   /* #1a1b1b */
+}
+
+/* 필수(*) 표시 — magenta */
+.req {
+  color: var(--color-danger);                  /* #ee1b5e */
+}
+
+/* 필드 묶음 — pl 24, gap 16, w-full (Figma node 5091:10359 등) */
+.signup-group__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                         /* 16px */
+  width: 100%;
+  padding-left: var(--space-lg);               /* 24px */
+}
+
+/* 한 행: 라벨(208px) + 컨트롤(나머지) — Figma node 6468:19242 등 */
+.signup-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);                         /* 16px */
+  width: 100%;
+}
+.signup-row__label {
+  flex-shrink: 0;
+  width: var(--signup-label-w);                /* 208px */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body-lg);         /* 20px */
+  line-height: 1.2;
+  letter-spacing: 0.4px;                        /* Figma 실측 */
+  color: var(--color-black);                   /* #1a1b1b */
+}
+.signup-row__control {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* 입력칸(채움형) — bg #ebeff9, 보더 없음 (Figma input field 6385:25564) */
+.signup-input {
+  width: 100%;
+  padding: var(--space-xs) var(--space-md);     /* 8px 16px */
+  border: none;
+  background-color: var(--color-neutral-100);   /* #ebeff9 */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);      /* 400 */
+  font-size: var(--font-size-body);             /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);   /* 0.32px */
+  color: var(--color-black);                    /* 입력값 색 */
+}
+.signup-input::placeholder {
+  color: var(--color-neutral-400);              /* #85888e */
+  opacity: 1;                                   /* Firefox 흐림 제거 */
+}
+.signup-input:focus-visible {
+  outline: 2px solid var(--color-primary);      /* #4428ff */
+  outline-offset: -2px;
+}
+
+/* ----------------------------------------------------------------------------
+ * 비밀번호 필수 입력값 검증 — Password 입력칸 아래 조건 목록
+ *   기본(미입력)  : 회색
+ *   조건 충족      : 초록(체크) / 미충족(입력 시작 후): 빨강
+ * -------------------------------------------------------------------------- */
+.pw-rules {
+  display: none;                                 /* 미입력 시 숨김 (입력 시작하면 노출) */
+  flex-direction: column;                        /* 각 조건을 줄마다 세로로 */
+  gap: var(--space-2xs);                          /* 4px */
+  margin: var(--space-xs) 0 0;                   /* 입력칸과 8px 간격 */
+  padding: 0;
+  list-style: none;
+}
+/* 비밀번호 입력이 시작되면 노출 (JS 가 .is-active 부착) */
+.pw-rules.is-active {
+  display: flex;
+}
+.pw-rule {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);                          /* 4px */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);        /* 400 */
+  font-size: var(--font-size-caption);            /* 14px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-caption);  /* 0.28px */
+  color: var(--color-neutral-400);                /* 기본 회색 (#85888e) */
+}
+/* 동그라미 상태 아이콘 (기본: 빈 원) */
+.pw-rule__icon {
+  flex-shrink: 0;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  position: relative;
+}
+/* 충족(초록) — 체크 표시 */
+.pw-rule.is-valid {
+  color: #1ca65b;                                 /* green */
+}
+.pw-rule.is-valid .pw-rule__icon {
+  background-color: #1ca65b;
+  border-color: #1ca65b;
+}
+.pw-rule.is-valid .pw-rule__icon::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 3px;
+  height: 7px;
+  border: solid #fff;
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg);
+}
+/* 미충족(빨강) — 입력이 시작된 뒤 충족하지 못한 조건 */
+.pw-rule.is-invalid {
+  color: var(--color-danger);                     /* #ee1b5e */
+}
+
+/* Confirm Password 일치 여부 메시지 — 확인란 입력이 시작되면 노출 */
+.pw-match {
+  display: none;
+  align-items: center;
+  gap: var(--space-2xs);                          /* 4px */
+  margin: var(--space-xs) 0 0;                   /* 입력칸과 8px 간격 */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);        /* 400 */
+  font-size: var(--font-size-caption);            /* 14px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-caption);  /* 0.28px */
+}
+.pw-match.is-active {
+  display: flex;
+}
+.pw-match.is-valid {
+  color: #1ca65b;                                 /* green — 일치 */
+}
+.pw-match.is-invalid {
+  color: var(--color-danger);                     /* #ee1b5e — 불일치 */
+}
+
+/* Job Type 커스텀 드롭다운
+ * Figma: 6469:19588(열림 + 옵션 목록), 6478:6587/6592(Other 직접입력)
+ * 네이티브 select 로는 옵션 스타일과 "Other 직접입력"을 재현할 수 없어 커스텀 구현.
+ *   닫힘 기본 : 보더 #85888e, 회색 placeholder, 화살표 아래
+ *   선택/열림 : 보더 #1a1b1b, 텍스트 진하게 (열림 시 화살표 180°)
+ *   옵션 메뉴 : 보더 #1a1b1b, 옵션 hover 시 bg #ebeff9
+ *   Other     : bg #ebeff9 + 보더 #85888e 직접입력 필드로 전환
+ */
+.job-select {
+  position: relative;
+  width: 100%;
+}
+
+/* 트리거 (닫힘 기본 = 회색 보더 + 회색 placeholder) */
+.job-select__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);                          /* 8px */
+  width: 100%;
+  padding: var(--space-xs) var(--space-md);      /* 8px 16px */
+  border: 1px solid var(--color-neutral-400);    /* #85888e */
+  background-color: transparent;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);       /* 400 */
+  font-size: var(--font-size-body);              /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);    /* 0.32px */
+  color: var(--color-neutral-400);               /* placeholder 회색 */
+  text-align: left;
+  cursor: pointer;
+}
+/* display:flex 가 hidden 속성을 덮으므로 명시적으로 숨김 처리 */
+.job-select__trigger[hidden] {
+  display: none;
+}
+/* 값 선택됨 / 열림 → 보더·텍스트 진하게 (Figma 6469:19563) */
+.job-select.is-selected .job-select__trigger,
+.job-select.is-open .job-select__trigger {
+  border-color: var(--color-black);              /* #1a1b1b */
+  color: var(--color-black);
+}
+.job-select__value {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.job-select__arrow {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.15s ease;
+}
+.job-select.is-open .job-select__arrow {
+  transform: rotate(180deg);                     /* 열림 시 위로 (Figma) */
+}
+
+/* 옵션 메뉴 (Figma 6469:19568: 보더 #1a1b1b, gap 8, px16 py8) */
+.job-select__menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% - 1px);                         /* 트리거 보더와 겹치게 */
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                          /* 8px */
+  margin: 0;
+  padding: var(--space-xs) var(--space-md);      /* 8px 16px */
+  border: 1px solid var(--color-black);          /* #1a1b1b */
+  background-color: var(--color-neutral-50);     /* #fbfdff */
+  list-style: none;
+}
+.job-select__menu[hidden] {
+  display: none;
+}
+
+/* 옵션 (px8 py4) — hover/활성 시 bg #ebeff9 (Figma 6469:19573) */
+.job-select__option {
+  padding: var(--space-2xs) var(--space-xs);     /* 4px 8px */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);       /* 400 */
+  font-size: var(--font-size-body);              /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);    /* 0.32px */
+  color: var(--color-black);                     /* #1a1b1b */
+  cursor: pointer;
+}
+.job-select__option:hover,
+.job-select__option.is-active {
+  background-color: var(--color-neutral-100);    /* #ebeff9 */
+}
+
+/* Other 직접입력 필드 — Figma 6478:6587(빈)/6592(입력됨)
+ * bg #ebeff9 + 보더 #85888e, 우측 화살표로 목록 재열기 */
+.job-select__other-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                          /* 8px */
+  width: 100%;
+  padding: var(--space-xs) var(--space-md);      /* 8px 16px */
+  border: 1px solid var(--color-neutral-400);    /* #85888e */
+  background-color: var(--color-neutral-100);    /* #ebeff9 */
+}
+.job-select__other-wrap[hidden] {
+  display: none;
+}
+.job-select__other-input {
+  flex: 1 1 0;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-body);              /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);    /* 0.32px */
+  color: var(--color-black);                     /* 입력값 진한색 (Figma 6478:6592) */
+}
+.job-select__other-input::placeholder {
+  color: var(--color-neutral-400);               /* #85888e (Figma 6478:6587) */
+  opacity: 1;
+}
+.job-select__other-input:focus {
+  outline: none;
+}
+.job-select__other-arrow {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-neutral-400);               /* 화살표 회색 */
+  cursor: pointer;
+}
+
+/* ----------------------------------------------------------------------------
+ * Business Card 업로드 영역 — Figma node 5091:10387
+ *    border 2px dashed #5b5d62, radius 6, px 16 py 24, 중앙 정렬
+ * -------------------------------------------------------------------------- */
+.signup-drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);                          /* 16px (안내 ↔ 파일 행) */
+  width: 100%;
+  padding: var(--space-lg) var(--space-md);     /* 24px 16px */
+  border: 2px dashed var(--color-neutral-500);  /* #5b5d62 */
+  border-radius: 6px;
+}
+.signup-drop:hover,
+.signup-drop.is-dragover {
+  border-color: var(--color-primary);           /* #4428ff (상호작용 힌트) */
+}
+/* 클릭 영역(파일 선택) — 아이콘 + 안내문 묶음. Figma node 6469:20983 */
+.signup-drop__zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);                          /* 8px */
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+.signup-drop__icon {
+  width: 48px;
+  height: 48px;
+}
+.signup-drop__title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);     /* 600 */
+  font-size: var(--font-size-body);             /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);   /* 0.32px */
+  color: var(--color-black);                    /* #1a1b1b */
+}
+.signup-drop__hint {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);      /* 400 */
+  font-size: var(--font-size-caption);          /* 14px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-caption);/* 0.28px */
+  color: var(--color-neutral-400);              /* #85888e */
+}
+.signup-drop__note {
+  max-width: 588px;                             /* Figma 실측 */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);      /* 400 */
+  font-size: var(--font-size-caption);          /* 14px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-caption);/* 0.28px */
+  color: var(--color-neutral-400);              /* #85888e */
+}
+/* 업로드된 파일 행 — Figma node 6469:20990 (h 32, px 8 py 4, justify-between)
+ * 기본은 숨김. 파일 선택 시 JS 가 .signup-drop 에 .is-filled 를 붙여 노출 */
+.signup-drop__file-row {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 32px;
+  padding: var(--space-2xs) var(--space-xs);    /* 4px 8px */
+}
+.signup-drop.is-filled .signup-drop__file-row {
+  display: flex;
+}
+.signup-drop__file-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                          /* 8px */
+  min-width: 0;
+}
+.signup-drop__file-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+.signup-drop__file-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);     /* 600 */
+  font-size: var(--font-size-body);             /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);   /* 0.32px */
+  color: var(--color-black);                    /* #1a1b1b */
+}
+.signup-drop__remove {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.signup-drop__remove img {
+  width: 24px;
+  height: 24px;
+}
+
+/* ----------------------------------------------------------------------------
+ * 액션 — SIGN UP 버튼 + 약관 안내 (Figma node 5091:13182)
+ * -------------------------------------------------------------------------- */
+.signup-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);                          /* 24px */
+  width: 100%;
+}
+.signup-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--space-xs) var(--space-md);      /* 8px 16px */
+  border: none;
+  background-color: var(--color-primary);        /* #4428ff */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);        /* 500 */
+  font-size: var(--font-size-body-lg);           /* 20px */
+  line-height: 1;
+  letter-spacing: 0.8px;                         /* Figma 실측 */
+  color: var(--color-text-on-dark);              /* #fbfdff */
+  cursor: pointer;
+}
+.signup-submit:hover {
+  background-color: var(--color-primary-hover);  /* #2914b2 */
+}
+.signup-submit:focus-visible {
+  outline: 2px solid var(--color-black);
+  outline-offset: 2px;
+}
+.signup-terms {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);        /* 500 */
+  font-size: var(--font-size-body);              /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);    /* 0.32px */
+  color: var(--color-black);                     /* #1a1b1b */
+  text-align: center;
+}
+.signup-terms a {
+  font-weight: var(--font-weight-semibold);      /* 600 */
+  color: var(--color-primary);                   /* #4428ff */
+  text-decoration: underline;
+}
+.signup-terms a:hover {
+  color: var(--color-primary-hover);             /* #2914b2 */
+}
+
+/* ----------------------------------------------------------------------------
+ * 모바일 — 1024px 미만 (라벨을 입력 위로 쌓고, 여백·폰트 축소)
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .signup-hero {
+    padding: var(--space-xl) var(--page-gutter-mobile);  /* 32px 16px */
+  }
+  .signup-hero__title {
+    font-size: 48px;                             /* 96 → 48 */
+    letter-spacing: -0.96px;
+  }
+
+  .signup-form {
+    padding: 40px var(--page-gutter-mobile);     /* 40px 16px */
+  }
+  .signup-group__fields {
+    padding-left: 0;                             /* 모바일은 들여쓰기 제거 */
+  }
+
+  /* 라벨을 입력 위로 쌓기 */
+  .signup-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-xs);                         /* 8px */
+  }
+  .signup-row__label {
+    width: 100%;
+  }
+}

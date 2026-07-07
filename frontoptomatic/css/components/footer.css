@@ -1,0 +1,218 @@
+/* ============================================================================
+ * footer.css — Optomatic 데스크톱 푸터 (footer_desktop / EN)
+ * Figma: node 5888:210
+ *
+ * 토큰 의존: variables.css (--color-*, --font-*, --space-*) 를 먼저 불러오세요.
+ * 색·폰트·간격은 모두 토큰을 참조합니다. 디자인 실측값이 기존 토큰과
+ * 다른 경우(예: BACK TO TOP letter-spacing)는 주석으로 명시했습니다.
+ * ========================================================================== */
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  background-color: var(--color-neutral-900);   /* #1a1b1b */
+  color: var(--color-text-on-dark);             /* #fbfdff */
+  font-family: var(--font-latin);
+}
+
+/* ----------------------------------------------------------------------------
+ * 상단 퍼플 바 — "BACK TO TOP" (클릭 시 맨 위로, 동작은 footer.js)
+ * -------------------------------------------------------------------------- */
+.footer__top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xl);                          /* 32px */
+  width: 100%;
+  border: none;
+  background-color: var(--color-primary);        /* #4428ff */
+  color: var(--color-text-on-dark);              /* #fbfdff */
+  cursor: pointer;
+}
+
+.footer__top-label {
+  font-size: var(--font-size-body-lg);           /* 20px */
+  font-weight: var(--font-weight-semibold);      /* 600 */
+  line-height: 1;                                /* 실측: leading none */
+  letter-spacing: 0.4px;                         /* 실측값. 참고: --letter-spacing-body-lg 는 0.8px 로 다름 */
+  white-space: nowrap;
+}
+
+.footer__top-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+/* 키보드 포커스 가시성 (접근성) */
+.footer__top:focus-visible {
+  outline: 2px solid var(--color-text-on-dark);
+  outline-offset: -4px;
+}
+
+/* ----------------------------------------------------------------------------
+ * 본문 영역 — 로고 · 링크 · 회사정보 · SNS
+ * -------------------------------------------------------------------------- */
+/* 본문 콘텐츠는 layout.css의 .container와 동일한 모델로 가둡니다:
+ *   width 100% + max-width 1440px + margin auto(가운데 정렬) + 좌우 여백(--page-gutter).
+ *   → 다크 배경(.footer)·퍼플 바(.footer__top)는 화면 전체 폭으로 두고,
+ *     이 콘텐츠만 1440px 안에 모이게 함. 1440px 초과 화면에서 콘텐츠가
+ *     양끝으로 퍼지지 않고 가운데 정렬됩니다.
+ *   여백 값은 --space-footer-gutter(136px)와 동일하지만, 공통 토큰을
+ *   참조해 .container와 한 기준으로 움직이게 함. */
+.footer__main {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-footer-col-gap);              /* 90px */
+  width: 100%;
+  max-width: var(--content-max);                 /* 1440px 안에 콘텐츠 가둠 */
+  margin: 0 auto;                                /* 넓은 화면에서 가운데 정렬 */
+  padding: var(--space-3xl) var(--page-gutter);  /* 80px 136px (PC 좌우 여백) */
+}
+
+/* 로고 */
+.footer__logo {
+  flex-shrink: 0;
+  display: block;
+}
+.footer__logo img {
+  width: auto;
+  height: 188px;                                 /* 실측: 167.676 × 188 */
+}
+
+/* ----------------------------------------------------------------------------
+ * 사이트 링크
+ * -------------------------------------------------------------------------- */
+.footer__nav {
+  flex-shrink: 0;
+}
+.footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                          /* 8px */
+  width: 142px;                                  /* 실측 */
+  list-style: none;
+}
+.footer__links a {
+  display: inline-block;
+  font-size: var(--font-size-caption);           /* 14px */
+  font-weight: var(--font-weight-light);         /* 300 */
+  line-height: 1.4;                              /* 실측 leading */
+  letter-spacing: var(--letter-spacing-caption); /* 0.28px */
+  color: var(--color-text-on-dark);
+  text-decoration: none;
+}
+.footer__links a:hover,
+.footer__links a:focus-visible {
+  text-decoration: underline;
+}
+/* 모바일 전용 링크 (Cookie policy / Downloads / Imprint): 데스크톱 숨김.
+ * 모바일 미디어쿼리에서 다시 표시함. */
+.footer__link--mobile {
+  display: none;
+}
+
+/* ----------------------------------------------------------------------------
+ * 회사 정보 — 라벨(600) / 값(300)
+ * -------------------------------------------------------------------------- */
+.footer__company {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                          /* 8px */
+  font-style: normal;                            /* <address> 기본 italic 해제 */
+}
+.footer__company p {
+  font-size: var(--font-size-caption);           /* 14px */
+  font-weight: var(--font-weight-light);         /* 300 (값 기본) */
+  line-height: 1.4;                              /* 실측 leading */
+  letter-spacing: var(--letter-spacing-caption); /* 0.28px */
+}
+.footer__label {
+  font-weight: var(--font-weight-semibold);      /* 600 (라벨 강조) */
+}
+.footer__value,
+.footer__sep {
+  font-weight: var(--font-weight-light);         /* 300 */
+}
+
+/* ----------------------------------------------------------------------------
+ * SNS 아이콘 링크
+ * -------------------------------------------------------------------------- */
+.footer__social {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);                          /* 24px (실측 아이콘 간격) */
+  list-style: none;
+  flex-shrink: 0;                                /* footer__main flex 행에서 눌리지 않게 고정 */
+}
+.footer__social-link {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--color-text-on-dark);
+}
+.footer__social-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;                                /* SVG가 flex 안에서 24px 밑으로 찌그러지지 않게 */
+}
+.footer__social-link:hover .footer__social-icon,
+.footer__social-link:focus-visible .footer__social-icon {
+  opacity: 0.7;
+}
+.footer__social-link:focus-visible {
+  outline: 2px solid var(--color-text-on-dark);
+  outline-offset: 2px;
+}
+
+/* ----------------------------------------------------------------------------
+ * 모바일 레이아웃 — 1024px 미만 (layout.css의 단일 breakpoint와 동일 기준)
+ *   Figma 모바일 footer(node 5888:526, 320px 기준)에 맞춤:
+ *     · 퍼플 BACK TO TOP 바 · Optomatic 로고 → 숨김 (모바일 디자인에 없음)
+ *     · SNS 아이콘을 맨 위로, 그 아래 링크 → 회사정보 순으로 세로 쌓기
+ *     · 블록 간 간격 24px, 좌우 여백 16px, 상하 여백 40px
+ *     · 링크 7개 (Cookie policy / Downloads / Imprint 모바일 전용 포함)
+ *     · 회사정보의 Company/CEO, Email/Phone은 각각 줄 분리
+ *   ※ 태블릿 전용 디자인이 없어 PC/모바일 2단계로만 운영합니다.
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  /* 모바일 디자인에 없는 요소 숨김 */
+  .footer__top,
+  .footer__logo {
+    display: none;
+  }
+
+  /* 2열 레이아웃 (Figma 모바일 4755:8852): 소셜 상단 전체폭, 그 아래 좌=회사정보 / 우=링크 */
+  .footer__main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "social social"
+      "company nav";
+    gap: var(--space-lg);                          /* 24px (디자인) */
+    padding: 40px var(--page-gutter-mobile);       /* 상하 40px / 좌우 16px (디자인) */
+  }
+  .footer__social {
+    grid-area: social;                             /* 최상단 전체폭 */
+    gap: var(--space-md);                          /* 아이콘 간격 16px */
+  }
+  .footer__company { grid-area: company; }         /* 좌측: 회사 정보 */
+  .footer__nav { grid-area: nav; min-width: 0; }   /* 우측: 사이트 링크 */
+
+  /* 모바일 전용 링크 표시 (데스크톱에서는 숨김) */
+  .footer__link--mobile {
+    display: block;
+  }
+
+  /* 회사정보: Company/CEO, Email/Phone을 각각 줄 분리.
+   * 구분자 '|'는 숨기고, sep 다음에 오는 2번째 라벨(CEO:/Phone:) 앞에
+   * 줄바꿈을 삽입해 라벨+값이 함께 다음 줄로 내려가게 함. */
+  .footer__sep {
+    display: none;
+  }
+  .footer__sep + .footer__label::before {
+    content: "\A";
+    white-space: pre;
+  }
+}

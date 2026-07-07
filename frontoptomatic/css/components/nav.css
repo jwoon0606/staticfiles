@@ -1,0 +1,463 @@
+/* ============================================================================
+ * nav.css — Optomatic 상단 내비게이션 바
+ * Figma: nav_bar_desktop (node 6661:10502) / nav_bar_mobile (node 6050:16603)
+ *        (Optomatic_NEW_260601)
+ *
+ * 토큰 의존: variables.css (--color-*, --font-*, --space-*) 를 먼저 불러오세요.
+ *
+ * 반응형: layout.css 와 동일하게 1024px 단일 breakpoint(PC ↔ 모바일).
+ *   · 1024px 이상 = 데스크톱: 로고 + 메뉴(Light Find/Light Design) | EN + SIGN IN
+ *   · 1024px 미만 = 모바일:   로고 | SIGN IN + 햄버거(dehaze)
+ *     모바일에서는 메뉴 링크·EN 박스가 숨겨지고 햄버거로 토글됩니다.
+ *
+ * 정직 고지(실측값과 기존 토큰의 차이):
+ *   · 데스크톱 좌우 패딩은 Figma 실측 184px 입니다. 푸터/.container 의
+ *     공통 좌우 여백 토큰 --page-gutter(136px)와 다른 값이라, 토큰을
+ *     덮어쓰지 않고 nav 전용 값(--nav-gutter)으로 분리했습니다.
+ *   · 메뉴 링크 사이 간격 64px 는 --space-* 스케일(…48,80…)에 없는 값이라
+ *     별도 변수(--nav-menu-gap)로 두었습니다.
+ *   · 글자 letter-spacing 0.4px 는 --letter-spacing-body-lg(0.8px)와 달라
+ *     실측값을 그대로 적습니다. (푸터의 BACK TO TOP 도 동일하게 0.4px)
+ * ========================================================================== */
+
+.nav {
+  /* nav 전용 변수 (위 정직 고지 참고) */
+  --nav-gutter: 184px;          /* 데스크톱 좌우 패딩 (Figma 실측, --page-gutter 와 다름) */
+  --nav-menu-gap: 64px;         /* 로고–메뉴, 메뉴 링크 간 간격 (Figma 실측, 스케일 외 값) */
+  --nav-height: 56px;           /* 바 높이 (Figma h-56, 보더 1px 포함) */
+
+  width: 100%;
+  background-color: var(--color-neutral-50);          /* #fbfdff */
+  border-bottom: 1px solid var(--color-black);        /* #1a1b1b */
+  font-family: var(--font-latin);
+}
+
+/* 콘텐츠를 1440px 안에 가두고 가운데 정렬 (footer__main 과 동일 모델).
+ * 보더(.nav)는 화면 전체 폭, 내부 콘텐츠만 max-width 로 모음. */
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: var(--content-max);                      /* 1440px */
+  min-height: calc(var(--nav-height) - 1px);          /* 56px − 보더 1px = 55px (바 높이 고정) */
+  margin: 0 auto;
+  padding: var(--space-xs) var(--nav-gutter);         /* 8px 184px */
+}
+
+/* ----------------------------------------------------------------------------
+ * 왼쪽: 로고 + 메뉴 링크
+ * -------------------------------------------------------------------------- */
+.nav__left {
+  display: flex;
+  align-items: center;
+  gap: var(--nav-menu-gap);                           /* 64px */
+}
+
+.nav__logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.nav__logo img {
+  display: block;
+  width: auto;
+  height: 36px;                                       /* 실측: 161.58 × 36 */
+}
+
+.nav__menu {
+  display: flex;
+  align-items: center;
+  gap: var(--nav-menu-gap);                           /* 64px (링크 사이 간격) */
+}
+.nav__menu-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) var(--space-md);           /* 8px 16px */
+  font-size: var(--font-size-body-lg);                /* 20px */
+  font-weight: var(--font-weight-semibold);           /* 600 */
+  line-height: 1;                                      /* 실측: leading none */
+  letter-spacing: 0.4px;                               /* 실측 (참고: --letter-spacing-body-lg 는 0.8px) */
+  white-space: nowrap;
+  color: var(--color-black);                          /* #1a1b1b */
+  text-decoration: none;
+}
+/* hover / 포커스 / 현재 페이지: 파란 배경 + 흰 글자
+ * Figma 변형(select1=light find / light design): bg #4428ff, text #fbfdff */
+.nav__menu-link:hover,
+.nav__menu-link:focus-visible,
+.nav__menu-link[aria-current="page"] {
+  background-color: var(--color-primary);             /* #4428ff */
+  color: var(--color-text-on-dark);                   /* #fbfdff */
+  text-decoration: none;
+}
+
+/* ----------------------------------------------------------------------------
+ * 오른쪽: 언어(EN) · SIGN IN · 햄버거
+ * -------------------------------------------------------------------------- */
+.nav__right {
+  display: flex;
+  align-items: center;
+  align-self: stretch;                                /* 바 콘텐츠 높이만큼 늘림 (드롭다운 기준점용) */
+  gap: var(--space-xl);                               /* 32px */
+}
+
+/* 언어 토글 래퍼 — 드롭다운 절대배치 기준.
+ * 바 콘텐츠 높이만큼 늘려, top:100% 가 '바 콘텐츠 아래끝'을 가리키게 함
+ * → 드롭다운을 nav 하단 패딩(--space-xs)만큼 내리면 항상 nav 밑줄에 겹침
+ *   (바 높이가 바뀌어도 자동으로 맞음 — 하드코딩 보정값 불필요). */
+.nav__lang-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;                                /* 늘어난 래퍼 안에서 EN 버튼은 세로 가운데 */
+  align-self: stretch;
+}
+
+/* 언어 토글 박스 "EN" — 보더 박스 */
+.nav__lang {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px var(--space-xs);                        /* 6px 8px (실측: py 6 / px 8) */
+  border: 1px solid var(--color-neutral-500);         /* #5b5d62 */
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--font-size-body-lg);                /* 20px */
+  font-weight: var(--font-weight-semibold);           /* 600 */
+  line-height: 1;
+  letter-spacing: 0.4px;
+  color: var(--color-neutral-500);                    /* #5b5d62 */
+  white-space: nowrap;
+  cursor: pointer;
+}
+.nav__lang:hover,
+.nav__lang:focus-visible {
+  color: var(--color-black);
+  border-color: var(--color-black);
+}
+/* 드롭다운 열림 상태의 EN 버튼 */
+.nav__lang[aria-expanded="true"] {
+  color: var(--color-black);
+  border-color: var(--color-black);
+}
+
+/* ----------------------------------------------------------------------------
+ * 언어 선택 드롭다운 (EN 클릭 시 표시)
+ * Figma: Frame 25558 — W 248px(고정) · H hug(120px), gap 16px, padding 16px 8px
+ *        상태: node 6671:13915(기본) / 6661:10135(EN hover) / 6661:10107(KR hover)
+ *   · 컨테이너: bg #fbfdff, border 1px #5b5d62
+ *   · 각 행: padding 8px, 국기(20px) + 텍스트(Manrope Medium 20px, #5b5d62)
+ *   · hover/focus: 행 배경 #1a1b1b, 텍스트 #fbfdff
+ *
+ * 위치: EN 버튼을 감싼 .nav__lang-wrap(position:relative, 바 콘텐츠 높이로 늘림) 기준.
+ *   absolute · left:0 → 왼쪽 끝을 EN 버튼 왼쪽에 맞춤.
+ *   top: 래퍼가 바 콘텐츠 높이라 top:100% = 바 콘텐츠 아래끝. 거기에 nav 하단
+ *   패딩(--space-xs)을 더하면 정확히 nav 밑줄 위치 → 윗변 테두리가 밑줄과 한 선으로 겹침.
+ *   (바 높이가 바뀌어도 보정값 수정 없이 자동 정렬)
+ *   absolute 라 레이아웃에서 빠져 nav 높이/다른 요소에 영향 없음.
+ * -------------------------------------------------------------------------- */
+.nav__lang-menu {
+  position: absolute;
+  top: calc(100% + var(--space-xs));                  /* 바 콘텐츠 아래끝 + 하단 패딩 = nav 밑줄에 겹침 */
+  left: 0;                                            /* 왼쪽 끝을 EN 버튼 왼쪽에 맞춤 */
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                               /* 16px */
+  width: 248px;                                       /* Figma 고정 폭 */
+  padding: var(--space-md) var(--space-xs);           /* 16px 8px */
+  background-color: var(--color-neutral-50);          /* #fbfdff */
+  border: 1px solid var(--color-neutral-500);         /* #5b5d62 */
+  list-style: none;
+}
+.nav__lang-menu[hidden] {
+  display: none;
+}
+
+.nav__lang-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);                               /* 16px */
+  width: 100%;
+  padding: var(--space-xs);                           /* 8px */
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--font-size-body-lg);                /* 20px */
+  font-weight: var(--font-weight-medium);             /* 500 (Manrope Medium) */
+  line-height: 1;
+  letter-spacing: 0.4px;
+  color: var(--color-neutral-500);                    /* #5b5d62 */
+  white-space: nowrap;
+  text-align: left;
+  cursor: pointer;
+}
+.nav__lang-option:hover,
+.nav__lang-option:focus-visible {
+  background-color: var(--color-black);               /* #1a1b1b */
+  color: var(--color-text-on-dark);                   /* #fbfdff */
+  outline: none;
+}
+.nav__lang-flag {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+/* SIGN IN 링크 */
+.nav__signin {
+  font-size: var(--font-size-body-lg);                /* 20px (데스크톱) */
+  font-weight: var(--font-weight-semibold);           /* 600 */
+  line-height: 1;
+  letter-spacing: 0.4px;
+  color: var(--color-neutral-500);                    /* #5b5d62 (데스크톱) */
+  white-space: nowrap;
+  text-decoration: none;
+}
+/* hover / 포커스: 회색 → 검정 (Figma 변형 select2=sign in, 밑줄 없음) */
+.nav__signin:hover,
+.nav__signin:focus-visible {
+  color: var(--color-black);                          /* #1a1b1b */
+}
+
+/* 햄버거(dehaze) 토글 — 데스크톱 숨김, 모바일 표시 */
+.nav__toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-black);                          /* #1a1b1b */
+  cursor: pointer;
+}
+.nav__toggle-icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+/* 아이콘 전환: 닫힘=햄버거(dehaze), 열림=X(close) */
+.nav__toggle-icon--close {
+  display: none;
+}
+.nav__toggle[aria-expanded="true"] .nav__toggle-icon--open {
+  display: none;
+}
+.nav__toggle[aria-expanded="true"] .nav__toggle-icon--close {
+  display: block;
+}
+
+/* 모바일 메뉴 패널 전용 항목(Sign in / EN)은 데스크톱 메뉴에선 숨김.
+ * (데스크톱은 SIGN IN·언어를 상단 바에 따로 두므로 메뉴엔 불필요) */
+.nav__menu-link--mobile {
+  display: none;
+}
+
+/* 모바일 메뉴 패널의 EN 박스 (Figma node 4755:7688) — 기본 숨김, 모바일에서 표시 */
+.nav__menu-lang {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;                              /* 박스는 내용 폭만 */
+  padding: 5px var(--space-xs);                        /* 5px 8px (실측) */
+  border: 1px solid var(--color-black);               /* #1a1b1b */
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--font-size-caption);                /* 14px */
+  font-weight: var(--font-weight-semibold);           /* 600 */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-caption);      /* 0.28px */
+  color: var(--color-black);                          /* #1a1b1b */
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* ----------------------------------------------------------------------------
+ * 로그인 상태 — 우측 계정 아이콘 (알림 벨 / 프로필 원)
+ * Figma: nav_bar_desktop 변형 "sign in=yes"
+ *   기본    node 6050:12607 (select2=no)
+ *   알림    node 6050:12757 (select2=notification)
+ *   프로필  node 6050:12837 (select2=profile)
+ *   + select1(light find/light design) 활성 조합 6종
+ *
+ * 로그아웃의 SIGN IN 링크 자리에 아이콘 2개가 들어갑니다.
+ *   · 아이콘 박스 40px (Figma size-40), 사이 간격은 .nav__right 의 32px 그대로.
+ *   · 기본색 #5b5d62 (EN 박스·SIGN IN 과 동일한 회색).
+ *   · hover / focus / 선택(select2=notification|profile) 시 #1a1b1b(검정).
+ *
+ * 정직 고지: 이 디자인 세트는 56px 바 변형만 있고 알림/프로필을 눌렀을 때
+ *   펼쳐지는 드롭다운 패널은 포함돼 있지 않습니다(프레임에 패널 노드 없음).
+ *   따라서 "선택됨=아이콘이 검정으로 바뀜" 상태까지만 구현했습니다.
+ *   패널 디자인이 나오면 .nav__lang-menu 와 동일한 절대배치 패턴으로 붙이세요.
+ *
+ * 읽지 않은 알림 배지(Figma 변형 notifications=yes):
+ *   벨 우상단의 빨간 점(8px, #ee1b5e = --color-danger). 실측: 40px 버튼 기준
+ *   top 0 / right 1px(점이 벨 글리프 오른쪽 위 모서리에 걸침).
+ *   .nav__icon-btn.has-unread 일 때만 표시 → notifications=no 는 클래스만 빼면 됨.
+ * -------------------------------------------------------------------------- */
+.nav__icon-btn {
+  position: relative;                                 /* 알림 점(.nav__icon-dot) 절대배치 기준 */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;                                        /* Figma size-40 */
+  height: 40px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-neutral-500);                    /* #5b5d62 (기본 회색) */
+  cursor: pointer;
+}
+.nav__icon-btn svg {
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+/* hover / 포커스 / 선택(aria-pressed=true): 회색 → 검정 (Figma select2 변형) */
+.nav__icon-btn:hover,
+.nav__icon-btn:focus-visible,
+.nav__icon-btn[aria-pressed="true"] {
+  color: var(--color-black);                          /* #1a1b1b */
+}
+
+/* 읽지 않은 알림 빨간 점 — has-unread 일 때만 표시 */
+.nav__icon-dot {
+  display: none;
+}
+.nav__icon-btn.has-unread .nav__icon-dot {
+  display: block;
+  position: absolute;
+  top: 0;                                             /* 실측: 40px 버튼 상단에 맞춤 */
+  right: 1px;                                          /* 실측: 벨 글리프 오른쪽 위 모서리 */
+  width: 8px;                                          /* Figma 실측 ø8 */
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-danger);              /* #ee1b5e (= --color-magenta) */
+}
+
+/* 포커스 가시성 (접근성) */
+.nav__lang:focus-visible,
+.nav__toggle:focus-visible,
+.nav__signin:focus-visible,
+.nav__icon-btn:focus-visible,
+.nav__menu-link:focus-visible {
+  outline: 2px solid var(--color-black);
+  outline-offset: 2px;
+}
+
+/* ----------------------------------------------------------------------------
+ * 모바일 레이아웃 — 1024px 미만
+ *   닫힘 상태 Figma(node 6050:16603, 320px 기준):
+ *     · 좌우 여백 16px, 로고 높이 24px
+ *     · 메뉴 링크·EN 드롭다운 → 숨김(햄버거로 토글)
+ *     · SIGN IN: 14px / #1a1b1b, 오른쪽 그룹 간격 16px, 햄버거 표시
+ *
+ *   열림 상태 Figma(node 4755:6516, "burger menu open"):
+ *     · 상단 바: 햄버거 → X(close) 아이콘, 상단 바 SIGN IN 숨김 (로고 | X)
+ *     · 풀스크린 패널: padding 40px 16px, 항목 간격 24px
+ *         Light Find / Light Design / Sign in (Manrope Regular 20px #1a1b1b)
+ *         EN 박스 (border 1px #1a1b1b, 14px SemiBold)
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .nav {
+    position: relative;                                /* 메뉴 패널 절대배치 기준 */
+  }
+
+  .nav__inner {
+    min-height: 0;                                     /* 56px 고정 해제 → 모바일 자연 높이(로고24+패딩16+보더1=41px) */
+    padding: var(--space-xs) var(--page-gutter-mobile); /* 8px 16px */
+  }
+
+  .nav__logo img {
+    height: 24px;                                      /* 실측: 107.72 × 24 */
+  }
+
+  .nav__right {
+    gap: var(--space-md);                              /* 16px */
+  }
+
+  /* 로그인 아이콘: 모바일 바 높이(약 41px)에 맞춰 축소 (모바일 로고 24px 와 정렬).
+   * 정직 고지: 로그인 상태 모바일 디자인은 Figma 세트에 없어 합리적 기본값입니다. */
+  .nav__icon-btn,
+  .nav__icon-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+  /* 알림 점도 모바일 24px 아이콘에 맞춰 축소 */
+  .nav__icon-btn.has-unread .nav__icon-dot {
+    top: 0;
+    right: 0;
+    width: 6px;
+    height: 6px;
+  }
+
+  /* SIGN IN: 모바일(닫힘)은 작고 검정 */
+  .nav__signin {
+    font-size: var(--font-size-caption);              /* 14px */
+    letter-spacing: var(--letter-spacing-caption);    /* 0.28px */
+    color: var(--color-black);                        /* #1a1b1b */
+  }
+  /* 메뉴 열림 시 상단 바의 SIGN IN 숨김 (패널 안 "Sign in" 으로 대체) */
+  .nav__right:has(.nav__toggle[aria-expanded="true"]) .nav__signin {
+    display: none;
+  }
+
+  /* 상단 바 언어 드롭다운(데스크톱용)은 모바일에서 컨테이너째 숨김.
+   * (.nav__lang 만 숨기면 빈 .nav__lang-wrap 이 flex 항목으로 남아
+   *  .nav__right 의 gap 16px 만큼 유령 간격이 생김) */
+  .nav__lang-wrap {
+    display: none;
+  }
+
+  /* 햄버거/X 토글 표시 */
+  .nav__toggle {
+    display: inline-flex;
+  }
+
+  /* 메뉴: 바 아래 풀스크린 패널 (기본 닫힘) */
+  .nav__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-lg);                              /* 24px (항목 간격) */
+    min-height: calc(100dvh - 41px);                  /* 바 높이(로고24+패딩16+보더1=41) 만큼 빼고 화면 채움 */
+    padding: 40px var(--page-gutter-mobile);          /* 40px 16px */
+    background-color: var(--color-neutral-50);        /* #fbfdff */
+    z-index: 10;
+  }
+  /* 닫힘 상태: 화면에서 제거 (aria-expanded=false → hidden) */
+  .nav__menu[hidden] {
+    display: none;
+  }
+
+  /* 패널 항목 텍스트: Manrope Regular 20px #1a1b1b */
+  .nav__menu-link {
+    justify-content: flex-start;
+    padding: 0;
+    font-size: var(--font-size-body-lg);              /* 20px */
+    font-weight: var(--font-weight-regular);          /* 400 */
+    letter-spacing: 0;                                /* 실측: tracking 0 */
+    color: var(--color-black);                        /* #1a1b1b */
+  }
+  /* 모바일 패널은 평문(파란 hover 배경 없음 — 데스크톱 전용 스타일 되돌림) */
+  .nav__menu-link:hover,
+  .nav__menu-link:focus-visible,
+  .nav__menu-link[aria-current="page"] {
+    background-color: transparent;
+    color: var(--color-black);
+  }
+
+  /* 패널 전용 항목(Sign in / EN) 표시 */
+  .nav__menu-link--mobile {
+    display: inline-flex;
+  }
+  .nav__menu-lang {
+    display: inline-flex;
+  }
+}

@@ -1,0 +1,142 @@
+/* ============================================================================
+ * typography.css — Optomatic 타이포그래피 스케일
+ * variables.css 의 폰트 토큰(--font-*, --font-size-*, --letter-spacing-*)을 사용합니다.
+ * 사용 전 variables.css 를 먼저 불러오세요.
+ * ========================================================================== */
+
+/* ----------------------------------------------------------------------------
+ * 폰트 불러오기 (FONT LOADING)
+ *
+ * 1) Manrope — 로컬에 self-host 합니다(assets/fonts/*.woff2).
+ *    file:// 로 더블클릭해 여는 환경이나 오프라인에서도 폰트가 확실히
+ *    로드되도록 Google Fonts 원격 @import 대신 로컬 @font-face 를 씁니다.
+ *    (원격 @import 에만 의존하면 인터넷이 없을 때 시스템 폴백 글꼴로
+ *     표시되어 Figma 와 달라 보입니다.)
+ *
+ *    파일은 Manrope 가변 폰트(weight 200~800)의 latin / latin-ext 서브셋이며
+ *    Google Fonts(v20)에서 받은 원본입니다. 한글은 --font-korean(별도) 사용.
+ */
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 200 800;                       /* 가변 폰트: 전체 weight 범위 */
+  font-display: swap;
+  src: url("../assets/fonts/manrope-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("../assets/fonts/manrope-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* 2) Asta Sans (한글) — 공식 웹폰트가 있으면 그것을 쓰고,
+ *    구하지 못할 경우 Pretendard 를 폴백으로 사용합니다.
+ *    Pretendard 는 CDN 으로 불러올 수 있습니다(아래 주석 해제):
+ *      @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
+ *    Asta Sans 웹폰트 파일을 직접 보유한 경우 @font-face 로 등록하세요:
+ *      @font-face {
+ *        font-family: "Asta Sans";
+ *        src: url("/fonts/AstaSans.woff2") format("woff2");
+ *        font-weight: 300 800;
+ *        font-display: swap;
+ *      }
+ *    → font-family 는 variables.css 에서 'Asta Sans', 'Pretendard', sans-serif 순으로
+ *      선언되어 있어, Asta Sans 미적용 시 자동으로 Pretendard 로 폴백됩니다.
+ * -------------------------------------------------------------------------- */
+
+/* ----------------------------------------------------------------------------
+ * BASE
+ * -------------------------------------------------------------------------- */
+body {
+  font-family: var(--font-latin);              /* 기본: Manrope (라틴) */
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.5;                            /* Figma Auto였으나 가독성 위해 보정 */
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-text);
+}
+
+/* 한글 콘텐츠에 적용할 클래스 (Asta Sans → Pretendard 폴백) */
+.font-ko,
+:lang(ko) {
+  font-family: var(--font-korean);
+  line-height: var(--line-height-korean);
+}
+
+/* ----------------------------------------------------------------------------
+ * HEADINGS — h1 ~ h3
+ * -------------------------------------------------------------------------- */
+h1,
+.h1 {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-h1);              /* 112px */
+  line-height: 1.0;                            /* 제목류: Figma Auto(1.0) 유지 */
+  letter-spacing: var(--letter-spacing-h1);    /* -2.24px */
+}
+
+h2,
+.h2 {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-h2);              /* 48px */
+  line-height: 1.1;                            /* 제목류: Figma Auto(1.0)→1.1 범위 */
+  letter-spacing: var(--letter-spacing-h2);    /* 0 */
+}
+
+h3,
+.h3 {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-h3);              /* 32px */
+  line-height: 1.1;                            /* 제목류: Figma Auto(1.0)→1.1 범위 */
+  letter-spacing: var(--letter-spacing-h3);    /* 0.64px */
+}
+
+/* 리드문/부제 */
+.subtitle {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-subtitle);        /* 24px */
+  line-height: 1.4;                            /* Figma Auto였으나 가독성 위해 보정 */
+  letter-spacing: var(--letter-spacing-subtitle); /* 0.48px */
+}
+
+/* 버튼·메뉴·라벨 (단일 행 UI 텍스트) */
+.body-lg {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 (버튼/메뉴 기준; 일부 라벨은 500) */
+  font-size: var(--font-size-body-lg);         /* 20px */
+  line-height: 1.1;                            /* 단일 행: Figma Auto(1.0) 유지 */
+  letter-spacing: var(--letter-spacing-body-lg); /* 0.8px */
+}
+
+/* ----------------------------------------------------------------------------
+ * BODY & CAPTION
+ * -------------------------------------------------------------------------- */
+.body,
+p {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.5;                            /* Figma Auto였으나 가독성 위해 보정 */
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+}
+
+.caption {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-light);       /* 300 (푸터 링크·회사정보 실측) */
+  font-size: var(--font-size-caption);         /* 14px */
+  line-height: 1.5;                            /* Figma Auto였으나 가독성 위해 보정 */
+  letter-spacing: var(--letter-spacing-caption); /* 0.28px */
+}
+
+/* 한글 본문/헤딩 변형: 위 클래스에 .font-ko 를 함께 붙이면
+ * 폰트 패밀리와 줄간격(1.4)이 한글용으로 전환됩니다.
+ * 예) <h1 class="font-ko">옵토매틱</h1>, <p class="font-ko">…</p> */
+
+ 

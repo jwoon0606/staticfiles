@@ -1,0 +1,20 @@
+<!-- 영국기(Union Jack) 원형 아이콘 20×20. Figma nav 언어 드롭다운(node 6671:13917)에서 추출 후 원형 클립으로 정규화 -->
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<clipPath id="flagEnClip"><circle cx="10" cy="10" r="10"/></clipPath>
+</defs>
+<g clip-path="url(#flagEnClip)">
+<g transform="translate(-10.94,-1.81)">
+<path d="M0.896308 1.79262V21.8347H40.9804V1.79262H0.896308Z" fill="#012169"/>
+<path d="M0.896308 1.79262L40.9804 21.8347M40.9804 1.79262L0.896308 21.8347" stroke="white" stroke-width="4.00841"/>
+<mask id="flagEnMask" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="1" width="41" height="21">
+<path d="M20.9436 11.8137H40.9856V21.8347L20.9436 11.8137ZM20.9436 11.8137V21.8347H0.901517L20.9436 11.8137ZM20.9436 11.8137H0.901517V1.79262L20.9436 11.8137ZM20.9436 11.8137V1.79262H40.9856L20.9436 11.8137Z" fill="white"/>
+</mask>
+<g mask="url(#flagEnMask)">
+<path d="M0.898913 1.79262L40.983 21.8347M40.983 1.79262L0.898913 21.8347" stroke="#C8102E" stroke-width="2.67228"/>
+</g>
+<path d="M20.9384 1.79262V21.8347M0.896308 11.8137H40.9804" stroke="white" stroke-width="6.68069"/>
+<path d="M20.9384 1.79262V21.8347M0.896308 11.8137H40.9804" stroke="#C8102E" stroke-width="4.00841"/>
+</g>
+</g>
+</svg>

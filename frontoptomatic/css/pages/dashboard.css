@@ -1,0 +1,381 @@
+/* ============================================================================
+ * dashboard.css — Optomatic 대시보드(로그인 후 프로필 진입) 페이지 전용 스타일
+ *
+ * 대상 디자인 (Optomatic_NEW_260601):
+ *   · 260429_dashboard_UI_02 (node 6479:7657)
+ *     로그인 후 nav 의 프로필 아이콘을 눌렀을 때 나오는 화면.
+ *
+ * 구성:
+ *   1) Welcome 띠 (Frame 116, node 6479:7659)
+ *      — 다크 사진 배경 + "Welcome back" 대형 제목.
+ *   2) 본문 (Frame 106, node 6479:7661) — 좌우 96px / 상하 40px, 세로 gap 40px
+ *      · How can we help you? (Frame 130): 제목 + 큰 버튼 2개(my projects / edit profile)
+ *      · Recent projects (Frame 124): 제목 + 프로젝트 카드 6개 + load more
+ *
+ * 토큰 의존: variables.css 를 먼저 불러오세요.
+ * 공통 컴포넌트: nav.css(로그인 상태 바) · footer.css(푸터) 재사용.
+ *
+ * 정직 고지(실측값 vs 토큰):
+ *   · 본문 좌우 패딩은 Figma 실측 96px (light-find 와 동일, --dash-gutter).
+ *   · Welcome 제목 96px·tracking -1.92px, 카드 높이 135.516px·썸네일 폭
+ *     124.219px, 상태 배지 13px, 라벨 폭 136px 등은 --space-*·--font-* 스케일에
+ *     없는 Figma 실측값이라 그대로 적습니다.
+ *   · 상태 배지 색은 Figma 실측 raw 값: to do #b6bbc5(=neutral-300),
+ *     proposed #b4a9fe, in progress #7f6cff, approved #4428ff(=blue),
+ *     shipped #48ddce, done #5ec841(=green). proposed/in-progress/shipped 는
+ *     스케일에 없는 보라/민트 계열이라 raw 값으로 둡니다.
+ *   · load more 텍스트/화살표 #a3a5aa 는 neutral-400(#85888e) 과 미세하게
+ *     달라 Figma 실측값을 그대로 씁니다(arrow_drop_down 에셋도 24px·#a3a5aa).
+ *   · 본문 카드/버튼 테두리는 모두 1px solid #1a1b1b(=neutral-900).
+ *
+ * 반응형: Figma 는 PC(1440) 만 제공. 1024px 미만은 layout.css 공통 가이드를
+ *   따라 도움 버튼 2개를 세로로 쌓고, 프로젝트 카드 좌/우 블록을 줄바꿈합니다.
+ * ========================================================================== */
+
+/* 페이지 루트: 본문 좌우 패딩 토큰 + 배경 */
+.dashboard {
+  --dash-gutter: 96px;                         /* Figma 실측 본문 좌우 패딩 */
+  background-color: var(--color-neutral-50);   /* #fbfdff */
+}
+
+/* 섹션 콘텐츠를 1440px 안에 가두는 공통 래퍼 (nav__inner 와 동일 모델) */
+.dash-inner {
+  width: 100%;
+  max-width: var(--content-max);               /* 1440px */
+  margin: 0 auto;
+}
+
+/* ----------------------------------------------------------------------------
+ * 1) Welcome 띠 — Frame 116 (node 6479:7659)
+ *    Figma: bg 사진(object-cover), padding 40px 96px, items-start · justify-center.
+ *    배경 사진이 어두워 그 위에 흰 텍스트. 사진 로딩 전 폴백은 다크 단색.
+ * -------------------------------------------------------------------------- */
+.dash-hero {
+  width: 100%;
+  background-color: var(--color-neutral-900);  /* #1a1b1b (이미지 폴백) */
+  background-image: url("../../assets/dashboard-hero.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: var(--color-text-on-dark);            /* #fbfdff */
+}
+.dash-hero .dash-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 176px;                           /* Figma 띠 높이 */
+  padding: 40px var(--dash-gutter);            /* 40px 96px */
+}
+.dash-hero__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: clamp(40px, 7vw, 96px);           /* Figma 96px → 유동 축소 */
+  font-weight: var(--font-weight-light);       /* 300 */
+  line-height: 1;                              /* Figma: leading none */
+  letter-spacing: -1.92px;                     /* 실측 (스케일 외 값) */
+  color: inherit;
+}
+
+/* ----------------------------------------------------------------------------
+ * 2) 본문 — Frame 106 (node 6479:7661)
+ *    Figma: padding 40px 96px, 세로 스택, 블록 간격 40px.
+ * -------------------------------------------------------------------------- */
+.dash-body .dash-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;                                   /* Figma: gap 40 (스케일 외 값) */
+  padding: 40px var(--dash-gutter);            /* 40px 96px */
+}
+
+/* 블록 공통: 제목(24px) + 내용 (gap 24px) — Frame 130 / Frame 124 */
+.dash-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);                        /* 24px */
+}
+.dash-section__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-subtitle);        /* 24px */
+  line-height: 1;                              /* Figma: leading none */
+  letter-spacing: var(--letter-spacing-subtitle); /* 0.48px */
+  color: var(--color-text);                    /* #1a1b1b */
+}
+
+/* ── How can we help you? — 큰 버튼 2개 (Frame 124, node 6479:7664) ──────────
+ *    가로 2열, gap 24px. 각 카드 높이 168px(상하 패딩 64px). */
+.dash-help {
+  display: flex;
+  gap: var(--space-lg);                        /* 24px */
+}
+.dash-help__card {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);                        /* 8px */
+  padding: 64px var(--space-md);               /* 64px 16px */
+  border: 1px solid var(--color-neutral-900);  /* #1a1b1b */
+  background: none;
+  color: var(--color-text);                    /* #1a1b1b — 아이콘·글자 공통 색 */
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+/* hover (Figma node 6467:17422 / 6467:17427): 검정 배경 + 흰 아이콘·글자.
+ *   아이콘은 currentColor 마스크라 글자색을 그대로 따라 흰색이 됩니다. */
+.dash-help__card:hover,
+.dash-help__card:focus-visible {
+  background-color: var(--color-neutral-900);  /* #1a1b1b */
+  color: var(--color-text-on-dark);            /* #fbfdff */
+}
+
+/* 아이콘: 인라인 SVG(fill: currentColor) — 카드 글자색을 따라가 hover 시 흰색.
+ *   외부 SVG 를 CSS mask 로 쓰면 file:// 교차출처 제한으로 안 보이므로 인라인 사용. */
+.dash-help__icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+}
+.dash-help__label {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-subtitle);        /* 24px */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-subtitle); /* 0.48px */
+  white-space: nowrap;
+}
+
+/* ── Recent projects — 카드 목록 ──────────────────────────────────────────── */
+.dash-projects {
+  list-style: none;                            /* reset.css 는 마커를 지우지 않음 */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);                        /* 24px */
+}
+
+/* ── 빈 상태 (프로젝트 없음) — UI_06 (node 6034:3474) ────────────────────────
+ *    Recent projects 자리에 카드 대신 보더 박스 + 안내문. 빈 페이지는 본문
+ *    상하 패딩이 96px(Figma 실측, 채워진 화면의 40px 보다 큼). */
+.dash-body--empty .dash-inner {
+  padding-top: 96px;
+  padding-bottom: 96px;
+}
+.dash-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 136px;                           /* Figma 실측 박스 높이 */
+  padding: var(--space-md);                    /* 16px */
+  border: 1px solid #a3a5aa;                   /* Figma 실측 (밝은 회색) */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-bold);        /* 700 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  text-align: center;
+  color: #a3a5aa;
+}
+
+/* 프로젝트 카드 (Frame 134/123/135…, node 6479:7678 …)
+ *   border 1px #1a1b1b, 높이 135.516px, padding 16px, 좌(정보)·우(서비스) 양끝. */
+.dash-card {
+  position: relative;                          /* 카드 전체 클릭 링크 오버레이용 (My projects 리스트 보기) */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);                        /* 24px */
+  height: 135.516px;                           /* Figma 실측 */
+  padding: var(--space-md);                    /* 16px */
+  border: 1px solid var(--color-neutral-900);  /* #1a1b1b */
+}
+/* 행 전체를 덮는 투명 링크 (more_vert 는 그 위로). 대시보드 행에는 미사용. */
+.dash-card__link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.dash-card__more {
+  position: relative;
+  z-index: 2;
+}
+
+/* 카드 좌측: 썸네일 + 정보 (gap 24px) */
+.dash-card__left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);                        /* 24px */
+  height: 100%;
+  min-width: 0;
+}
+
+/* 썸네일 칼럼: 폭 124.219px, 카드 안쪽 높이(103.516px)를 꽉 채움.
+ *   이미지는 object-cover, 상태 배지를 하단에 겹쳐 둠. */
+.dash-card__thumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 124.219px;                            /* Figma 실측 */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+.dash-card__thumb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* 상태 배지: 썸네일 하단 폭 100%, 높이 28px. 13px SemiBold 대문자 흰 글자.
+ *   기본값은 to do(#b6bbc5); 상태별 modifier 로 배경색 교체. */
+.dash-status {
+  position: relative;
+  width: 100%;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px var(--space-xs);                /* 4px 8px */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: 13px;                             /* 실측 (스케일 외 값) */
+  line-height: 1;                              /* Figma: leading none */
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--color-neutral-50);              /* #fbfdff */
+  background-color: var(--color-neutral-300);  /* to do #b6bbc5 */
+}
+.dash-status--todo        { background-color: #b6bbc5; }   /* = neutral-300 */
+.dash-status--proposed    { background-color: #b4a9fe; }
+.dash-status--in-progress { background-color: #7f6cff; }
+.dash-status--approved    { background-color: var(--color-blue); }    /* #4428ff */
+.dash-status--shipped     { background-color: #48ddce; }
+.dash-status--done        { background-color: var(--color-success); } /* #5ec841 */
+
+/* 정보 블록 (Frame 25539, node 6479:7682): 3행, 행 gap 8px. */
+.dash-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                        /* 8px */
+  min-width: 0;
+}
+.dash-card__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);                        /* 16px */
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-text);                    /* #1a1b1b */
+}
+.dash-card__key {
+  flex-shrink: 0;
+  width: 136px;                                /* Figma 실측 라벨 폭 */
+  font-weight: var(--font-weight-semibold);    /* 600 */
+}
+.dash-card__val {
+  font-weight: var(--font-weight-regular);     /* 400 */
+  white-space: nowrap;
+}
+
+/* 카드 우측: 서비스명 + more_vert (gap 40px) */
+.dash-card__right {
+  display: flex;
+  align-items: center;
+  gap: 40px;                                   /* Figma 실측 (스케일 외 값) */
+  flex-shrink: 0;
+}
+.dash-card__service {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-bold);        /* 700 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  color: var(--color-text);                    /* #1a1b1b */
+  white-space: nowrap;
+}
+.dash-card__more {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.dash-card__more img {
+  width: 24px;
+  height: 24px;
+}
+
+/* load more (Frame 131, node 6479:7792): 가운데 정렬, 텍스트 + 화살표. */
+.dash-loadmore {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);                        /* 8px */
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.dash-loadmore__label {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1;                              /* Figma: leading none */
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: #a3a5aa;                              /* 실측 (neutral-400 과 미세 차이) */
+}
+.dash-loadmore__icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* ----------------------------------------------------------------------------
+ * 반응형 — 1024px 미만 (layout.css 공통 가이드 적용)
+ *   · 도움 버튼 2개 세로 쌓기
+ *   · 프로젝트 카드: 좌(정보)·우(서비스) 블록 줄바꿈, 서비스명은 왼쪽 정렬
+ *   · 본문 좌우 패딩 96px → 16px
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .dash-hero .dash-inner,
+  .dash-body .dash-inner {
+    padding-left: var(--page-gutter-mobile);   /* 16px */
+    padding-right: var(--page-gutter-mobile);
+  }
+
+  .dash-help {
+    flex-direction: column;
+  }
+  .dash-help__card {
+    padding: 40px var(--space-md);             /* 64px → 40px 한 단계 축소 */
+  }
+
+  .dash-card {
+    height: auto;
+    flex-wrap: wrap;
+    gap: var(--space-md);                      /* 16px */
+  }
+  .dash-card__left {
+    height: auto;
+  }
+  .dash-card__thumb {
+    height: 103.516px;                         /* 데스크톱 안쪽 높이 유지 */
+  }
+  .dash-card__right {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

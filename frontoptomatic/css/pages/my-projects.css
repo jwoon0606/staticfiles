@@ -1,0 +1,580 @@
+/* ============================================================================
+ * my-projects.css — Optomatic "My projects" 페이지 전용 스타일
+ *
+ * 대상 디자인 (Optomatic_NEW_260601):
+ *   · 260428_dashboard_UI_08 (node 5091:10534)
+ *     대시보드에서 "my projects" 버튼을 눌렀을 때 진입하는 프로젝트 목록 화면.
+ *
+ * 구성:
+ *   1) Welcome 띠 (Frame 116, node 6467:17481) — 대시보드와 동일한 다크 사진 배경
+ *      + "My projects" 대형 제목. (배경 이미지 dashboard-hero.png 재사용)
+ *   2) 본문 (Frame 106, node 5091:10561) — 좌우 96px / 상하 40px, 블록 gap 40px
+ *      · 검색바 (Frame 129): 보더 + 플레이스홀더 + search 아이콘
+ *      · 툴바 (Frame 130): Projects | Sort | Filter | 보기 토글(list/grid)
+ *      · 카드 그리드 (Frame 177/178): 4열, gap 24px, 카드 8개
+ *      · load more (Frame 131)
+ *
+ * 토큰 의존: variables.css 를 먼저 불러오세요.
+ * 공통 컴포넌트: nav.css(로그인 상태 바) · footer.css(푸터) 재사용.
+ *
+ * 정직 고지(실측값 vs 토큰):
+ *   · 본문 좌우 패딩 96px (대시보드 시리즈 공통, --mp-gutter).
+ *   · 검색바 보더 #85888e(=neutral-400)·padding 16px, 플레이스홀더 16px SemiBold.
+ *   · 툴바 컨트롤 보더 #1a1b1b·px8 py4, 폭 sort 348px / filter 198px 는 Figma 실측.
+ *   · 카드 보더 1px #1a1b1b·padding 16·gap 24, 이미지 비율 262:218.33,
+ *     상태 배지 13px·h28, 정보 2열 gap 38px(라벨 Bold / 값 Medium) 모두 실측.
+ *   · 상태 배지 색은 Figma raw: to do #b6bbc5 · proposed #b4a9fe ·
+ *     in progress #7f6cff · approved #4428ff(=blue) · shipped #48ddce ·
+ *     done #5ec841(=green). (대시보드 카드와 동일 팔레트)
+ *   · 보기 토글: list(calendar_view_day) #85888e(비활성) / grid_view #1a1b1b(활성).
+ *   · load more 텍스트/화살표 #a3a5aa.
+ *
+ * 반응형: Figma 는 PC(1440)만 제공. 1024px 미만은 그리드 열 수를 줄이고
+ *   (4→2→1), 툴바를 줄바꿈하며, 좌우 패딩 96→16px.
+ * ========================================================================== */
+
+/* 스크린리더 전용(시각적 숨김) — 검색 라벨 등 접근성용 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 페이지 루트: 본문 좌우 패딩 토큰 + 배경 */
+.my-projects {
+  --mp-gutter: 96px;                           /* Figma 실측 본문 좌우 패딩 */
+  background-color: var(--color-neutral-50);   /* #fbfdff */
+}
+
+/* 섹션 콘텐츠를 1440px 안에 가두는 공통 래퍼 */
+.mp-inner {
+  width: 100%;
+  max-width: var(--content-max);               /* 1440px */
+  margin: 0 auto;
+}
+
+/* ----------------------------------------------------------------------------
+ * 1) Welcome 띠 — Frame 116 (node 6467:17481) — 대시보드 띠와 동일
+ * -------------------------------------------------------------------------- */
+.mp-hero {
+  width: 100%;
+  background-color: var(--color-neutral-900);  /* #1a1b1b (이미지 폴백) */
+  background-image: url("../../assets/dashboard-hero.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: var(--color-text-on-dark);            /* #fbfdff */
+}
+.mp-hero .mp-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 176px;                           /* Figma 띠 높이 */
+  padding: 40px var(--mp-gutter);              /* 40px 96px */
+}
+.mp-hero__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: clamp(40px, 7vw, 96px);           /* Figma 96px → 유동 축소 */
+  font-weight: var(--font-weight-light);       /* 300 */
+  line-height: 1;
+  letter-spacing: -1.92px;
+  color: inherit;
+}
+
+/* ----------------------------------------------------------------------------
+ * 2) 본문 — Frame 106 (node 5091:10561): padding 40px 96px, 세로 gap 40px
+ * -------------------------------------------------------------------------- */
+.mp-body .mp-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;                                   /* Figma: gap 40 */
+  padding: 40px var(--mp-gutter);              /* 40px 96px */
+}
+
+/* ── 검색바 (Frame 129, node 5091:10562) ────────────────────────────────────
+ *    보더 1px #85888e, padding 16px, 좌측 입력 + 우측 search 아이콘. */
+.mp-search {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);                        /* 16px */
+  width: 100%;
+  padding: var(--space-md);                    /* 16px */
+  border: 1px solid var(--color-neutral-400);  /* #85888e */
+  background: var(--color-bg);
+}
+.mp-search__input {
+  flex: 1 0 0;
+  min-width: 0;
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 (Figma 플레이스홀더 SemiBold) */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-text);                    /* 입력값 #1a1b1b */
+}
+.mp-search__input::placeholder {
+  color: var(--color-neutral-400);             /* #85888e */
+  opacity: 1;
+}
+.mp-search__input:focus-visible {
+  outline: none;                               /* 보더는 컨테이너가 담당 */
+}
+.mp-search__btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.mp-search__btn img {
+  width: 24px;
+  height: 24px;
+}
+
+/* ── 본문 콘텐츠(툴바 + 그리드 + load more) (Frame 124): 세로 gap 24px ────────── */
+.mp-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);                        /* 24px */
+}
+
+/* ── 뷰 패널 (list/grid/analytics/empty 를 한 페이지에 담아 js 로 토글) ────────
+ *    패널 내부(예: 카드 목록 + load more)도 .mp-content 와 같은 24px 세로 간격.
+ *    숨김 패널은 [hidden] 로 제거 (display:flex 보다 우선하도록 함께 선택). */
+[data-view-panel] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);                        /* 24px */
+}
+[data-view-panel][hidden] {
+  display: none;
+}
+
+/* ── 툴바 (Frame 130, node 5091:10568): h32, 좌(제목+컨트롤) · 우(보기 토글) ──── */
+.mp-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);                        /* 16px (줄바꿈 시 여유) */
+  flex-wrap: wrap;
+}
+.mp-toolbar__left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);                        /* 24px */
+  flex-wrap: wrap;
+}
+.mp-toolbar__heading {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-subtitle);        /* 24px */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-subtitle); /* 0.48px */
+  color: var(--color-text);                    /* #1a1b1b */
+}
+
+/* 드롭다운 컨트롤(Sort / Filter): 보더 #1a1b1b, px8 py4, 양끝 정렬 */
+.mp-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);                        /* 8px */
+  padding: 4px var(--space-xs);                /* 4px 8px */
+  border: 1px solid var(--color-neutral-900);  /* #1a1b1b */
+  background: none;
+  color: var(--color-text);                    /* 아이콘·글자 #1a1b1b */
+  cursor: pointer;
+}
+.mp-control--sort { width: 348px; }            /* Figma 실측 */
+.mp-control--filter { width: 198px; }          /* Figma 실측 */
+.mp-control__main {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);                        /* 8px */
+  min-width: 0;
+}
+.mp-control__label {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  white-space: nowrap;
+}
+.mp-control__icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+/* 보기 토글 (Frame 130, node 5091:10589): list / grid 아이콘 버튼, gap 8 */
+.mp-view {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                        /* 8px */
+}
+.mp-view__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-decoration: none;                       /* <a> 로 쓰일 때 밑줄 제거 */
+  color: var(--color-neutral-400);             /* 기본 비활성 #85888e */
+}
+.mp-view__btn--active {
+  color: var(--color-text);                    /* 활성 #1a1b1b */
+}
+.mp-view__btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* ── 빈 상태 (프로젝트 없음) — UI_09 (node 6034:3574) ────────────────────────
+ *    카드 그리드 자리에 보더 박스 + 안내문. 빈 페이지는 본문 상단 패딩 96px. */
+.mp-body--empty .mp-inner {
+  padding-top: 96px;
+  padding-bottom: 96px;
+}
+.mp-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 252px;                           /* Figma 실측 박스 높이 */
+  padding: var(--space-md);                    /* 16px */
+  border: 1px solid #a3a5aa;                   /* Figma 실측 (밝은 회색) */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-bold);        /* 700 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  text-align: center;
+  color: #a3a5aa;
+}
+
+/* ── 카드 그리드 (Frame 177/178): 4열, gap 24px ───────────────────────────── */
+.mp-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg);                        /* 24px (행·열 공통) */
+}
+
+/* 카드 (Frame 123, node 5091:10598): 보더 1px #1a1b1b, padding 16, 세로 gap 24 */
+.mp-card {
+  position: relative;                          /* 카드 전체 클릭 → 상세 (오버레이 링크) */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);                        /* 24px */
+  padding: var(--space-md);                    /* 16px */
+  border: 1px solid var(--color-neutral-900);  /* #1a1b1b */
+}
+/* 카드 전체를 덮는 투명 링크. more_vert 만 그 위로 올려 따로 클릭되게 함. */
+.mp-card__link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.mp-card__more {
+  position: relative;
+  z-index: 2;
+}
+.mp-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);                        /* 8px */
+  width: 100%;
+}
+.mp-card__service {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-bold);        /* 700 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  color: var(--color-text);                    /* #1a1b1b */
+  white-space: nowrap;
+}
+.mp-card__more {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.mp-card__more img {
+  width: 24px;
+  height: 24px;
+}
+
+/* 이미지 + 상태 배지 (Frame 25539) */
+.mp-card__media {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.mp-card__image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 262 / 218.333;                 /* Figma 실측 비율 */
+  overflow: hidden;
+}
+.mp-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+}
+
+/* 상태 배지: 폭 100%, 높이 28px, 13px SemiBold 대문자 흰 글자. */
+.mp-status {
+  width: 100%;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px var(--space-xs);                /* 4px 8px */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: 13px;                             /* 실측 (스케일 외 값) */
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--color-neutral-50);              /* #fbfdff */
+  background-color: var(--color-neutral-300);  /* to do #b6bbc5 */
+}
+.mp-status--todo        { background-color: #b6bbc5; }   /* = neutral-300 */
+.mp-status--proposed    { background-color: #b4a9fe; }
+.mp-status--in-progress { background-color: #7f6cff; }
+.mp-status--approved    { background-color: var(--color-blue); }    /* #4428ff */
+.mp-status--shipped     { background-color: #48ddce; }
+.mp-status--done        { background-color: var(--color-success); } /* #5ec841 */
+
+/* 정보 2열 (Frame 130, node 5091:10605): 라벨(Bold) + 값(Medium), gap 38px */
+.mp-card__info {
+  display: flex;
+  gap: 38px;                                   /* Figma 실측 (스케일 외 값) */
+  font-size: var(--font-size-body);            /* 16px */
+  color: var(--color-text);                    /* #1a1b1b */
+}
+.mp-card__keys,
+.mp-card__vals {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);                       /* 4px (행 간격) */
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.mp-card__keys { font-weight: var(--font-weight-bold); }    /* 700 */
+.mp-card__vals { font-weight: var(--font-weight-medium); }  /* 500 */
+.mp-card__keys p,
+.mp-card__vals p {
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* ============================================================================
+ * 보기 모드 변형
+ *   · 리스트(calendar_view_day) — UI_05 (node 6479:7871): 행은 대시보드
+ *     .dash-card 와 동일하므로 my-projects-list.html 에서 dashboard.css 를
+ *     함께 불러와 재사용합니다(여기엔 별도 규칙 없음).
+ *   · 애널리틱스/칸반(analytics) — UI_07 (node 5091:15797): 상태별 3열.
+ * ========================================================================== */
+
+/* 칸반 보드: 3열, 컬럼 간격 32px */
+.mp-board {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;                                   /* Figma 실측 */
+}
+.mp-col {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);                        /* 24px */
+}
+/* 컬럼 상태 헤더 (project_status kanban): 폭 100%, 18px SemiBold 대문자 흰 글자 */
+.mp-col__status {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) var(--space-md);    /* 8px 16px */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: 18px;                             /* 실측 */
+  line-height: 1;
+  letter-spacing: 0.36px;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--color-neutral-50);              /* #fbfdff */
+  background-color: var(--color-neutral-300);  /* to do #b6bbc5 */
+}
+.mp-col__status--todo        { background-color: #b6bbc5; }
+.mp-col__status--proposed    { background-color: #b4a9fe; }
+.mp-col__status--in-progress { background-color: #7f6cff; }
+.mp-col__status--approved    { background-color: var(--color-blue); }
+.mp-col__status--shipped     { background-color: #48ddce; }
+.mp-col__status--done        { background-color: var(--color-success); }
+
+/* 칸반 카드 (Frame 123, node 5091:15866): border 1px, p16, 세로 gap16 */
+.mp-acard {
+  position: relative;                          /* 카드 전체 클릭 → 상세 (오버레이 링크) */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                        /* 16px */
+  padding: var(--space-md);                    /* 16px */
+  border: 1px solid var(--color-neutral-900);  /* #1a1b1b */
+}
+.mp-acard__link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.mp-acard .mp-card__more {
+  position: relative;
+  z-index: 2;
+}
+.mp-acard__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);                        /* 8px */
+  width: 100%;
+}
+.mp-acard__service {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-bold);        /* 700 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  color: var(--color-text);                    /* #1a1b1b */
+  white-space: nowrap;
+}
+.mp-acard__body {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);                        /* 16px */
+  width: 100%;
+}
+.mp-acard__thumb {
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 87.6px;                               /* Figma 실측 (비율 119.67:99.72) */
+  overflow: hidden;
+}
+.mp-acard__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+}
+.mp-acard__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                        /* 8px */
+  min-width: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-text);                    /* #1a1b1b */
+}
+.mp-acard__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);                        /* 16px */
+}
+.mp-acard__key {
+  flex-shrink: 0;
+  width: 136px;
+  font-weight: var(--font-weight-semibold);    /* 600 */
+}
+.mp-acard__val {
+  font-weight: var(--font-weight-regular);     /* 400 */
+  white-space: nowrap;
+}
+
+/* 칸반 보드 반응형: 좁아지면 1열로 */
+@media (max-width: 1023.98px) {
+  .mp-board { flex-direction: column; }
+}
+
+/* ── load more (Frame 131, node 5091:10731): 가운데 텍스트 + 화살표 ─────────── */
+.mp-loadmore {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);                        /* 8px */
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.mp-loadmore__label {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: #a3a5aa;                              /* 실측 */
+}
+.mp-loadmore__icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* ----------------------------------------------------------------------------
+ * 반응형 — layout.css 공통 가이드 적용
+ * -------------------------------------------------------------------------- */
+/* 중간 폭: 4열 → 2열 */
+@media (max-width: 1279.98px) {
+  .mp-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+/* 모바일(1024px 미만): 좌우 패딩 96→16, 컨트롤 폭 유동, 1열 */
+@media (max-width: 1023.98px) {
+  .mp-hero .mp-inner,
+  .mp-body .mp-inner {
+    padding-left: var(--page-gutter-mobile);   /* 16px */
+    padding-right: var(--page-gutter-mobile);
+  }
+  .mp-control--sort,
+  .mp-control--filter {
+    width: auto;
+    flex: 1 0 auto;
+  }
+  .mp-grid {
+    grid-template-columns: 1fr;
+  }
+}

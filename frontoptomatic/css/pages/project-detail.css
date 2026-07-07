@@ -1,0 +1,811 @@
+/* ============================================================================
+ * project-detail.css — Optomatic 프로젝트 상세 페이지 공통 스타일
+ *
+ * 대상 디자인 (Optomatic_NEW_260601):
+ *   · 260428_dashboard_UI_10 (node 6468:18329) — Light Find 상세
+ *   · 260428_dashboard_UI_11 (node 6468:18520) — Light Find one (beta) 상세
+ *   · 260428_dashboard_UI_12 (node 6468:19024) — Light Design 상세
+ *   My projects 목록의 카드를 눌렀을 때 진입하는 상세 화면들.
+ *
+ * 세 페이지가 공통 chrome(헤더 BACK/제목/상태, 스펙 카드, 라벨/값 행,
+ * 파일+Preview/Download 블록, Messages, 푸터)을 공유하므로 한 CSS 로 묶습니다.
+ * 각 페이지 고유 섹션(브레드크럼·Description/Reference·Service Option·메시지
+ * 스레드 등)도 여기서 .pd-* 로 함께 정의합니다.
+ *
+ * 토큰 의존: variables.css 를 먼저 불러오세요.
+ * 공통 컴포넌트: nav.css(로그인 상태 바) · footer.css(푸터) 재사용.
+ *
+ * 정직 고지(실측값 vs 토큰):
+ *   · 본문 좌우 패딩 96px(대시보드 시리즈 공통, --pd-gutter), 섹션 간격 40px.
+ *   · BACK/제목 24px SemiBold·tracking 0.48 / 상태 배지 184×40·18px / 섹션 제목
+ *     20px SemiBold·tracking 0.4 / 스펙 라벨 폭 200px·정보 라벨 208px·메시지 라벨
+ *     80px / 버튼 180×40·border 1px·icon24+16px / 스펙 카드 border 2px·이미지
+ *     비율 135:88 등은 모두 Figma 실측값입니다.
+ *   · 색 매핑: 회색 텍스트/보더 #85888e=neutral-400, 메시지 라벨 #5b5d62=
+ *     neutral-500, 날짜 #aaaeb6, 메시지/입력 배경 #ebeff9=neutral-100,
+ *     강조(메시지 보더·REPLY·Service 바·Project Type 텍스트) #4428ff=blue.
+ *   · 상태 배지 색 팔레트는 대시보드 카드와 동일.
+ *
+ * 정직 고지(차이):
+ *   · BACK·Preview·Download·Upload·REPLY·toggle·more 등은 연결 동작이 이
+ *     디자인 세트에 없어 정적(시각만)입니다. BACK 만 my-projects.html 로 연결.
+ *   · 메시지 답장 입력은 디자인의 불릿 안내를 textarea placeholder(• 줄바꿈)로
+ *     옮겼습니다(기능형). 색만 회색 placeholder 로 표시됩니다.
+ *
+ * 반응형: Figma 는 PC(1440)만 제공. 1024px 미만은 좌우 패딩 96→16px,
+ *   라벨/값 행을 세로로 쌓고, 스펙 카드를 세로로 전환합니다.
+ * ========================================================================== */
+
+/* 스크린리더 전용(시각적 숨김) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 페이지 루트 */
+.project-detail {
+  --pd-gutter: 96px;                           /* Figma 실측 본문 좌우 패딩 */
+  background-color: var(--color-neutral-50);   /* #fbfdff */
+}
+.pd-inner {
+  width: 100%;
+  max-width: var(--content-max);               /* 1440px */
+  margin: 0 auto;
+}
+.pd-body .pd-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;                                   /* Figma: 섹션 간격 40 */
+  padding: 40px var(--pd-gutter);              /* 40px 96px */
+}
+
+/* 상태별 표시 토글(js/project-detail.js)이 hidden 을 줄 때, 클래스의 display
+   (예: .pd-banner{display:flex})를 이기도록 보장. layout.css 의 [data-step] 패턴과 동일. */
+[data-pd-show][hidden] {
+  display: none !important;
+}
+
+/* ── 헤더 (Frame 118): BACK | 제목 | 상태 배지 ──────────────────────────────── */
+.pd-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);                        /* 24px */
+  min-height: 40px;
+}
+.pd-back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);                        /* 8px */
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-neutral-400);             /* #85888e */
+  text-decoration: none;
+}
+.pd-back__icon {
+  width: 40px;
+  height: 40px;
+  transform: rotate(180deg);                   /* chevron_forward → 왼쪽 향함 */
+}
+.pd-back__label {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-subtitle);        /* 24px */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-subtitle); /* 0.48px */
+}
+.pd-title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-subtitle);        /* 24px */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-subtitle); /* 0.48px */
+  text-align: center;
+  color: var(--color-text);                    /* #1a1b1b */
+}
+/* 상태 배지 (medium): 184×40, 18px SemiBold 대문자 흰 글자 */
+.pd-status {
+  flex-shrink: 0;
+  width: 184px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px var(--space-md);                /* 4px 16px */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: 18px;                             /* 실측 (스케일 외 값) */
+  line-height: 1.4;
+  letter-spacing: 0.36px;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--color-neutral-50);              /* #fbfdff */
+  background-color: var(--color-neutral-300);  /* to do #b6bbc5 */
+}
+.pd-status--todo        { background-color: #b6bbc5; }
+.pd-status--proposed    { background-color: #b4a9fe; }
+.pd-status--in-progress { background-color: #7f6cff; }
+.pd-status--approved    { background-color: var(--color-blue); }
+.pd-status--shipped     { background-color: #48ddce; }
+.pd-status--done        { background-color: var(--color-success); }
+
+/* ── 브레드크럼 (Frame 138, Light Find 전용) ─────────────────────────────────── */
+.pd-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                        /* 8px */
+  flex-wrap: wrap;
+}
+.pd-crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);                       /* 4px */
+  padding: 4px var(--space-xs);                /* 4px 8px */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-neutral-400);             /* #85888e */
+}
+.pd-crumb__icon {
+  width: 20px;
+  height: 20px;
+}
+.pd-breadcrumb__sep {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-body-lg);         /* 20px */
+  line-height: 1.4;
+  letter-spacing: 0.4px;
+  color: var(--color-neutral-400);             /* #85888e */
+}
+
+/* ── 스펙 카드 (Frame 25540): border 2px, 이미지 + 5행 ──────────────────────── */
+.pd-spec {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-lg);                        /* 24px */
+  padding: var(--space-md);                    /* 16px */
+  border: 2px solid var(--color-neutral-900);  /* #1a1b1b */
+}
+.pd-spec__image {
+  position: relative;
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 194.83px;                             /* Figma 실측 폭 (높이는 카드에 맞춰 stretch) */
+  overflow: hidden;
+}
+/* image 57 은 큰 합성 이미지의 일부를 잘라 보여줍니다. Figma 의 fill 스케일/오프셋
+   (w 394.4% · h 430.37% · left -20.71% · top -149.87%)을 그대로 재현해 같은 영역을 크롭. */
+.pd-spec__image img {
+  position: absolute;
+  width: 394.4%;
+  height: 430.37%;
+  left: -20.71%;
+  top: -149.87%;
+  max-width: none;
+  pointer-events: none;
+}
+.pd-spec__rows {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                        /* 8px */
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  color: var(--color-text);                    /* #1a1b1b */
+}
+.pd-spec__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);                        /* 16px */
+}
+.pd-spec__key {
+  flex-shrink: 0;
+  width: 200px;                                /* Figma 실측 */
+  font-weight: var(--font-weight-semibold);    /* 600 */
+}
+.pd-spec__val {
+  flex: 1 0 0;
+  min-width: 0;
+  font-weight: var(--font-weight-regular);     /* 400 */
+}
+
+/* ── 프로젝트 정보 행 (Frame 25539): 라벨 20px(w208) + 값 16px, gap 40, 행 gap16 ── */
+.pd-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                        /* 16px */
+}
+.pd-info__row {
+  display: flex;
+  align-items: center;
+  gap: 40px;                                   /* Figma 실측 */
+}
+.pd-info__key {
+  flex-shrink: 0;
+  width: 208px;                                /* Figma 실측 */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body-lg);         /* 20px */
+  line-height: 1.2;
+  letter-spacing: 0.4px;
+  color: var(--color-text);                    /* #1a1b1b */
+}
+.pd-info__val {
+  flex: 1 0 0;
+  min-width: 0;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);     /* 400 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-text);
+}
+
+/* Light Design 상단 소형 정보 행 (라벨 w136, 16px, 행 gap8) — dashboard 카드와 동일 */
+.pd-info--compact {
+  gap: var(--space-xs);                        /* 8px */
+}
+.pd-info--compact .pd-info__row {
+  align-items: flex-start;
+  gap: var(--space-md);                        /* 16px */
+}
+.pd-info--compact .pd-info__key {
+  width: 136px;
+  font-size: var(--font-size-body);            /* 16px */
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  line-height: 1.2;
+}
+
+/* ── 라벨+내용 필드 (Description / Reference / Additional Remarks) — gap 24 ───── */
+.pd-fieldgroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                        /* 16px (Description↔Reference) */
+}
+.pd-field {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-lg);                        /* 24px */
+}
+.pd-field__key {
+  flex-shrink: 0;
+  width: 208px;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body-lg);         /* 20px */
+  line-height: 1.2;
+  letter-spacing: 0.4px;
+  color: var(--color-text);
+}
+.pd-field__val {
+  flex: 1 0 0;
+  min-width: 0;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);     /* 400 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-text);
+}
+.pd-field__files {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                        /* 8px */
+}
+
+/* ── 섹션 (제목 20px + 내용), gap 16 ─────────────────────────────────────────── */
+.pd-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                        /* 16px */
+}
+.pd-section__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body-lg);         /* 20px */
+  line-height: 1;
+  letter-spacing: 0.4px;
+  color: var(--color-text);                    /* #1a1b1b */
+}
+
+/* 파일 행 (article 아이콘 + 파일명) */
+.pd-file {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                        /* 8px */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 (기본) */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-text);                    /* #1a1b1b */
+}
+.pd-file--strong { font-weight: var(--font-weight-semibold); }  /* Service/메시지 파일명 */
+.pd-file__icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+/* Further Information — 고객이 작성한 추가 정보(읽기전용, 줄바꿈 보존) */
+.pd-field__remarks {
+  margin: 0;
+  width: 100%;
+  padding: var(--space-xs) var(--space-md);    /* 8px 16px */
+  background-color: var(--color-neutral-100);  /* #ebeff9 */
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);            /* 16px */
+  font-weight: var(--font-weight-regular);     /* 400 */
+  line-height: 1.6;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-text);                    /* #1a1b1b */
+  white-space: pre-wrap;                       /* 줄바꿈 보존 + 자동 줄바꿈 */
+  word-break: break-word;
+}
+
+/* Further Information 첨부파일 다운로드 링크 (아이콘 클릭 시 다운로드) */
+.pd-file__download {
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;                           /* 다운로드 아이콘을 줄 오른쪽으로 */
+  color: var(--color-text);                    /* #1a1b1b */
+  cursor: pointer;
+}
+.pd-file__download:hover,
+.pd-file__download:focus-visible {
+  color: var(--color-primary);                 /* #4428ff */
+  outline: none;
+}
+
+/* Preview / Download 버튼 쌍 */
+.pd-filebtns {
+  display: flex;
+  gap: var(--space-md);                        /* 16px */
+}
+.pd-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);                        /* 8px */
+  width: 180px;
+  height: 40px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-neutral-900);  /* #1a1b1b */
+  background: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-text);                    /* #1a1b1b */
+}
+.pd-btn__icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+/* 비활성(work in progress) — 회색 보더/글자 */
+.pd-btn--muted {
+  border-color: var(--color-neutral-400);      /* #85888e */
+  color: var(--color-neutral-400);
+  cursor: default;
+}
+
+/* "work in progress" 행 (회색) */
+.pd-wip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                        /* 8px */
+  color: var(--color-neutral-400);             /* #85888e */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);
+}
+.pd-wip__icon { flex-shrink: 0; width: 24px; height: 24px; }
+
+/* ── Project Type 필드 (Light Design): 보더 + 텍스트 ─────────────────────────── */
+.pd-typefield {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid var(--color-neutral-900);  /* #1a1b1b */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-body);
+  color: var(--color-text);                    /* #1a1b1b */
+}
+
+/* ── Service Option (Light Design) ──────────────────────────────────────────── */
+.pd-service__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: 8px var(--space-md);                /* 8px 16px */
+  border: 1px solid var(--color-neutral-400);  /* #85888e */
+  background-color: var(--color-blue);         /* #4428ff */
+  color: var(--color-text-on-dark);            /* #fbfdff */
+}
+/* 티어별 바 색상 — Light Design Step 3 카드와 동일 */
+.pd-service--basic .pd-service__bar {
+  background-color: var(--color-neutral-400);  /* #85888e */
+}
+.pd-service--standard .pd-service__bar {
+  background-color: var(--color-blue);         /* #4428ff */
+}
+.pd-service--premium .pd-service__bar {
+  background-color: var(--color-black);        /* #1a1b1b */
+}
+.pd-service__name,
+.pd-service__toggle {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-body);
+}
+.pd-service__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);                        /* 8px */
+  border: none;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+.pd-service__toggle img,
+.pd-service__toggle svg { width: 24px; height: 24px; transition: transform 0.2s ease; }
+/* 접힘 상태: 화살표를 아래로 뒤집고(▲→▼) 서비스 목록을 숨긴다 */
+.pd-service.is-collapsed .pd-service__toggle svg { transform: rotate(180deg); }
+.pd-service.is-collapsed .pd-service__list { display: none !important; }
+.pd-service__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);                        /* 24px */
+  padding: 0 var(--space-lg);                  /* 좌우 24px 들여쓰기 */
+}
+
+/* ── 문서 업로드 위젯 (Light Design) ───────────────────────────────────────────── */
+.pd-doc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                        /* 8px */
+}
+.pd-doc__title {
+  font-size: var(--font-size-body);            /* 16px — h3 라 본문 크기 */
+  line-height: 1.2;
+}
+.pd-doc__req { color: #e5484d; }               /* 필수 항목 별표(빨강) */
+
+/* 고객 화면 — 결과물 파일 행 (아이콘 + 파일명). 회색 바 없이 본문색·세미볼드. (Figma 126:9605) */
+.pd-doc__file {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                        /* 8px */
+}
+.pd-doc__file .pd-file__icon { color: var(--color-neutral-900); }  /* #1a1b1b */
+.pd-doc__filename {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);
+  color: var(--color-text);                    /* #1a1b1b */
+}
+.pd-doc__filled {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                        /* 8px */
+}
+/* 업로드된 파일 행 — 회색 바 + 파일명 + X (Figma 8403) */
+.pd-fileinput {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                        /* 8px */
+  padding: 8px var(--space-md);                /* 8px 16px */
+  background-color: var(--color-neutral-100);  /* #ebeff9 */
+}
+.pd-fileinput .pd-file__icon { flex-shrink: 0; color: var(--color-neutral-400); }
+.pd-fileinput__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);
+  color: var(--color-neutral-400);             /* #85888e */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pd-fileinput__close {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--color-neutral-400);             /* #85888e */
+}
+/* Preview / Change File / Download — 문서 확정(CONFIRM) 전에는 숨김.
+   확정 후에도 data-admin(관리자)일 때만 auth.js 가 노출한다. */
+.pd-service:not(.is-confirmed) [data-doc-actions] { display: none !important; }
+
+/* SAVE / CONFIRM 버튼 바 (Frame 25542) */
+.pd-docbar {
+  display: flex;
+  gap: var(--space-md);                        /* 16px */
+}
+.pd-docbar__btn {
+  flex: 1 1 0;
+  height: 40px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-body);
+  text-transform: uppercase;
+  color: var(--color-text-on-dark);            /* #fbfdff */
+}
+.pd-docbar__btn--muted { background-color: var(--color-neutral-400); }  /* 회색 (#85888e) */
+.pd-docbar__btn--primary { background-color: var(--color-blue); }       /* #4428ff */
+.pd-docbar__btn--primary:hover { background-color: var(--color-primary-hover); }
+
+/* ── Messages — 빈 상태 ─────────────────────────────────────────────────────── */
+.pd-msg-empty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                        /* 8px */
+  padding: 24px var(--space-md);               /* 24px 16px */
+  background-color: var(--color-neutral-100);  /* #ebeff9 */
+}
+.pd-msg-empty__text {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);
+  color: var(--color-neutral-500);             /* #5b5d62 */
+}
+.pd-msg-empty__date {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-caption);         /* 14px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-caption); /* 0.28px */
+  color: #aaaeb6;                              /* 실측 (밝은 회색) */
+}
+
+/* ── Messages — 답변 스레드 (Light Find one) ────────────────────────────────── */
+.pd-msg-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                        /* 16px */
+  padding: 24px var(--space-md);               /* 24px 16px */
+  background-color: var(--color-neutral-100);  /* #ebeff9 */
+  border: 2px solid var(--color-blue);         /* #4428ff */
+}
+.pd-msg-card__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                        /* 8px */
+  width: 100%;
+}
+.pd-msg-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-lg);                        /* 24px */
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+}
+.pd-msg-row__key {
+  flex-shrink: 0;
+  width: 80px;                                 /* Figma 실측 */
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  color: var(--color-neutral-500);             /* #5b5d62 */
+}
+.pd-msg-row__val {
+  flex: 1 0 0;
+  min-width: 0;
+  font-weight: var(--font-weight-regular);     /* 400 */
+  color: var(--color-neutral-500);             /* #5b5d62 (기본) */
+}
+.pd-msg-row__val--muted { color: var(--color-neutral-400); }  /* KS/KC 값 #85888e */
+.pd-msg-row__val.pd-file { color: var(--color-neutral-500); } /* Files 값 */
+.pd-msg-card__date {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-caption);         /* 14px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-caption);
+  color: #aaaeb6;
+}
+/* 답장 입력 박스 */
+.pd-reply {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);                        /* 24px */
+  width: 100%;
+  padding: 24px var(--space-md);               /* 24px 16px */
+  background-color: var(--color-bg);           /* #ffffff */
+  border: 1px solid var(--color-neutral-500);  /* #5b5d62 */
+  border-radius: 6px;
+}
+.pd-reply__input {
+  width: 100%;
+  border: none;
+  background: none;
+  resize: vertical;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);      /* 500 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);
+  color: var(--color-text);
+}
+.pd-reply__input::placeholder {
+  color: var(--color-neutral-400);             /* #85888e */
+  opacity: 1;
+}
+.pd-reply__input:focus-visible { outline: none; }
+.pd-reply__actions {
+  display: flex;
+  gap: var(--space-md);                        /* 16px */
+}
+.pd-btn--primary {
+  justify-content: center;
+  border: none;
+  background-color: var(--color-blue);         /* #4428ff */
+  color: var(--color-text-on-dark);            /* #fbfdff */
+}
+.pd-btn--primary:hover { background-color: var(--color-primary-hover); }
+
+/* ── 상태별 표시 토글 (자동 전환 데모) ───────────────────────────────────────── */
+/* .pd-section 등이 display:flex 라 [hidden] 기본값이 안 먹으므로 강제 숨김 */
+.project-detail [hidden] { display: none !important; }
+
+/* ── 완료 배너 (Approved, Frame 125): 점선 초록 박스 ──────────────────────────── */
+.pd-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);                        /* 8px */
+  padding: 24px var(--space-md);               /* 24px 16px */
+  border: 2px dashed #5ec841;                  /* 실측 점선 초록 */
+  border-radius: 6px;
+  background-color: #f4fff1;                   /* 실측 연초록 배경 */
+  text-align: center;
+}
+.pd-banner__icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  color: #40b620;                              /* 실측 초록 */
+}
+.pd-banner__text {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: #40b620;
+}
+
+/* ── Messages — 양방향 스레드 (In progress / Approved, Frame 138) ────────────── */
+/* 발신자 안내문(distributer/client) + 날짜 묶음 */
+.pd-msg-thread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                        /* 8px */
+  width: 100%;
+}
+.pd-msg-thread__text {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 (distributer/client 안내문) */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);  /* 0.32px */
+  color: var(--color-neutral-500);             /* #5b5d62 */
+}
+.pd-msg-thread__text--regular { font-weight: var(--font-weight-regular); }  /* Proposed 질문문 400 */
+.pd-msg-thread .pd-file {                       /* 스레드 안 첨부 파일명 (medium #5b5d62) */
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-500);
+}
+
+/* 답변 박스 안 제목/본문 텍스트 (user's answer · Answer from the distributer …) */
+.pd-reply__title {
+  width: 100%;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: var(--font-size-body);            /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);
+  color: var(--color-text);                    /* #1a1b1b */
+}
+
+/* 클라이언트 카드 — 파란 보더 없는 변형 */
+.pd-msg-card--plain { border: none; }
+/* 클라이언트 답변 묶음 (흰 박스 + 우측 날짜) */
+.pd-msg-answer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                        /* 8px */
+  width: 100%;
+}
+.pd-msg-card__date--right { width: 100%; text-align: right; }
+
+/* ── Send a Message to Client (Frame 137): 회색 래퍼 + 흰 입력 박스 ──────────── */
+.pd-send {
+  padding: 24px var(--space-md);               /* 24px 16px */
+  background-color: var(--color-neutral-100);  /* #ebeff9 */
+}
+.pd-sendfiles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                        /* 8px */
+  width: 100%;
+}
+.pd-sendfile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);                        /* 8px */
+}
+.pd-sendfile .pd-file {                         /* 첨부 파일명 — 회색 #85888e */
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-400);
+}
+.pd-sendfile__close {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--color-neutral-400);             /* #85888e */
+}
+
+/* ----------------------------------------------------------------------------
+ * 반응형 — 1024px 미만
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .pd-body .pd-inner {
+    padding-left: var(--page-gutter-mobile);   /* 16px */
+    padding-right: var(--page-gutter-mobile);
+  }
+  .pd-spec { flex-direction: column; }
+  .pd-spec__image { align-self: stretch; width: 100%; max-width: 260px; }
+  .pd-info__row,
+  .pd-field { flex-direction: column; gap: var(--space-2xs); align-items: stretch; }
+  .pd-info__key,
+  .pd-field__key { width: auto; }
+  .pd-filebtns { flex-wrap: wrap; }
+}

@@ -1,0 +1,1476 @@
+/* ============================================================================
+ * light-find-one.css — "Light Find one (beta)" 페이지 전체 스타일 (단일 파일 통합)
+ *
+ * light-find-one.html 한 파일에서만 쓰이던 4개 조각을 하나로 합쳤습니다.
+ * 로드 순서(one→two→three→four)대로 이어붙여 캐스케이드는 그대로입니다:
+ *   [1] Step 1: 업로드 화면      [2] Step 2: Fixture Proposal
+ *   [3] Step 3: Contact          [4] 제출 완료(Thank you)
+ * ========================================================================== */
+
+/* ===== [1] Step 1: 업로드 화면 ============================================ */
+/* ============================================================================
+ * light-find.css — Optomatic "Light Find one (beta)" 페이지 전용 스타일
+ *
+ * 대상 디자인 (Optomatic_NEW_260601):
+ *   · 260427_light_find_one_UI_01 (node 5588:170)
+ *     상단 promo 띠의 TRY IT NOW 를 눌렀을 때 진입하는 화면(Step 1).
+ *
+ * 구성:
+ *   1) 히어로 띠(Frame 116, node 6416:6923) — 다크 사진 배경 + 큰 제목 + 타겟 링
+ *   2) 위저드(Frame 106, node 5588:201)
+ *      · 스텝 헤더(Frame 126): BACK | 진행 점(1·2·3) + 단계 라벨 | NEXT
+ *      · 업로드 영역(Frame 125): 안내문 + 점선 드롭존 + 입력 필드
+ *
+ * 토큰 의존: variables.css 를 먼저 불러오세요.
+ * 공통 컴포넌트: nav.css(로그인 상태 바) · footer.css(푸터) 재사용.
+ *
+ * 정직 고지(실측값 vs 토큰):
+ *   · 이 페이지의 본문 좌우 패딩은 Figma 실측 96px 입니다.
+ *     nav(184px)·footer/.container(136px)와 다른 값이라 페이지 전용
+ *     --lf-gutter(96px)로 둡니다.
+ *   · 히어로 제목 96px·tracking -1.92px, 타겟 링 96px, 드롭존 radius 6px,
+ *     BROWSE FILE tracking 0.64px 등은 --space-* · --font-* 스케일에 없는
+ *     실측값이라 그대로 적습니다.
+ *   · 색상 매핑: 드롭존 보더 #5b5d62 = --color-neutral-500,
+ *     입력 배경 #ebeff9 = --color-neutral-100, 플레이스홀더 #85888e =
+ *     --color-neutral-400, 비활성(BACK·점) #b6bbc5 = --color-neutral-300.
+ *   · BACK 이 회색(비활성)인 것은 첫 단계라 뒤로 갈 곳이 없는 상태 표현입니다.
+ *     2·3단계 화면은 이 디자인 세트에 없어 BACK/NEXT 는 정적(href="#")입니다.
+ * ========================================================================== */
+
+/* 스크린리더 전용(시각적 숨김) — 파일 입력 라벨 등 접근성용 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 페이지 루트: 본문 좌우 패딩 토큰 + 배경 */
+.light-find {
+  --lf-gutter: 96px;                                   /* Figma 실측 본문 좌우 패딩 */
+  background-color: var(--color-neutral-50);           /* #fbfdff */
+}
+
+/* 섹션 콘텐츠를 1440px 안에 가두는 공통 래퍼 (nav__inner 와 동일 모델) */
+.lf-inner {
+  width: 100%;
+  max-width: var(--content-max);                       /* 1440px */
+  margin: 0 auto;
+}
+
+/* ----------------------------------------------------------------------------
+ * 1) 히어로 띠 — Frame 116 (node 6416:6923)
+ *    Figma: bg 사진(object-cover), padding 40px 96px, items-end · space-between.
+ *    배경 사진이 어두워 그 위에 흰 텍스트/링. 사진 로딩 전 폴백은 다크 단색.
+ * -------------------------------------------------------------------------- */
+.lf-hero {
+  width: 100%;
+  background-color: var(--color-neutral-900);          /* #1a1b1b (이미지 폴백) */
+  background-image: url("../../assets/light-find-hero.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: var(--color-text-on-dark);                    /* #fbfdff */
+}
+.lf-hero .lf-inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-lg);                                /* 24px */
+  padding: 40px var(--lf-gutter);                      /* 40px 96px */
+}
+.lf-hero__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: clamp(40px, 7vw, 96px);                   /* Figma 96px → 유동 축소 */
+  font-weight: var(--font-weight-light);               /* 300 */
+  line-height: 1;                                       /* Figma: leading none */
+  letter-spacing: -1.92px;                              /* 실측 (스케일 외 값) */
+  color: inherit;
+}
+.lf-hero__mark {
+  flex-shrink: 0;
+  width: clamp(40px, 7vw, 96px);                       /* 제목과 같은 비율로 축소 */
+  height: clamp(40px, 7vw, 96px);
+}
+
+/* ----------------------------------------------------------------------------
+ * 2) 위저드 — Frame 106 (node 5588:201)
+ *    Figma: padding 40px 96px 96px, 세로 스택, 항목 간격 40px.
+ * -------------------------------------------------------------------------- */
+.lf-wizard .lf-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;                                            /* Figma: gap 40 (스케일 외 값) */
+  padding: 40px var(--lf-gutter) 96px;                 /* 40px 96px 96px */
+}
+
+/* ── 스텝 헤더 (Frame 126) ─────────────────────────────────────────────────
+ *    BACK | (진행 점 + 단계 라벨) | NEXT — 양끝 정렬, 위쪽 정렬. */
+.lf-steps {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-lg);                                /* 24px */
+}
+
+/* BACK · NEXT — 텍스트 + 셰브론 (24px SemiBold). 셰브론 박스 40px. */
+.lf-steps__nav {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);                                /* 8px */
+  /* BACK 을 <button> 으로 동작시키므로 기본 버튼 박스 리셋 — 링크처럼 보이게 */
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-subtitle);                /* 24px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-subtitle);      /* 0.48px */
+  text-decoration: none;
+  white-space: nowrap;
+}
+.lf-steps__nav svg {
+  display: block;
+  width: 40px;                                          /* Figma size-40 */
+  height: 40px;
+}
+/* BACK: 첫 단계라 비활성(회색). 셰브론은 왼쪽을 향함(180° 회전). */
+.lf-steps__nav--back {
+  color: var(--color-neutral-300);                     /* #b6bbc5 */
+  cursor: default;
+}
+.lf-steps__nav--back svg {
+  transform: rotate(180deg);
+}
+/* NEXT: 파일을 올리기 전엔 비활성(회색) — "Light Find" 페이지의 NEXT(.lf-next)
+ * 비활성색과 동일하게 #b6bbc5. 파일이 1개 이상 올라오면 js 가 .is-enabled 를
+ * 붙여 검정(활성)으로 바뀝니다. */
+.lf-steps__nav--next {
+  color: var(--color-neutral-300);                     /* #b6bbc5 (비활성) */
+  cursor: default;
+}
+/* 활성: 파일 업로드 후 (Light Find 의 .lf-next.is-active 와 동일하게 #1a1b1b) */
+.lf-steps__nav--next.is-enabled {
+  color: var(--color-black);                           /* #1a1b1b */
+  cursor: pointer;
+}
+.lf-steps__nav--next.is-enabled:hover,
+.lf-steps__nav--next.is-enabled:focus-visible {
+  color: var(--color-primary);                         /* #4428ff */
+}
+
+/* 가운데: 진행 점 + 단계 라벨 (세로 스택, gap 24) */
+.lf-steps__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);                                /* 24px */
+}
+/* 진행 점 줄: 원·연결점·원·연결점·원, 모두 16px 간격 */
+.lf-steps__progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);                                /* 16px */
+  margin: 0;
+  padding: 0;
+  list-style: none;                                    /* <ol> 기본 번호 마커 제거 */
+}
+/* 단계 원 — 40px, 보더 2px, 숫자 가운데(24px SemiBold) */
+.lf-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-subtitle);                /* 24px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1;
+}
+.lf-step--active {
+  color: var(--color-primary);                         /* #4428ff */
+}
+/* 완료된 단계 — 검정 (다음 스텝 화면에서 지나온 단계 표시) */
+.lf-step--done {
+  color: var(--color-black);                           /* #1a1b1b */
+}
+.lf-step--todo {
+  color: var(--color-neutral-300);                     /* #b6bbc5 */
+}
+/* 연결점 — 4px 회색 점 (원 사이 2개씩) */
+.lf-step-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--color-neutral-300);          /* #b6bbc5 */
+}
+/* 단계 라벨 — "Step 1: …" 24px SemiBold #1a1b1b */
+.lf-steps__label {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-subtitle);                /* 24px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-subtitle);      /* 0.48px */
+  color: var(--color-black);                           /* #1a1b1b */
+  text-align: center;
+}
+
+/* ── 업로드 영역 (Frame 125) ──────────────────────────────────────────────
+ *    안내문 + 점선 드롭존 + 입력 필드 (세로 스택, gap 24) */
+.lf-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);                                /* 24px */
+}
+/* 안내문 — 20px SemiBold, 가운데 */
+.lf-upload__prompt {
+  margin: 0;
+  width: 100%;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body-lg);                 /* 20px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1;
+  letter-spacing: 0.4px;                                /* 실측 */
+  color: var(--color-black);                           /* #1a1b1b */
+  text-align: center;
+}
+
+/* 점선 드롭존 — 보더 2px dashed #5b5d62, radius 6px, padding 24 16 */
+.lf-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);                                /* 16px (안내 블록 ↔ 파일 목록 간격) */
+  width: 100%;
+  padding: var(--space-lg) var(--space-md);            /* 24px 16px */
+  border: 2px dashed var(--color-neutral-500);         /* #5b5d62 */
+  border-radius: 6px;                                  /* 실측 (radius 토큰 없음) */
+  background: transparent;
+}
+/* 드래그 진입 시 강조 (js/light-find.js 가 .is-dragover 토글) */
+.lf-dropzone.is-dragover {
+  border-color: var(--color-primary);                  /* #4428ff */
+  background-color: var(--color-neutral-100);          /* #ebeff9 */
+}
+.lf-dropzone__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);                                /* 8px */
+  text-align: center;
+}
+.lf-dropzone__icon {
+  display: block;
+  width: 48px;                                          /* Figma size-48 */
+  height: 48px;
+  color: var(--color-black);                           /* #1a1b1b */
+}
+.lf-dropzone__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-black);                           /* #1a1b1b */
+}
+.lf-dropzone__hint {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-caption);                 /* 14px */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-caption);       /* 0.28px */
+  color: var(--color-neutral-400);                     /* #85888e */
+}
+/* ── 업로드된 파일 목록 (Frame 11951) ──────────────────────────────────────
+ *    각 행: article 아이콘(24) + 파일명 + 닫기(×). 행 높이 32, padding 4 8,
+ *    행 사이 간격 8. hover 시 배경 #ebeff9(Figma 두 번째 행이 보여주는 상태). */
+.lf-files {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                                /* 8px */
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lf-files[hidden] {
+  display: none;
+}
+.lf-file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);                                /* 8px */
+  min-height: 32px;                                    /* Figma h-32 */
+  padding: var(--space-2xs) var(--space-xs);           /* 4px 8px */
+  background: transparent;
+}
+.lf-file:hover {
+  background-color: var(--color-neutral-100);          /* #ebeff9 (Figma hover 행) */
+}
+.lf-file__main {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                                /* 8px */
+  min-width: 0;                                        /* 긴 파일명 말줄임 허용 */
+}
+.lf-file__icon {
+  flex-shrink: 0;
+  display: block;
+  width: 24px;                                         /* Figma size-24 */
+  height: 24px;
+  color: var(--color-black);                           /* #1a1b1b */
+}
+.lf-file__name {
+  overflow: hidden;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-black);                           /* #1a1b1b */
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* 닫기(×) 버튼 — Material close_small, 24px */
+.lf-file__remove {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-black);                           /* #1a1b1b */
+  cursor: pointer;
+}
+.lf-file__remove svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+.lf-file__remove:hover,
+.lf-file__remove:focus-visible {
+  color: var(--color-primary);                         /* #4428ff */
+  outline: none;
+}
+
+/* 검증 에러 — 비어 있으면 숨김 */
+.lf-dropzone__error {
+  margin: 0;
+  width: 100%;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-caption);                 /* 14px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-danger);                          /* #ee1b5e */
+}
+.lf-dropzone__error:empty {
+  display: none;
+}
+
+/* BROWSE FILE — 파란 버튼(라벨), padding 8 16, 16px SemiBold tracking 0.64 */
+.lf-browse {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) var(--space-md);            /* 8px 16px */
+  background-color: var(--color-primary);              /* #4428ff */
+  color: var(--color-text-on-dark);                    /* #fbfdff */
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1;
+  letter-spacing: 0.64px;                               /* 실측 */
+  white-space: nowrap;
+  cursor: pointer;
+}
+.lf-browse:hover,
+.lf-browse:focus-within,
+.lf-browse:focus-visible {
+  background-color: var(--color-black);                /* #1a1b1b */
+  outline: none;
+}
+/* 숨긴 file input — 라벨(BROWSE FILE) 클릭으로 파일 선택.
+ * .sr-only 만으로는 Chrome 이 파일 입력의 네이티브 "Choose File" 버튼
+ * (shadow DOM)을 끝까지 가리지 못해, 폭/투명도까지 0 으로 확실히 숨깁니다. */
+.lf-browse input[type="file"] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* 입력 필드 — bg #ebeff9, padding 8 16, 풀폭 textarea.
+ * 플레이스홀더 #85888e 16px Regular tracking 0.32 / line 1.2 */
+.lf-field {
+  width: 100%;
+}
+.lf-field__input {
+  display: block;
+  width: 100%;
+  min-height: 73px;                                     /* Figma 실측 높이(약 3줄) */
+  padding: var(--space-xs) var(--space-md);            /* 8px 16px */
+  border: none;
+  background-color: var(--color-neutral-100);          /* #ebeff9 */
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-black);                           /* 입력값 색 */
+  resize: vertical;
+}
+.lf-field__input::placeholder {
+  color: var(--color-neutral-400);                     /* #85888e */
+  opacity: 1;                                           /* Firefox 기본 투명도 해제 */
+}
+.lf-field__input:focus-visible {
+  outline: 2px solid var(--color-black);
+  outline-offset: -2px;
+}
+
+/* ============================================================================
+ * 업로드 진행 모달 — Figma "Uploading files" (Frame 169, node 7126:19050)
+ *   NEXT(활성) 클릭 시 표시. 딤 오버레이 + 중앙 흰 모달(555px).
+ * ========================================================================== */
+.lf-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);                            /* 화면 가장자리 여백 */
+  background-color: rgba(26, 27, 27, 0.4);             /* 딤 오버레이 (#1a1b1b 40%) */
+}
+.lf-modal[hidden] {
+  display: none;
+}
+/* 모달 박스 — Figma 555px, padding 16, 닫기 우측 정렬, gap 16 */
+.lf-modal__dialog {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-md);                                /* 16px */
+  width: 555px;
+  max-width: 100%;
+  padding: var(--space-md);                            /* 16px */
+  background-color: var(--color-neutral-50);           /* #fbfdff */
+  box-shadow: 0 12px 40px rgba(26, 27, 27, 0.24);      /* 오버레이 위 분리감 (디자인엔 없음) */
+}
+/* 닫기(×) — Material close, 24px */
+.lf-modal__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-black);                           /* #1a1b1b */
+  cursor: pointer;
+}
+.lf-modal__close svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+.lf-modal__close:hover,
+.lf-modal__close:focus-visible {
+  color: var(--color-primary);                         /* #4428ff */
+  outline: none;
+}
+/* 본문 — 제목 + 진행바, gap 32, 가운데, padding 40 80 80 */
+.lf-modal__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xl);                                /* 32px */
+  align-self: stretch;
+  padding: 40px 80px 80px;                             /* Figma 실측 */
+}
+/* "Uploading files" — Manrope SemiBold 28px, line 1.2, tracking 0.56 */
+.lf-modal__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: 28px;                                     /* Figma 실측 (스케일 외 값) */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: 0.56px;
+  color: var(--color-black);                           /* #1a1b1b */
+  text-align: center;
+}
+/* 진행바 행 — 트랙 + 퍼센트, gap 8 */
+.lf-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                                /* 8px */
+  max-width: 100%;
+}
+.lf-progress__track {
+  position: relative;
+  width: 320px;                                        /* Figma 실측 */
+  max-width: 100%;
+  height: 16px;
+  background-color: var(--color-neutral-200);          /* #d6dbe4 (트랙) */
+  overflow: hidden;
+}
+.lf-progress__fill {
+  height: 100%;
+  width: 0;                                            /* js 가 % 로 갱신 */
+  background-color: var(--color-success);              /* #5ec841 (채움) */
+  transition: width 0.2s ease;
+}
+/* 퍼센트 — Regular 16px. 고정폭으로 두어 값이 바뀌어도 창 크기 불변 */
+.lf-progress__pct {
+  flex-shrink: 0;
+  min-width: 42px;                                     /* "100%" 까지 폭 고정 */
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-black);                           /* #1a1b1b */
+}
+
+/* ----------------------------------------------------------------------------
+ * 모바일 레이아웃 — 1024px 미만 (layout.css 와 동일 기준)
+ *   정직 고지: 이 페이지의 모바일 전용 Figma 디자인은 세트에 없습니다.
+ *   layout.css 모바일 전환 가이드(좌우 여백 16px, 가로→세로, 간격 축소)를
+ *   따른 합리적 기본값입니다.
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .light-find {
+    --lf-gutter: var(--page-gutter-mobile);            /* 16px */
+  }
+
+  /* 히어로: 좁은 폭에선 제목+링을 세로로 쌓고, 제목이 전체폭에서 줄바꿈되게
+   * 한다. (가로 배치로 두면 제목이 한 줄을 고집해 페이지 전체가 가로로
+   * 넘쳐 다른 섹션까지 잘리는 오버플로가 생김) */
+  .lf-hero .lf-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);                              /* 16px */
+    padding: var(--space-xl) var(--lf-gutter);         /* 32px 16px */
+  }
+  .lf-hero__title {
+    width: 100%;                                       /* 전체폭 → 자연 줄바꿈 */
+    font-size: clamp(32px, 9vw, 72px);
+  }
+
+  .lf-wizard .lf-inner {
+    gap: var(--space-xl);                              /* 32px */
+    padding: var(--space-xl) var(--lf-gutter) var(--space-3xl); /* 32 16 80 */
+  }
+
+  /* 스텝 헤더: BACK/NEXT 를 양옆, 가운데 묶음은 아래로 — 세로 2줄 배치 */
+  .lf-steps {
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .lf-steps__center {
+    order: 3;
+    flex-basis: 100%;                                  /* 다음 줄 전체 폭 */
+    margin-top: var(--space-md);                       /* 16px */
+  }
+  .lf-steps__nav {
+    font-size: var(--font-size-body-lg);               /* 24 → 20 */
+  }
+  .lf-steps__nav svg {
+    width: 32px;
+    height: 32px;
+  }
+  .lf-steps__label {
+    width: 100%;                                       /* 좁은 폭에서 한 줄 고정 대신 줄바꿈 허용(오버플로 방지) */
+    font-size: var(--font-size-body-lg);               /* 24 → 20 */
+  }
+
+  .lf-upload__prompt {
+    font-size: var(--font-size-body);                  /* 20 → 16 */
+  }
+
+  /* 모달: 좁은 화면에선 본문 좌우 패딩과 제목을 줄여 넘침 방지 */
+  .lf-modal__body {
+    padding: var(--space-xl) var(--space-lg) var(--space-2xl); /* 32 24 48 */
+  }
+  .lf-modal__title {
+    font-size: var(--font-size-body-lg);               /* 28 → 20 */
+  }
+}
+
+/* ===== [2] Step 2: Fixture Proposal ====================================== */
+/* ============================================================================
+ * light-find-two.css — "Light Find one (beta)" Step 2: Fixture Proposal
+ *
+ * 대상 디자인 (Optomatic_NEW_260601):
+ *   · 260427_light_find_one_UI_04 (node 5588:1311)
+ *     Step 1(파일 업로드)에서 업로드가 끝나면(진행 모달 100%) 넘어오는 화면.
+ *
+ * 공유 스타일: 이 페이지는 nav·hero·스텝헤더·footer 를 Step 1 과 동일하게
+ *   쓰므로 css/pages/light-find-one.css 를 함께 불러옵니다(.light-find/.lf-*).
+ *   여기서는 Step 2 전용 "전문가 검토 대기" 박스(.lf-proposal)만 정의합니다.
+ *
+ * 정직 고지(실측값 vs 토큰):
+ *   · 대기 박스 배경 #ebeff9 = --color-neutral-100, 안내문 #85888e =
+ *     --color-neutral-400. batch_prediction 아이콘 240px·padding 40px 은
+ *     스케일 외 실측값이라 그대로 적습니다.
+ *   · Figma 에선 안내문이 한 줄 고정(whitespace-nowrap)이지만, 좁은 폭에서의
+ *     오버플로를 막기 위해 줄바꿈을 허용했습니다(<br> 위치는 디자인대로 유지).
+ * ========================================================================== */
+
+/* ----------------------------------------------------------------------------
+ * 전문가 검토 대기 박스 — Frame 5588:1390
+ *   Figma: bg #ebeff9, padding 40, 세로 스택, gap 8, 가운데, 풀폭.
+ * -------------------------------------------------------------------------- */
+.lf-proposal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);                                /* 8px */
+  width: 100%;
+  padding: 40px;                                       /* Figma 실측 */
+  background-color: var(--color-neutral-100);          /* #ebeff9 */
+}
+/* 작성자 display 규칙이 UA [hidden] 보다 우선하므로 명시적 숨김 필요 */
+.lf-proposal[hidden] {
+  display: none;
+}
+
+/* batch_prediction 아이콘 — 240px (회색 #85888e 는 에셋에 내장) */
+.lf-proposal__icon {
+  display: block;
+  width: 240px;
+  max-width: 100%;
+  height: auto;
+}
+
+/* 안내문 — Manrope Regular 16px #85888e, line 1.2, 가운데 */
+.lf-proposal__text {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-neutral-400);                     /* #85888e */
+  text-align: center;
+}
+
+/* ----------------------------------------------------------------------------
+ * 추천 결과 카드 — Frame 6416:12867 (UI_05)
+ *   대기(.lf-proposal)가 2초 후 이 카드로 교체됩니다(js/light-find-one.js).
+ *   Figma: 세로 스택, gap 16, padding 16, 가운데(hug 264px).
+ * -------------------------------------------------------------------------- */
+.lf-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);                                /* 16px */
+  align-self: center;                                  /* .lf-inner stretch 해제 → 가운데 hug */
+  padding: var(--space-md);                            /* 16px */
+  border: 2px solid transparent;                       /* 선택 시 검정 테두리. 투명으로 두어 위치 흔들림 방지 */
+  cursor: pointer;                                     /* 클릭해 선택 가능 */
+  transition: border-color 0.2s ease;
+}
+.lf-result[hidden] {
+  display: none;
+}
+.lf-result:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* 제품 이미지 — 264×220, opacity 80%. Figma 크롭(확대/오프셋)을 그대로 재현.
+ * 호버 시 100% 로 또렷해짐(아래 .lf-result:hover 참고). */
+.lf-result__image {
+  position: relative;
+  width: 264px;
+  height: 220px;
+  overflow: hidden;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+.lf-result__image img {
+  position: absolute;
+  top: -116.71%;                                       /* Figma 크롭 오프셋 */
+  left: -20.71%;
+  width: 394.4%;
+  height: 335.16%;
+  max-width: none;
+}
+
+/* 스펙 목록 — width 264, 텍스트 #b6bbc5(기본), 16px, 행간 8.
+ * 호버 시 #85888e 로 진해짐(아래 .lf-result:hover 참고). */
+.lf-result__specs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                                /* 8px */
+  width: 264px;
+  max-width: 100%;
+  margin: 0;
+  color: var(--color-neutral-300);                     /* #b6bbc5 */
+  transition: color 0.2s ease;
+}
+/* 각 행: 라벨(SemiBold, 120px 고정) + 값(Regular), gap 16 */
+.lf-result__row {
+  display: flex;
+  gap: var(--space-md);                                /* 16px */
+  align-items: flex-start;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+}
+.lf-result__row dt {
+  flex-shrink: 0;
+  width: 120px;                                        /* Figma 라벨 폭 고정 */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+}
+.lf-result__row dd {
+  margin: 0;
+  font-weight: var(--font-weight-regular);             /* 400 */
+}
+
+/* 호버 상태 — Figma Frame 6416:12995 (UI_06)
+ *   이미지가 또렷해지고(opacity 100%) 스펙 텍스트가 진해짐(#85888e). */
+.lf-result:hover .lf-result__image,
+.lf-result:focus-within .lf-result__image {
+  opacity: 1;
+}
+.lf-result:hover .lf-result__specs,
+.lf-result:focus-within .lf-result__specs {
+  color: var(--color-neutral-400);                     /* #85888e */
+}
+
+/* 선택 상태 — Figma Frame 6416:12887 (UI_06, 항목 선택)
+ *   2px 검정 테두리 + 이미지 100% + 스펙 텍스트 검정(#1a1b1b).
+ *   (호버 규칙 뒤에 둬서 선택이 호버보다 우선) */
+.lf-result.is-selected {
+  border-color: var(--color-black);                    /* #1a1b1b */
+}
+.lf-result.is-selected .lf-result__image {
+  opacity: 1;
+}
+.lf-result.is-selected .lf-result__specs {
+  color: var(--color-black);                           /* #1a1b1b */
+}
+
+/* BACK 활성(추천 결과가 나오면 검정) — UI_05 의 BACK 색(#1a1b1b) */
+.lf-steps__nav--back.is-enabled {
+  color: var(--color-black);                           /* #1a1b1b */
+  cursor: pointer;
+}
+.lf-steps__nav--back.is-enabled:hover,
+.lf-steps__nav--back.is-enabled:focus-visible {
+  color: var(--color-primary);                         /* #4428ff */
+}
+
+/* ----------------------------------------------------------------------------
+ * 모바일 — 1024px 미만 (light-find-one.css 와 동일 기준)
+ *   정직 고지: 모바일 전용 Figma 디자인은 세트에 없어, 박스 패딩과 아이콘을
+ *   줄인 합리적 기본값입니다.
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .lf-proposal {
+    padding: var(--space-lg);                          /* 24px */
+  }
+  .lf-proposal__icon {
+    width: 160px;
+  }
+}
+
+/* ===== [3] Step 3: Contact Distributer =================================== */
+/* ============================================================================
+ * light-find-three.css — "Light Find one (beta)" Step 3: Contact Distributer
+ *
+ * 대상 디자인 (Optomatic_NEW_260601):
+ *   · 260427_light_find_one_UI_07 본문 (node 5556:1699)
+ *     Step 2 에서 추천 항목을 고르고 NEXT 를 누르면 나오는 연락처/정보 입력 폼.
+ *     (공통 nav·hero·footer 는 light-find-one.html 의 것을 그대로 재사용)
+ *
+ * 공유: 패널 컨테이너는 Step 1/2 와 같은 .lf-wizard .lf-inner(gap 40, padding
+ *   40 96 96)를 쓰고, 스텝 헤더/점/BACK 도 light-find-one.css·light-find-two.css
+ *   규칙을 재사용한다. 여기서는 Step 3 전용 요소만 정의한다.
+ *
+ * 정직 고지(실측값 vs 토큰):
+ *   · 입력 배경 #ebeff9 = --color-neutral-100, 플레이스홀더 #85888e =
+ *     --color-neutral-400, 필수표시 #ee1b5e = --color-danger,
+ *     SAVE 배경 #b6bbc5 = --color-neutral-300, SUBMIT 배경 #4428ff = --color-primary.
+ *   · 라벨폭 208/200px, intro 18px, 버튼 tracking 0.8 등은 실측값.
+ * ========================================================================== */
+
+/* 우측 DONE 자리지킴 — 디자인상 opacity 0 (가운데 스텝을 BACK 과 균형 맞춤) */
+.lf-steps__done {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 안내문 — SemiBold 18px, 가운데 */
+.lf3-intro {
+  align-self: center;
+  margin: 0;
+  max-width: 100%;
+  font-family: var(--font-latin);
+  font-size: 18px;                                     /* Figma 실측 */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: 0.36px;
+  color: var(--color-black);                           /* #1a1b1b */
+  text-align: center;
+}
+
+/* ----------------------------------------------------------------------------
+ * 선택한 추천 항목 요약 카드 (가로형) — Frame 6416:13195
+ *   border 2px #1a1b1b, gap 24, padding 16, 풀폭. 이미지 좌 / 스펙 우.
+ * -------------------------------------------------------------------------- */
+.lf-summary {
+  display: flex;
+  gap: var(--space-lg);                                /* 24px */
+  align-items: stretch;
+  width: 100%;
+  padding: var(--space-md);                            /* 16px */
+  border: 2px solid var(--color-black);                /* #1a1b1b */
+}
+.lf-summary__image {
+  position: relative;
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 196px;                                        /* 명시적 너비 (flex 에서 aspect-ratio 만으로는 0 으로 접혀 이미지가 사라짐) */
+  aspect-ratio: 135 / 88;                              /* 너비 기준 높이(약 128px) — 행 높이와 일치 */
+  overflow: hidden;
+}
+.lf-summary__image img {
+  position: absolute;
+  top: -149.87%;                                       /* Figma 크롭 오프셋 */
+  left: -20.71%;
+  width: 394.4%;
+  height: 430.37%;
+  max-width: none;
+}
+.lf-summary__specs {
+  display: flex;
+  flex: 1 0 0;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-xs);                                /* 8px */
+  color: var(--color-black);                           /* #1a1b1b */
+}
+.lf-summary__row {
+  display: flex;
+  gap: var(--space-md);                                /* 16px */
+  align-items: flex-start;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+}
+.lf-summary__row dt {
+  flex-shrink: 0;
+  width: 200px;                                        /* Figma 라벨폭 */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+}
+.lf-summary__row dd {
+  flex: 1 0 0;
+  min-width: 0;
+  margin: 0;
+  font-weight: var(--font-weight-regular);             /* 400 */
+}
+
+/* ----------------------------------------------------------------------------
+ * 입력 폼 — Frame 6416:13214 (라벨 208 + 입력칸 flex-1)
+ * -------------------------------------------------------------------------- */
+.lf3-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);                                /* 24px */
+  width: 100%;
+}
+.lf3-form__row {
+  display: flex;
+  gap: var(--space-lg);                                /* 24px */
+  align-items: center;
+  width: 100%;
+}
+/* 라벨 — 20px SemiBold, 폭 208 고정 */
+.lf3-form__label {
+  flex-shrink: 0;
+  width: 208px;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body-lg);                 /* 20px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: 0.4px;
+  color: var(--color-black);                           /* #1a1b1b */
+}
+/* 필수 표시 (빨강 *) */
+.lf3-req {
+  color: var(--color-danger);                          /* #ee1b5e */
+}
+
+/* 입력칸 (단일행) — bg #ebeff9, padding 8 16, 16px. 플레이스홀더 #85888e */
+.lf3-input {
+  flex: 1 0 0;
+  min-width: 0;
+  width: 100%;
+  padding: var(--space-xs) var(--space-md);            /* 8px 16px */
+  border: none;
+  background-color: var(--color-neutral-100);          /* #ebeff9 */
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-black);                           /* 입력값 */
+}
+.lf3-input::placeholder {
+  color: var(--color-neutral-400);                     /* #85888e */
+  opacity: 1;
+}
+.lf3-input:focus-visible {
+  outline: 2px solid var(--color-black);
+  outline-offset: -2px;
+}
+/* 여러 줄 입력칸 (Additional Remarks) */
+.lf3-input--area {
+  resize: vertical;
+  min-height: 60px;
+}
+
+/* ----------------------------------------------------------------------------
+ * Description / Reference — Frame 6416:13214(아래) : 라벨 208 + 내용
+ * -------------------------------------------------------------------------- */
+.lf3-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);                                /* 24px */
+  width: 100%;
+}
+.lf3-info__row {
+  display: flex;
+  gap: var(--space-lg);                                /* 24px */
+  align-items: flex-start;
+  width: 100%;
+}
+.lf3-info__label {
+  flex-shrink: 0;
+  width: 208px;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body-lg);                 /* 20px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: 0.4px;
+  color: var(--color-black);
+}
+.lf3-info__text {
+  flex: 1 0 0;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-black);                           /* #1a1b1b */
+}
+/* Reference 파일 목록 (읽기전용 표시) — article 아이콘 + 파일명(Medium) */
+.lf3-files {
+  display: flex;
+  flex: 1 0 0;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-xs);                                /* 8px */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lf3-file {
+  display: flex;
+  gap: var(--space-xs);                                /* 8px */
+  align-items: center;
+}
+.lf3-file svg {
+  flex-shrink: 0;
+  display: block;
+  width: 24px;
+  height: 24px;
+  color: var(--color-black);                           /* #1a1b1b */
+}
+.lf3-file span {
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-medium);              /* 500 (Manrope Medium) */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-black);                           /* #1a1b1b */
+}
+
+/* ----------------------------------------------------------------------------
+ * 라벨 + 도움말 블록 (Additional Remarks) — Frame 5556:1781
+ * -------------------------------------------------------------------------- */
+.lf3-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                                /* 16px */
+  width: 100%;
+}
+.lf3-block__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                                /* 8px */
+  color: var(--color-black);                           /* #1a1b1b */
+}
+.lf3-block__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body-lg);                 /* 20px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1;
+  letter-spacing: 0.4px;
+}
+.lf3-block__desc {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+}
+
+/* ----------------------------------------------------------------------------
+ * 명함 업로드 드롭존 — Frame 5556:1787 (Step 1 드롭존과 동일 톤, 안내문 추가)
+ * -------------------------------------------------------------------------- */
+.lf3-card-drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);                                /* 16px (안내 ↔ 파일 목록) */
+  width: 100%;
+  padding: var(--space-md);                            /* 16px */
+  border: 2px dashed var(--color-neutral-500);         /* #5b5d62 */
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;                                     /* 영역 클릭으로 업로드 */
+}
+.lf3-card-drop.is-dragover {
+  border-color: var(--color-primary);
+  background-color: var(--color-neutral-100);
+}
+/* 안내 블록(아이콘 + 문구) — 파일 목록과 분리, 자체 간격 8 */
+.lf3-card-drop__prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);                                /* 8px */
+}
+.lf3-card-drop__icon {
+  display: block;
+  width: 48px;
+  height: 48px;
+  color: var(--color-black);                           /* #1a1b1b */
+}
+.lf3-card-drop__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-black);
+}
+.lf3-card-drop__hint {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-caption);                 /* 14px */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-caption);       /* 0.28px */
+  color: var(--color-neutral-400);                     /* #85888e */
+}
+.lf3-card-drop__note {
+  max-width: 588px;                                    /* Figma 실측 */
+  margin: 0;
+}
+
+/* ----------------------------------------------------------------------------
+ * SAVE / SUBMIT — Frame 6416:13288 (각 flex-1, gap 40)
+ * -------------------------------------------------------------------------- */
+.lf3-actions {
+  display: flex;
+  gap: 40px;                                           /* Figma 실측 */
+  align-items: stretch;
+  width: 100%;
+}
+.lf3-btn {
+  display: inline-flex;
+  flex: 1 0 0;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) var(--space-md);            /* 8px 16px */
+  border: none;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body-lg);                 /* 20px */
+  font-weight: var(--font-weight-medium);              /* 500 */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-body-lg);       /* 0.8px */
+  color: var(--color-text-on-dark);                    /* #fbfdff */
+  white-space: nowrap;
+  cursor: pointer;
+}
+.lf3-btn--save {
+  background-color: var(--color-neutral-300);          /* #b6bbc5 */
+}
+.lf3-btn--save:hover,
+.lf3-btn--save:focus-visible {
+  background-color: var(--color-neutral-400);          /* #85888e (살짝 진하게) */
+  outline: none;
+}
+.lf3-btn--submit {
+  background-color: var(--color-primary);              /* #4428ff */
+}
+.lf3-btn--submit:hover,
+.lf3-btn--submit:focus-visible {
+  background-color: var(--color-black);                /* #1a1b1b */
+  outline: none;
+}
+
+/* ----------------------------------------------------------------------------
+ * 모바일 — 1024px 미만 (light-find-one.css 와 동일 기준)
+ *   정직 고지: 모바일 전용 디자인이 없어 라벨/입력을 세로로 쌓는 기본값.
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .lf-summary {
+    flex-direction: column;
+  }
+  .lf-summary__image {
+    width: 100%;
+    align-self: stretch;
+  }
+  .lf-summary__row dt {
+    width: 140px;
+  }
+
+  .lf3-form__row,
+  .lf3-info__row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-xs);                              /* 8px */
+  }
+  .lf3-form__label,
+  .lf3-info__label {
+    width: auto;
+  }
+
+  .lf3-actions {
+    gap: var(--space-md);                              /* 16px */
+  }
+}
+
+/* ===== [4] 제출 완료(Thank you) ========================================= */
+/* ============================================================================
+ * light-find-four.css — "Light Find one (beta)" 제출 완료(Thank you) 화면
+ *
+ * 대상 디자인 (Optomatic_NEW_260601):
+ *   · 260427_light_find_one_UI_08 (node 5589:2899)
+ *     Step 3 에서 SUBMIT 을 누르면 나오는 접수 완료 화면.
+ *     (공통 nav·hero·footer 는 light-find-one.html 것을 재사용)
+ *
+ * 공유: 요약 카드(.lf-summary)·정보행(.lf3-info 계열, .lf3-files)·파일행은
+ *   light-find-three.css 규칙을 재사용한다. 여기서는 완료 화면 전용 요소만 정의.
+ *
+ * 정직 고지(실측값 vs 토큰):
+ *   · 안내 띠 배경 #ebeff9 = --color-neutral-100, 보조텍스트 #85888e =
+ *     --color-neutral-400, Preview/Download 보더 #85888e.
+ *   · 라벨폭 208, 카드 폭 400·아이콘 200px, 제목 32px 등은 실측값.
+ * ========================================================================== */
+
+/* ----------------------------------------------------------------------------
+ * 완료 본문 — Frame 5589:2930 (px 96 / py 40, gap 40)
+ * -------------------------------------------------------------------------- */
+.lf-done .lf-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;                                           /* Figma 실측 */
+  padding: 40px 96px;                                  /* Figma px-96 py-40 */
+}
+
+/* 감사 인사 — 가운데, 제목 24px / 부제 18px (둘 다 SemiBold) */
+.lf-done__intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                                /* 16px */
+  width: 100%;
+  text-align: center;
+  color: var(--color-black);                           /* #1a1b1b */
+}
+.lf-done__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-subtitle);                /* 24px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-subtitle);      /* 0.48px */
+}
+.lf-done__sub {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: 18px;                                     /* Figma 실측 */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: 0.36px;
+}
+
+/* ----------------------------------------------------------------------------
+ * 제출한 정보 목록 (읽기전용) — Frame 6416:13535 : 라벨 208 + 값, gap 40
+ * -------------------------------------------------------------------------- */
+.lf-done__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                                /* 16px (행 사이) */
+  width: 100%;
+  color: var(--color-black);                           /* #1a1b1b */
+}
+.lf-done__row {
+  display: flex;
+  gap: 40px;                                           /* Figma 실측 (라벨↔값) */
+  align-items: center;
+  width: 100%;
+}
+.lf-done__label {
+  flex-shrink: 0;
+  width: 208px;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body-lg);                 /* 20px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: 0.4px;
+}
+.lf-done__value {
+  flex: 1 0 0;
+  min-width: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+}
+
+/* ----------------------------------------------------------------------------
+ * Fixture Specification (준비 중) — Frame 5589:3063
+ * -------------------------------------------------------------------------- */
+.lf-done__spec {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                                /* 16px */
+  width: 100%;
+}
+.lf-done__spec-title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body-lg);                 /* 20px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1;
+  letter-spacing: 0.4px;
+  color: var(--color-black);                           /* #1a1b1b */
+}
+/* "work in progress" 줄 — construction 아이콘 + 회색 텍스트 */
+.lf-done__wip {
+  display: flex;
+  gap: var(--space-xs);                                /* 8px */
+  align-items: center;
+}
+.lf-done__wip img {
+  width: 24px;
+  height: 24px;
+}
+.lf-done__wip span {
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-semibold);            /* 600 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-neutral-400);                     /* #85888e */
+}
+/* Preview / Download (비활성 톤) */
+.lf-done__spec-actions {
+  display: flex;
+  gap: var(--space-md);                                /* 16px */
+  align-items: flex-start;
+}
+.lf-done__spec-btn {
+  display: inline-flex;
+  gap: var(--space-xs);                                /* 8px */
+  align-items: center;
+  width: 180px;
+  height: 40px;
+  padding: var(--space-xs) 12px;                       /* 8px 12px */
+  border: 1px solid var(--color-neutral-400);          /* #85888e */
+  background: transparent;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-medium);              /* 500 */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+  color: var(--color-neutral-400);                     /* #85888e */
+  white-space: nowrap;
+  cursor: not-allowed;                                 /* 준비 중 */
+}
+.lf-done__spec-btn img {
+  width: 24px;
+  height: 24px;
+}
+
+/* ----------------------------------------------------------------------------
+ * 다른 서비스 안내 띠 — Frame 6416:12595 (#ebeff9 풀폭)
+ * -------------------------------------------------------------------------- */
+.lf-services {
+  width: 100%;
+  background-color: var(--color-neutral-100);          /* #ebeff9 */
+}
+.lf-services .lf-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;                                           /* Figma 실측 */
+  padding: 40px 96px 96px;                             /* pt40 px96 pb96 */
+}
+.lf-services__lead {
+  margin: 0;
+  width: 100%;
+  font-family: var(--font-latin);
+  font-size: 18px;                                     /* Figma 실측 */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.2;
+  letter-spacing: 0.36px;
+  color: var(--color-black);                           /* text-black */
+  text-align: center;
+}
+.lf-services__cards {
+  display: flex;
+  gap: var(--space-xl);                                /* 32px */
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+}
+.lf-service-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);                                /* 32px */
+  width: 400px;
+  max-width: 100%;
+  padding: var(--space-xl);                            /* 32px */
+  text-align: center;
+}
+.lf-service-card__icon {
+  display: block;
+  width: 200px;
+  height: 200px;
+}
+.lf-service-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                                /* 16px */
+  align-items: center;
+  color: var(--color-black);                           /* #1a1b1b */
+}
+.lf-service-card__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-h3);                      /* 32px */
+  font-weight: var(--font-weight-medium);              /* 500 */
+  line-height: 1;
+  letter-spacing: 0.64px;
+}
+.lf-service-card__desc {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                    /* 16px */
+  font-weight: var(--font-weight-regular);             /* 400 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);          /* 0.32px */
+}
+/* Try It Now — 보더 버튼 */
+.lf-service-card__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) var(--space-md);            /* 8px 16px */
+  border: 1px solid var(--color-black);                /* #1a1b1b */
+  background: transparent;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body-lg);                 /* 20px */
+  font-weight: var(--font-weight-medium);              /* 500 */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-body-lg);       /* 0.8px */
+  color: var(--color-black);                           /* #1a1b1b */
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+}
+.lf-service-card__cta:hover,
+.lf-service-card__cta:focus-visible {
+  background-color: var(--color-black);                /* #1a1b1b */
+  color: var(--color-text-on-dark);                    /* #fbfdff */
+  outline: none;
+}
+
+/* ----------------------------------------------------------------------------
+ * 모바일 — 1024px 미만
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .lf-done .lf-inner {
+    padding: var(--space-xl) var(--page-gutter-mobile);   /* 32 16 */
+  }
+  .lf-done__row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2xs);                             /* 4px */
+  }
+  .lf-done__label {
+    width: auto;
+  }
+  .lf-services .lf-inner {
+    padding: var(--space-xl) var(--page-gutter-mobile) var(--space-3xl);  /* 32 16 80 */
+  }
+  .lf-services__cards {
+    flex-direction: column;
+    align-items: center;
+  }
+  .lf-done__spec-actions {
+    flex-wrap: wrap;
+  }
+}

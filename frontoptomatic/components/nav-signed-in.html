@@ -1,0 +1,118 @@
+<!-- ============================================================================
+     nav-signed-in.html — Optomatic 상단 내비게이션 바 (로그인 상태)
+     Figma: nav_bar_desktop 변형 "sign in=yes" (Optomatic_NEW_260601)
+       기본    node 6050:12607   알림선택  node 6050:12757   프로필선택 node 6050:12837
+       Light Find 활성 node 6050:12532 / Light Design 활성 node 6050:12627
+       (+ 활성메뉴 × 아이콘 선택 조합 6종: 12877 / 12917 / 12957 / 12997)
+
+     로그아웃 nav(components/nav.html)와의 차이:
+       · 우측 SIGN IN 링크 → 알림 벨 + 계정 원 아이콘(각 40px)으로 교체.
+       · 메뉴 활성 표시는 로그아웃과 동일하게 aria-current="page" → 파란 배경.
+
+     활성 메뉴를 표시하려면 해당 링크에 aria-current="page" 를 추가하세요.
+       예) <a class="nav__menu-link" href="#" aria-current="page">Light Find</a>
+
+     사용법: head 에 CSS(변수→reset→typography→layout→nav.css), body 끝에 nav.js.
+============================================================================ -->
+<header class="nav" lang="en">
+  <div class="nav__inner">
+    <!-- 왼쪽: 로고 + 메뉴 -->
+    <div class="nav__left">
+      <a class="nav__logo" href="/" aria-label="Optomatic — home">
+        <img src="assets/logo-optomatic-horizontal.svg" alt="Optomatic" width="162" height="36" />
+      </a>
+
+      <!-- 메뉴 (데스크톱: 가로 링크 / 모바일: 햄버거 풀스크린 패널, 기본 닫힘) -->
+      <nav class="nav__menu" id="nav-menu" aria-label="Primary" hidden>
+        <a class="nav__menu-link" href="#" data-i18n="nav.lightFind">Light Find</a>
+        <a class="nav__menu-link" href="/light-design" data-i18n="nav.lightDesign">Light Design</a>
+        <!-- 모바일 패널 전용 EN 박스 (로그인 상태엔 Sign in 항목 없음) -->
+        <button type="button" class="nav__menu-lang nav__menu-link--mobile" aria-label="Change language, current: English">
+          <span data-i18n="nav.lang">EN</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- 오른쪽: 언어 · 알림 · 프로필 · 햄버거 -->
+    <div class="nav__right">
+      <!-- 언어 토글 + 드롭다운 (데스크톱 전용; 모바일에서는 숨김) -->
+      <div class="nav__lang-wrap">
+        <button
+          type="button"
+          class="nav__lang"
+          data-nav-toggle
+          aria-haspopup="true"
+          aria-controls="nav-lang-menu"
+          aria-expanded="false"
+          aria-label="Change language, current: English"
+        >
+          <span class="nav__lang-current" data-i18n="nav.lang">EN</span>
+        </button>
+
+        <ul class="nav__lang-menu" id="nav-lang-menu" role="menu" hidden>
+          <li role="none">
+            <button type="button" class="nav__lang-option" role="menuitem" data-lang="en" data-lang-label="EN" aria-current="true">
+              <img class="nav__lang-flag" src="assets/flag-en.svg" alt="" width="20" height="20" />
+              <span data-i18n="nav.langOption.en">EN - English</span>
+            </button>
+          </li>
+          <li role="none">
+            <button type="button" class="nav__lang-option" role="menuitem" data-lang="kr" data-lang-label="KR" aria-current="false">
+              <img class="nav__lang-flag" src="assets/flag-kr.svg" alt="" width="20" height="20" />
+              <span data-i18n="nav.langOption.kr">KR - 한국어</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 알림 벨 (Material "notifications" filled). 선택 시 검정 — 동작은 js/nav.js
+           읽지 않은 알림 배지(Figma 변형 notifications=yes): 벨 우상단 빨간 점.
+           · 배지가 없는 상태(notifications=no)로 쓰려면 .nav__icon-btn 의
+             has-unread 클래스와 안의 .nav__icon-dot 을 제거하세요. -->
+      <button
+        type="button"
+        class="nav__icon-btn has-unread"
+        data-account-icon="notifications"
+        aria-pressed="false"
+        aria-label="Notifications, unread"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5S10.5 3.17 10.5 4v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="currentColor" />
+        </svg>
+        <span class="nav__icon-dot" aria-hidden="true"></span>
+      </button>
+
+      <!-- 프로필 (Material "account_circle" filled). 선택 시 검정 -->
+      <button
+        type="button"
+        class="nav__icon-btn"
+        data-account-icon="profile"
+        aria-pressed="false"
+        aria-label="Account"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="currentColor" />
+        </svg>
+      </button>
+
+      <!-- 햄버거(dehaze) — 모바일 전용. 동작은 js/nav.js -->
+      <button
+        type="button"
+        class="nav__toggle"
+        data-nav-toggle
+        aria-controls="nav-menu"
+        aria-expanded="false"
+        aria-label="Open menu"
+        data-label-open="Open menu"
+        data-label-close="Close menu"
+      >
+        <svg class="nav__toggle-icon nav__toggle-icon--open" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M3 7V5H21V7H3ZM3 19V17H21V19H3ZM3 13V11H21V13H3Z" fill="currentColor" />
+        </svg>
+        <svg class="nav__toggle-icon nav__toggle-icon--close" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z" fill="currentColor" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>

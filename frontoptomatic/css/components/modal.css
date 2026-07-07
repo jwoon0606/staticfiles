@@ -1,0 +1,198 @@
+/* ============================================================================
+ * modal.css — ERCO 신제품 프로모 팝업 (Figma node 7126:13814)
+ *   페이지 로드 시 오버레이 위에 중앙 표시. 제품 캐러셀 + "24시간 숨김" 체크.
+ *   토큰 의존: variables.css. 동작: js/modal.js
+ * ========================================================================== */
+
+/* 오버레이(배경 딤) */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);                  /* 24px (작은 화면 여백) */
+  background: rgba(0, 0, 0, 0.6);
+}
+.modal-overlay[hidden] { display: none; }
+
+/* 모달 본체 */
+.modal {
+  width: 100%;
+  max-width: 660px;                          /* 콘텐츠 628 + 좌우 16 패딩 */
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  padding: var(--space-md);                  /* 16px */
+  background: var(--color-neutral-900);      /* #1a1b1b */
+  color: var(--color-text-on-dark);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);                     /* 48px (본문 ↔ 체크박스) */
+}
+.modal__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);                      /* 24px */
+  width: 100%;
+}
+
+/* 닫기 (X) — 우측 상단 */
+.modal__close-row { display: flex; justify-content: flex-end; width: 100%; }
+.modal__close {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text-on-dark);
+  cursor: pointer;
+  display: inline-flex;
+}
+.modal__close svg { width: 24px; height: 24px; display: block; }
+
+/* 제목 "NEW from ERCO" */
+.modal__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-h2);            /* 48px */
+  font-weight: var(--font-weight-semibold);  /* 600 */
+  line-height: 1.2;
+  letter-spacing: 0.96px;
+  text-align: center;
+}
+
+/* 캐러셀: 좌 화살표 · 제품이미지 · 우 화살표 */
+.modal__carousel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  width: 100%;
+  max-width: 628px;
+}
+.modal__arrow {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text-on-dark);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal__arrow svg { width: 40px; height: 40px; display: block; }
+.modal__product {
+  flex-shrink: 0;
+  width: 258px;
+  height: 337px;
+  background: var(--color-neutral-900);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.33);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.modal__product img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+/* 슬라이드 도트 (제품 수만큼 JS 생성) — 8px, 활성 opacity 1 / 비활성 0.5 */
+.modal__dots { display: flex; gap: var(--space-sm); justify-content: center; }  /* 12px */
+.modal__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: var(--color-text-on-dark);
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+.modal__dot:hover { opacity: 0.8; }
+.modal__dot.is-active { opacity: 1; }
+
+/* 제품명 / 설명 */
+.modal__info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);                      /* 8px */
+  text-align: center;
+}
+.modal__name,
+.modal__desc {
+  margin: 0;
+  font-size: var(--font-size-subtitle);      /* 24px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-subtitle); /* 0.48px */
+}
+.modal__name { font-weight: var(--font-weight-semibold); }
+.modal__desc { font-weight: var(--font-weight-regular); }
+
+/* "NOW AVAILABLE IN OPTOMATIC" */
+.modal__avail {
+  margin: 0;
+  font-size: var(--font-size-h3);            /* 32px */
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-h3);  /* 0.64px */
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* "24시간 동안 보지 않기" 체크박스 */
+.modal__dismiss {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);                      /* 8px */
+  cursor: pointer;
+}
+/* 체크박스: Figma check_box_outline_blank SVG 를 그대로 사용
+   (20px 박스 안 ~13px 둥근 사각형, 보더 ~1px, #fbfdff — 크기·모양 동일) */
+.modal__dismiss input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border: none;
+  background: url("../../assets/icon-checkbox.svg") center / 20px 20px no-repeat;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+}
+/* 체크 시: 박스 안에 체크마크 표시 (Figma 에 체크 상태 아이콘은 없어 합리적 기본값) */
+.modal__dismiss input:checked::after {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 3.5px;
+  width: 4px;
+  height: 8px;
+  border: solid var(--color-text-on-dark);
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg);
+}
+.modal__dismiss span {
+  font-size: 15px;
+  font-weight: var(--font-weight-light);     /* 300 */
+  line-height: 1.2;
+  letter-spacing: 0.3px;
+}
+
+/* ── 모바일 (< 1024px): 폰트 축소, 줄바꿈 허용 ───────────────────────────── */
+@media (max-width: 1023.98px) {
+  .modal__title { font-size: var(--font-size-h3); letter-spacing: 0.64px; }  /* 48 → 32 */
+  .modal__avail { font-size: var(--font-size-body-lg); letter-spacing: 0.4px; white-space: normal; }  /* 32 → 20 */
+  .modal__name,
+  .modal__desc { font-size: var(--font-size-body-lg); white-space: normal; }  /* 24 → 20 */
+  .modal__product { width: 200px; height: 261px; }   /* 258×337 비율 유지 축소 */
+  .modal__carousel { gap: var(--space-xs); }
+  .modal__arrow { width: 32px; height: 32px; }
+  .modal__arrow svg { width: 32px; height: 32px; }
+}

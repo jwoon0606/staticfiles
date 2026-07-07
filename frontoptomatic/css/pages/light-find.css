@@ -1,0 +1,682 @@
+/* ============================================================================
+ * light-find.css — "Light Find" 페이지 전용 스타일
+ * (마케팅 nav 에서 "Light Find" 클릭 시 진입하는 제품 첫 화면)
+ *
+ * 구성 섹션 (Figma nodes, file: Optomatic_NEW_260601):
+ *   1) 공지 띠 promo   — node 6363:18855  (.promo, 마케팅과 동일 디자인)
+ *   2) 히어로          — node 5851:1234   (.lf-hero)
+ *   3) 입력 폼         — node 5851:1244   (.lf-form: Region + 3단계 + NEXT)
+ *   (앱 상단바는 components/app-nav.css, 푸터는 components/footer.css)
+ *
+ * 참고: "Light Find one (beta)"(업로드 단계)는 별도 화면이며
+ *        light-find-one.html / css/pages/light-find-one.css 에 있습니다.
+ *
+ * 토큰 의존: variables.css 를 먼저 불러오세요.
+ *
+ * 반응형 주의(정직 고지): 이 페이지의 Figma 노드는 데스크톱(1440)만
+ *   제공되었습니다. 1024px 미만 규칙은 layout.css 공통 가이드(여백·간격 축소,
+ *   가로→세로 전환)를 따른 "적응"이며 별도 모바일 디자인에서 추출한 값이
+ *   아닙니다.
+ * ========================================================================== */
+
+/* 본문 좌우 패딩: Figma 실측 96px (nav 184 · footer 136 과 다른 값) */
+.light-find {
+  --lf-gutter: 96px;
+  background-color: var(--color-white);
+}
+
+/* 섹션 콘텐츠를 1440px 안에 가두는 공통 래퍼 */
+.lf-inner {
+  width: 100%;
+  max-width: var(--content-max);                  /* 1440px */
+  margin: 0 auto;
+}
+
+/* ============================================================================
+ * 1) PROMO BAR — 상단 파란 공지 띠 (Figma node 6363:18855)
+ *    랜딩의 .promo 와 동일 디자인. 이 페이지는 landing.css 를 불러오지 않으므로
+ *    자기완결성을 위해 동일 규칙을 여기 다시 정의합니다.
+ * ========================================================================== */
+.promo {
+  width: 100%;
+  background: var(--color-primary);               /* #4428ff */
+  color: var(--color-text-on-dark);              /* #fbfdff */
+}
+.promo__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xl);                           /* 32px */
+  padding: var(--space-xs) var(--space-xl);       /* 8px 32px */
+  text-align: center;
+}
+.promo__text {
+  margin: 0;
+  font-size: var(--font-size-body);               /* 16px */
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-body);     /* 0.32px */
+  line-height: 1;
+}
+.promo__text-strong {
+  font-weight: var(--font-weight-semibold);       /* 600 */
+}
+.promo__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);                           /* 8px */
+  padding: var(--space-2xs) var(--space-md);      /* 4px 16px */
+  background: var(--color-neutral-50);            /* #fbfdff */
+  color: var(--color-primary);
+  border-radius: 16px;
+  font-size: var(--font-size-body);               /* 16px */
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-body);
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+.promo__cta:hover {
+  background: var(--color-primary-50, #ebe9ff); /* 살짝 푸른 틴트로 흰 알약 유지 */
+}
+.promo__cta-arrow {
+  width: 20px;
+  height: 20px;
+}
+
+/* ============================================================================
+ * 2) HERO — "Light Find" (Figma node 5851:1234)
+ *    배경 사진(어두운 인테리어 + 스케치) 위 흰색 대제목 + 우측 타겟 링.
+ *    Figma: padding 40px 96px, items-end · space-between.
+ * ========================================================================== */
+.lf-hero {
+  width: 100%;
+  background-color: var(--color-neutral-900);     /* #1a1b1b (이미지 로딩 폴백) */
+  background-image: url("../../assets/light-find-hero.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: var(--color-text-on-dark);              /* #fbfdff */
+}
+.lf-hero .lf-inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-lg);                           /* 24px */
+  padding: 40px var(--lf-gutter);                 /* 40px 96px */
+}
+.lf-hero__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-light);          /* 300 */
+  font-size: clamp(40px, 7vw, 96px);              /* Figma 96px → 유동 축소 */
+  line-height: 1;                                  /* Figma: leading none */
+  letter-spacing: -1.92px;                         /* 실측 (스케일 외 값) */
+  color: inherit;
+}
+.lf-hero__target {
+  flex-shrink: 0;
+  width: clamp(40px, 7vw, 96px);                  /* 제목과 같은 비율로 축소 */
+  height: clamp(40px, 7vw, 96px);
+  color: var(--color-text-on-dark);
+}
+
+/* ============================================================================
+ * 3) FORM — Region + 3단계 선택 (Figma node 5851:1244)
+ *    Figma: padding 40px 96px 96px, 세로 스택 gap 32.
+ * ========================================================================== */
+.lf-form .lf-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);                           /* 32px */
+  padding: 40px var(--lf-gutter) 96px;            /* 40px 96px 96px */
+}
+
+/* 공통: 필수 표시 별표(*) */
+.lf-required {
+  color: var(--color-danger);                     /* #ee1b5e */
+}
+
+/* --- Region 행 ----------------------------------------------------------- */
+.lf-region {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);                           /* 24px */
+  width: 100%;
+}
+.lf-region__label {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);       /* 600 */
+  font-size: var(--font-size-subtitle);           /* 24px */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-subtitle); /* 0.48px */
+  color: var(--color-black);
+  white-space: nowrap;
+}
+
+/* 드롭다운(외관용 버튼) */
+.lf-select {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);                           /* 8px */
+  padding: var(--space-xs) var(--space-sm);       /* 8px 12px */
+  border: 1px solid var(--color-neutral-400);     /* #85888e */
+  background: var(--color-white);
+  text-align: left;
+  cursor: pointer;
+}
+.lf-select__value {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                           /* 8px */
+  min-width: 0;
+}
+.lf-select__flag {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+.lf-select__text {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);         /* 500 */
+  font-size: var(--font-size-body);               /* 16px */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-body);     /* 0.32px */
+  color: var(--color-neutral-400);                /* #85888e */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lf-select__caret {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--color-black);
+}
+
+/* --- 단계(steps) 행: [1단계][>][2단계][>][3단계] ········ [NEXT >] ------- */
+.lf-steps {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-xl);                           /* 32px */
+  width: 100%;
+  /* 왼쪽 여백은 고정하고, 단계가 많은(venue 4열) 경우 오른쪽 거터까지 콘텐츠를
+     확장한 뒤 넘치면 이 행만 가로 스크롤한다(시작점 Project 는 항상 왼쪽 고정). */
+  margin-right: calc(-1 * var(--lf-gutter));
+  padding-right: var(--lf-gutter);
+  overflow-x: auto;
+  scrollbar-width: none;                          /* 스크롤바 숨김 (Firefox) */
+  -ms-overflow-style: none;                       /* 스크롤바 숨김 (구 Edge) */
+}
+.lf-steps::-webkit-scrollbar { display: none; }   /* 스크롤바 숨김 (Chrome/Safari) */
+.lf-steps__track {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-xl);                           /* 32px */
+}
+.lf-step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);                           /* 32px */
+}
+.lf-step--1 { width: 260px; }
+.lf-step--2 { width: 260px; }
+.lf-step--3 { width: 360px; }
+
+.lf-step__title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);       /* 600 */
+  font-size: var(--font-size-subtitle);           /* 24px */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-subtitle); /* 0.48px */
+  color: var(--color-black);                       /* 활성 단계 */
+}
+/* 비활성(아직 진입 전) 단계 제목 */
+.lf-step__title--inactive {
+  color: var(--color-neutral-300);                /* #b6bbc5 */
+}
+
+/* 단계 사이 화살표 (chevron_forward, 40px, 회색) */
+.lf-steps__chevron {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  color: var(--color-neutral-300);                /* #b6bbc5 */
+}
+
+/* --- 옵션 목록 (Project type) ------------------------------------------- */
+.lf-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);                           /* 24px */
+  width: 100%;
+}
+.lf-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                           /* 8px */
+  width: 100%;
+  padding: var(--space-xs) var(--space-sm);       /* 8px 12px */
+  border: 1px solid var(--color-neutral-400);     /* #85888e */
+  background: var(--color-white);
+  color: var(--color-neutral-400);                /* 아이콘+텍스트 (currentColor) */
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.lf-option__icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+.lf-option__label {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);         /* 500 */
+  font-size: 18px;
+  line-height: 1.4;
+  letter-spacing: 0.36px;                          /* 실측 */
+}
+.lf-option:not(:disabled):not(.is-selected):hover {
+  border-color: var(--color-primary);             /* #4428ff */
+  color: var(--color-black);
+}
+/* 선택된 옵션 — 검은 배경 + 흰 아이콘/텍스트 (Figma node 5851:2167) */
+.lf-option.is-selected {
+  background: var(--color-black);                  /* #1a1b1b */
+  border-color: var(--color-black);               /* 보더폭 유지(레이아웃 흔들림 방지) */
+  color: var(--color-text-on-dark);              /* #fbfdff (아이콘은 currentColor) */
+}
+/* 비활성 옵션 (예: Retail — 연한 회색) */
+.lf-option:disabled {
+  border-color: var(--color-neutral-300);         /* #b6bbc5 */
+  color: var(--color-neutral-300);
+  cursor: not-allowed;
+}
+/* muted 옵션 — PDF 에서 흐리게(grey) 표시된 항목. 비활성과 같은 회색이지만
+   클릭 가능(선택/hover 는 일반 옵션과 동일하게 동작). */
+.lf-option--muted:not(.is-selected):not(:hover) {
+  border-color: var(--color-neutral-300);         /* #b6bbc5 — Office 비활성과 동일 회색 */
+  color: var(--color-neutral-300);
+}
+
+/* ----------------------------------------------------------------------------
+ * 선택 후 상태 — Project type 을 고르면 2단계(Space type)가 열림
+ *   (JS 가 .lf-steps 에 .is-space-active 를 토글; Figma node 5851:2090)
+ *   · 2단계 옵션 목록은 기본 숨김 → 활성 시 노출
+ *   · 2단계 제목: 회색(비활성) → 검정(활성)
+ *   · 1→2 화살표: 회색 → 검정
+ * -------------------------------------------------------------------------- */
+.lf-step--2 .lf-options {
+  display: none;                                   /* 기본 숨김 (선택 전) */
+}
+.lf-steps.is-space-active .lf-step--2 .lf-options {
+  display: flex;                                   /* 선택 후 노출 */
+}
+.lf-steps.is-space-active .lf-step--2 .lf-step__title {
+  color: var(--color-black);                       /* 비활성 회색 → 활성 검정 */
+}
+.lf-steps.is-space-active .lf-steps__chevron--1 {
+  color: var(--color-black);                       /* #b6bbc5 → #1a1b1b */
+}
+
+/* ----------------------------------------------------------------------------
+ * 선택 후 상태 — Space type 을 고르면 3단계(Lighting type)가 열림
+ *   (JS 가 .lf-steps 에 .is-lighting-active 를 토글; Figma node 5851:2304)
+ * -------------------------------------------------------------------------- */
+.lf-step--3 .lf-options {
+  display: none;                                   /* 기본 숨김 (Space 선택 전) */
+}
+.lf-steps.is-lighting-active .lf-step--3 .lf-options {
+  display: flex;                                   /* 선택 후 노출 */
+}
+.lf-steps.is-lighting-active .lf-step--3 .lf-step__title {
+  color: var(--color-black);                       /* 비활성 회색 → 활성 검정 */
+}
+.lf-steps.is-lighting-active .lf-steps__chevron--2 {
+  color: var(--color-black);                       /* #b6bbc5 → #1a1b1b */
+}
+
+/* ----------------------------------------------------------------------------
+ * Venue 단계 (Museum / Gallery 전용, Figma 11:108)
+ *   · 기본 숨김 — Project 가 venues 를 가질 때만(.lf-steps.has-venue) 노출.
+ *   · venue 노출 시 Space=3, Lighting=4 로 번호가 밀린다(light-find.js 가 .lf-step__n 갱신).
+ *   · 흐름: Project 선택 → is-venue-active(venue 옵션 노출) → Venue 선택 → is-space-active …
+ * -------------------------------------------------------------------------- */
+.lf-step--venue { width: 260px; }
+.lf-step--venue,
+.lf-steps__chevron--venue { display: none; }       /* venue 없는 프로젝트에선 숨김(자리 차지 X) */
+.lf-steps.has-venue .lf-step--venue { display: flex; }
+.lf-steps.has-venue .lf-steps__chevron--venue { display: block; }
+
+.lf-step--venue .lf-options { display: none; }      /* Project 선택 전 숨김 */
+.lf-steps.is-venue-active .lf-step--venue .lf-options { display: flex; }
+.lf-steps.is-venue-active .lf-step--venue .lf-step__title { color: var(--color-black); }
+/* Project→Venue 화살표: venue 활성 시 검정 */
+.lf-steps.is-venue-active .lf-steps__chevron--1 { color: var(--color-black); }
+/* Venue→Space 화살표: Space 단계가 열리면(venue 선택 후) 검정 */
+.lf-steps.has-venue.is-space-active .lf-steps__chevron--venue { color: var(--color-black); }
+
+/* 알고리즘 추천 안내문 ("General lighting recommendations generated by algorithm")
+ *   Workspace 의 "Select a type" 선택 시 조명 컬럼 하단에 노출 */
+.lf-algo-note {
+  width: 100%;
+  margin-top: var(--space-sm);                     /* 12px */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);          /* 500 */
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: 0.28px;
+  color: var(--color-black);
+}
+.lf-algo-note[hidden] {
+  display: none;
+}
+
+/* Lighting type 그룹 헤더 ("General light" / "Additional light") */
+.lf-group-head {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 56px;
+  padding: var(--space-xs) 0;                      /* 8px 0 */
+  border-bottom: 1px solid var(--color-black);    /* #1c1b1f ≈ #1a1b1b */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);       /* 600 */
+  font-size: 18px;
+  line-height: 1.4;
+  letter-spacing: 0.36px;
+  color: var(--color-black);
+}
+
+/* 우측 info 아이콘이 있는 옵션 (General light): 라벨 좌측 · info 우측 */
+.lf-option--info {
+  justify-content: space-between;
+}
+.lf-option__main {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                            /* 8px (아이콘+라벨) */
+  min-width: 0;
+}
+/* 일부 다운라이트 아이콘은 디자인상 180° 뒤집힘 */
+.lf-option__icon--flip {
+  transform: rotate(180deg);
+}
+/* info(ⓘ) 아이콘 — 클릭 시 모달 (옵션 선택과 분리; 자체 클릭 영역) */
+.lf-option__info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: inherit;                                 /* 옵션 색(선택 시 흰색) 상속 */
+  cursor: pointer;
+}
+.lf-option__info svg {
+  width: 24px;
+  height: 24px;
+}
+.lf-option__info:hover {
+  color: var(--color-primary);                    /* 마우스오버 강조 */
+}
+
+/* ============================================================================
+ * INFO MODAL — General light info(ⓘ) 클릭 시 (Figma node 7126:15369)
+ *   배경 rgba(26,27,27,0.7) + 가운데 흰 카드(닫기 · 이미지 · 제목 · 설명)
+ * ========================================================================== */
+.lf-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;                                  /* 기본 숨김 */
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);                       /* 좁은 화면에서 카드가 가장자리에 안 닿도록 */
+  background: rgba(26, 27, 27, 0.7);             /* #1a1b1b 70% */
+}
+.lf-modal.is-open {
+  display: flex;
+}
+.lf-modal__card {
+  width: 100%;
+  max-width: 669px;                               /* Figma 모달 폭 */
+  max-height: calc(100vh - 2 * var(--space-lg));
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                           /* 8px */
+  padding: var(--space-md);                       /* 16px */
+  background: var(--color-neutral-50);            /* #fbfdff */
+}
+.lf-modal__bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}
+.lf-modal__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-black);
+  cursor: pointer;
+}
+.lf-modal__close svg {
+  width: 48px;
+  height: 48px;
+}
+.lf-modal__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);                           /* 24px */
+  padding: 64px 80px 80px;                        /* Figma: pt64 / px80 / pb80 */
+}
+.lf-modal__image {
+  width: 100%;
+  aspect-ratio: 461 / 481;                        /* Figma 이미지 비율 */
+  object-fit: cover;
+}
+.lf-modal__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);                           /* 8px */
+  text-align: center;
+  color: var(--color-black);
+}
+.lf-modal__title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);       /* 600 */
+  font-size: var(--font-size-subtitle);           /* 24px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-subtitle); /* 0.48px */
+}
+.lf-modal__desc {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);        /* 400 */
+  font-size: var(--font-size-body);               /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);     /* 0.32px */
+}
+
+/* --- PRICE MODAL (Step 4 의 Basic/Standard/Premium 비교) -----------------
+ * .lf-modal 백드롭/닫기 메커니즘은 공유하고, 카드 폭과 본문(3열)만 다릅니다.
+ * Figma: 카드 1072px = 3×320 열 + 2×16 gap + 본문 px24 + 카드 p16. */
+.lf-modal__card--price {
+  max-width: 1072px;                               /* 3열 비교용 넓은 카드 */
+}
+.lf-price-modal__body {
+  display: flex;
+  flex-wrap: wrap;                                 /* 좁은 화면에서 열 줄바꿈 */
+  gap: var(--space-md);                            /* 16px */
+  justify-content: center;
+  padding: 0 var(--space-lg) var(--space-lg);     /* px24 pb24 (상단은 close 바가 차지) */
+}
+.lf-tier {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                            /* 16px */
+  width: 320px;
+  max-width: 100%;
+}
+.lf-tier__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);                            /* 16px */
+  height: 240px;
+  padding: var(--space-md);
+  color: var(--color-white);
+  text-align: center;
+}
+.lf-tier__head--basic    { background: var(--color-neutral-400); }  /* #85888e */
+.lf-tier__head--standard { background: var(--color-primary); }      /* #4428ff */
+.lf-tier__head--premium  { background: var(--color-black); }        /* #1a1b1b */
+.lf-tier__name {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);         /* 400 */
+  font-size: 54px;                                 /* Figma 실측 (토큰 없음) */
+  line-height: 1;
+}
+.lf-tier__tag {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-body);                /* 16px */
+  line-height: 1.2;
+}
+.lf-tier__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                            /* 8px (불릿 사이) */
+  margin: 0;
+  padding-left: var(--space-lg);                   /* ms-24: 불릿 들여쓰기 */
+  list-style: disc;
+  color: var(--color-black);
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);         /* 400 */
+  font-size: var(--font-size-body);                /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);      /* 0.32px */
+}
+.lf-tier__list li {
+  margin: 0;
+}
+.lf-tier__list strong {
+  font-weight: var(--font-weight-semibold);        /* 600 */
+}
+
+/* --- SIGN-IN MODAL (비로그인 시 Step 4 NEXT) ----------------------------- */
+.lf-modal__card--signin {
+  max-width: 584px;                                /* Figma pop up 폭 */
+}
+.lf-signin__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);                            /* 24px */
+  padding: 40px;                                   /* Figma p-40 */
+}
+.lf-signin__title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-subtitle);            /* 24px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-subtitle);  /* 0.48px */
+  color: var(--color-black);
+  text-align: center;
+}
+.lf-signin__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) var(--space-md);        /* 8px 16px */
+  border: 1px solid var(--color-black);
+  background: none;
+  color: var(--color-black);
+  text-decoration: none;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);          /* 500 */
+  font-size: var(--font-size-body);                /* 16px */
+  line-height: 1;
+  letter-spacing: 0.64px;                          /* Figma tracking */
+  white-space: nowrap;
+}
+.lf-signin__cta:hover,
+.lf-signin__cta:focus-visible {
+  background: var(--color-black);
+  color: var(--color-neutral-50);                  /* 반전 hover (가독성) */
+}
+
+/* --- NEXT --------------------------------------------------------------- */
+.lf-next {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                           /* 8px */
+  border: none;
+  background: none;
+  color: var(--color-neutral-300);                /* #b6bbc5 (현재 비활성) */
+  cursor: pointer;
+  white-space: nowrap;
+}
+.lf-next__label {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);       /* 600 */
+  font-size: var(--font-size-subtitle);           /* 24px */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-subtitle); /* 0.48px */
+}
+.lf-next__icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+/* 필수 3단계(Project·Space·Lighting) 모두 선택되면 활성 */
+.lf-next.is-active {
+  color: var(--color-black);                       /* #b6bbc5 → #1a1b1b */
+}
+
+/* ----------------------------------------------------------------------------
+ * 모바일 (<1024px) — 적응 규칙 (상단 정직 고지 참고)
+ *   히어로: 여백 축소(제목은 clamp 로 이미 축소).
+ *   폼: Region 세로 쌓기, 단계 세로 쌓기(화살표는 아래 방향으로 회전).
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .light-find { --lf-gutter: var(--page-gutter-mobile); }  /* 16px */
+
+  .lf-hero .lf-inner { padding: var(--space-lg) var(--lf-gutter); }      /* 24 16 */
+  .lf-form .lf-inner { padding: var(--space-lg) var(--lf-gutter) var(--space-2xl); gap: var(--space-lg); }
+
+  .lf-region { flex-direction: column; align-items: stretch; gap: var(--space-xs); }
+  .lf-region__label { white-space: normal; }
+
+  .lf-steps { flex-direction: column; gap: var(--space-lg); margin-right: 0; padding-right: 0; overflow-x: visible; }
+  .lf-steps__track { flex-direction: column; width: 100%; gap: var(--space-md); }
+  .lf-step,
+  .lf-step--1,
+  .lf-step--2,
+  .lf-step--3,
+  .lf-step--venue { width: 100%; }
+  /* 세로 배치에서는 단계 사이 화살표를 아래 방향으로 */
+  .lf-steps__chevron { align-self: center; transform: rotate(90deg); }
+
+  .lf-next { align-self: flex-end; }
+
+  /* 모달: 데스크톱 px80/pt64/pb80 패딩은 좁은 화면에서 과해 축소 */
+  .lf-modal { padding: var(--space-md); }
+  .lf-modal__body { padding: var(--space-xl) var(--space-md) var(--space-2xl); } /* 32 16 48 */
+}

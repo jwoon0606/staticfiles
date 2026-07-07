@@ -1,0 +1,223 @@
+/* ============================================================================
+ * legal.css — 약관/동의 문서 페이지 공통 (Terms · Privacy · Consents)
+ * Figma: Optomatic_NEW_260601 / 260429_sign_in_UI_07_A~D
+ *   A 5219:3412  Terms of service
+ *   B 5219:3455  Privacy Policy
+ *   C 5219:3498  Consent to Provide Personal Information to Third Parties
+ *   D 5219:3541  Consent for Overseas Transfer of Personal Information
+ *
+ * 토큰 의존: variables.css → reset → typography → layout
+ *           → nav → footer 다음에 마지막으로 불러오세요.
+ *
+ * 구성(4개 페이지 공통):
+ *   1) legal-hero    — "Light up your spaces" 배경 사진 + 큰 제목
+ *   2) legal-content — 제목(36px) + 본문(20px, 목록/문단)
+ *
+ * 정직 고지(디자인 실측과 다른 점):
+ *   · 좌우 여백 96px (전용 변수 --legal-gutter).
+ *   · 제목 "Light up your spaces" 96px / -1.92px (다른 히어로와 동일 실측).
+ *   · 섹션 제목 36px·본문 20px(tracking 0.4px)는 --font-size 스케일과 달라 실측값 사용.
+ *   · 목록 들여쓰기 30px·항목 간격 10px 은 Figma 실측(ms-[30px], mb-[10px]).
+ * ========================================================================== */
+
+.legal {
+  --legal-gutter: 96px;          /* 페이지 좌우 여백 (Figma 실측) */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background-color: var(--color-neutral-50);   /* #fbfdff */
+}
+
+/* ----------------------------------------------------------------------------
+ * 1) HERO — "Light up your spaces"
+ *    px 96 / py 40, 배경 Frame116(이미 어둡게 합성됨; login-hero.png 재사용)
+ * -------------------------------------------------------------------------- */
+.legal-hero {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: var(--content-max);               /* 1440px */
+  padding: 40px var(--legal-gutter);           /* 상하 40 / 좌우 96 */
+  overflow: hidden;
+  background-color: var(--color-neutral-900);  /* 이미지 로드 전 폴백 */
+  color: var(--color-text-on-dark);            /* #fbfdff */
+}
+.legal-hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.legal-hero__title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-light);       /* 300 */
+  font-size: 96px;                             /* Figma 실측 */
+  line-height: 1;
+  letter-spacing: -1.92px;                     /* Figma 실측 */
+}
+
+/* ----------------------------------------------------------------------------
+ * 2) CONTENT — 제목 + 본문
+ *    px 96 / py 40, gap 40, items-start
+ * -------------------------------------------------------------------------- */
+.legal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;                                   /* 제목 ↔ 본문 (Figma 실측) */
+  width: 100%;
+  max-width: var(--content-max);
+  padding: 40px var(--legal-gutter);
+  color: var(--color-black);                   /* #1a1b1b */
+}
+.legal-content__title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);    /* 600 */
+  font-size: 36px;                             /* Figma 실측 */
+  line-height: 1.2;
+}
+
+/* 본문 묶음 — 20px / tracking 0.4px / line-height 1.2 (Figma 실측) */
+.legal-body {
+  width: 100%;
+  font-family: var(--font-latin);
+  font-size: 20px;
+  line-height: 1.2;
+  letter-spacing: 0.4px;
+}
+/* typography.css 의 p(16px) 규칙을 이 영역에선 20px 로 덮어씀 */
+.legal-body p {
+  font-size: 20px;
+  line-height: 1.2;
+  letter-spacing: 0.4px;
+  margin-bottom: 10px;                         /* Figma mb-[10px] */
+}
+.legal-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* 목록 공통 — 들여쓰기 30px, 항목 간격 10px (Figma) */
+.legal-body ol,
+.legal-body ul {
+  padding-left: 30px;                          /* 마커 들여쓰기 (reset 가 padding 0 으로 만든 것 복구) */
+}
+.legal-body li {
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+.legal-body li:last-child {
+  margin-bottom: 0;
+}
+.legal-body ul {
+  list-style: disc;
+}
+
+/* Terms 전용 — 번호 목록(각 항목: 굵은 제목 + 일반 설명) */
+.legal-list--terms {
+  list-style: decimal;
+  font-weight: var(--font-weight-semibold);    /* 항목 제목 = semibold */
+}
+.legal-list--terms .legal-list__desc {
+  font-weight: var(--font-weight-regular);     /* 설명 = regular */
+}
+
+/* ----------------------------------------------------------------------------
+ * 문서 본문(docx 변환) + EN/KR 전환 (js/legal.js)
+ * -------------------------------------------------------------------------- */
+.legal-content__title span[data-legal-lang][hidden] { display: none; }
+
+.legal-doc { width: 100%; }
+.legal-doc[hidden] { display: none; }
+
+/* 긴 법률 문서 → 본문은 넉넉한 행간으로 (요약 20px/1.2 규칙을 이 영역에선 완화) */
+.legal-doc p,
+.legal-doc li { line-height: 1.6; letter-spacing: 0.2px; }
+.legal-doc p { margin-bottom: 14px; }
+
+/* 시행일 */
+.legal-eff {
+  color: var(--color-neutral-400);             /* #85888e */
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+
+/* 섹션 제목 (장/조/소항목) */
+.legal-h {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.3;
+}
+.legal-h--3 {
+  font-size: 26px;
+  margin: 40px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-neutral-100);   /* #ebeff9 */
+}
+.legal-h--4 { font-size: 21px; margin: 28px 0 12px; }
+.legal-h--5 { font-size: 18px; margin: 20px 0 10px; }
+.legal-h--6 { font-size: 16px; margin: 16px 0 8px; }
+.legal-doc > .legal-h:first-child,
+.legal-doc > .legal-eff:first-child { margin-top: 0; }
+
+/* 목록 (숫자 / 불릿 / 중첩) */
+.legal-doc .legal-list { padding-left: 26px; margin: 8px 0 14px; }
+.legal-doc ol.legal-list { list-style: decimal; }
+.legal-doc ul.legal-list { list-style: disc; }
+.legal-doc ol.legal-list ol.legal-list { list-style: lower-alpha; }
+.legal-doc .legal-list .legal-list { margin: 8px 0; }
+
+/* 표 (개인정보 보관/제공 항목 등) */
+.legal-table-wrap { width: 100%; overflow-x: auto; margin: 12px 0 20px; }
+.legal-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: normal;
+}
+.legal-table th,
+.legal-table td {
+  border: 1px solid var(--color-neutral-300);  /* #b6bbc5 */
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+.legal-table th {
+  background: var(--color-neutral-100);        /* #ebeff9 */
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ----------------------------------------------------------------------------
+ * 모바일 — 1024px 미만
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .legal-hero {
+    padding: var(--space-xl) var(--page-gutter-mobile);  /* 32px 16px */
+  }
+  .legal-hero__title {
+    font-size: 48px;                           /* 96 → 48 */
+    letter-spacing: -0.96px;
+  }
+  .legal-content {
+    padding: var(--space-xl) var(--page-gutter-mobile);  /* 32px 16px */
+    gap: var(--space-lg);                       /* 24px */
+  }
+  .legal-content__title {
+    font-size: 28px;                           /* 36 → 28 */
+  }
+  .legal-body,
+  .legal-body p {
+    font-size: 16px;                           /* 20 → 16 */
+  }
+  .legal-h--3 { font-size: 20px; margin-top: 28px; }
+  .legal-h--4 { font-size: 17px; margin-top: 20px; }
+  .legal-h--5 { font-size: 15px; }
+  .legal-doc li { font-size: 16px; }
+  .legal-table { font-size: 14px; }
+  .legal-table th,
+  .legal-table td { padding: 8px 10px; }
+}

@@ -1,0 +1,1223 @@
+/* ============================================================================
+ * light-find-config.css — "Light Find" 설정 위저드 화면
+ * (선택 화면 light-find.html 에서 필수 항목 선택 후 NEXT → 진입)
+ * Figma: 260426_light_find_UI_06 (node 6363:19883) — Step 1: Ceiling height
+ *
+ * 이 페이지는 nav(app-nav.css)·promo·hero·.lf-inner·.light-find 셸을
+ * light-find.css 와 공유하므로 그 파일을 함께 불러옵니다. 이 파일에는
+ * 위저드 전용(브레드크럼·스텝 인디케이터·선택 카드)만 정의합니다.
+ *
+ * 반응형 주의(정직 고지): Figma 는 데스크톱(1440)만 제공. 1024px 미만은
+ * layout.css 가이드를 따른 적응이며 별도 모바일 디자인이 아닙니다.
+ * ========================================================================== */
+
+.lfc__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);                            /* 32px */
+  padding: 40px var(--lf-gutter) 96px;            /* 40 96 96 */
+}
+
+/* --- 브레드크럼 (선택 경로) ---------------------------------------------- */
+.lfc-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);                            /* 8px */
+}
+.lfc-crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);                           /* 4px (아이콘+텍스트) */
+  padding: var(--space-2xs) var(--space-xs);       /* 4px 8px */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);          /* 500 */
+  font-size: var(--font-size-body);                /* 16px */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-body);      /* 0.32px */
+  color: var(--color-neutral-400);                /* #85888e */
+  white-space: nowrap;
+}
+.lfc-crumb__icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.lfc-sep {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-body-lg);             /* 20px */
+  line-height: 1.4;
+  letter-spacing: 0.4px;
+  color: var(--color-neutral-400);                /* #85888e */
+}
+
+/* --- 스텝 인디케이터 행: BACK · (점+제목) · NEXT ------------------------- */
+.lfc-steps {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-lg);                            /* 24px */
+}
+
+/* BACK / NEXT — 24px SemiBold #1a1b1b + 40px 화살표 */
+.lfc-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);                            /* 8px */
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--color-black);                       /* 활성(검정) */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-subtitle);            /* 24px */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-subtitle);  /* 0.48px */
+  white-space: nowrap;
+}
+.lfc-nav__icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+.lfc-nav--back .lfc-nav__icon {
+  transform: rotate(180deg);                        /* 왼쪽 방향 */
+}
+/* 비활성 NEXT (조명 타입 미선택) — 회색 + 클릭 불가 */
+.lfc-nav[disabled],
+.lfc-nav.is-disabled {
+  color: var(--color-neutral-300);                  /* #b6bbc5 */
+  cursor: not-allowed;
+}
+
+/* 가운데: 점 인디케이터 + 단계 제목 */
+.lfc-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);                            /* 24px */
+  width: 328px;
+}
+.lfc-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);                            /* 16px */
+  width: 100%;
+  list-style: none;                                /* <ol> 기본 번호 마커 제거 */
+}
+/* 단계 번호 원 (40px, 보더 2px) */
+.lfc-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: 2px solid var(--color-neutral-300);     /* 기본 비활성 #b6bbc5 */
+  border-radius: 50%;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-subtitle);            /* 24px */
+  line-height: 1;
+  color: var(--color-neutral-300);
+}
+.lfc-dot.is-active {
+  border-color: var(--color-primary);             /* #4428ff (현재 단계) */
+  color: var(--color-primary);
+}
+.lfc-dot.is-done {
+  border-color: var(--color-black);                /* #1a1b1b (지나온 단계) */
+  color: var(--color-black);
+}
+/* 원 사이 연결점 (4px) */
+.lfc-tick {
+  width: 4px;
+  height: 4px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-neutral-300);            /* #b6bbc5 (대기) */
+}
+.lfc-tick.is-done {
+  background: var(--color-black);                  /* #1a1b1b (지나온 구간) */
+}
+.lfc-steptitle {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-subtitle);            /* 24px */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-subtitle);  /* 0.48px */
+  color: var(--color-black);
+  text-align: center;
+}
+
+/* --- 선택 카드 (Ceiling height) ----------------------------------------- */
+.lfc-cards {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--space-md);                            /* 16px */
+}
+.lfc-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);                            /* 16px */
+  padding: var(--space-md);                        /* 16px */
+  border: 2px solid transparent;                   /* 선택 시 검정 (레이아웃 흔들림 방지) */
+  background: none;
+  cursor: pointer;
+  color: var(--color-neutral-300);                /* 미선택: 회색 텍스트 */
+}
+.lfc-card.is-selected {
+  border-color: var(--color-black);                /* 선택: 검은 테두리 */
+  color: var(--color-black);
+}
+/* hover (미선택 카드만) — Figma node 6363:20217 (High hover) 기준, Standard 도 동일:
+   · 텍스트 색이 진해짐: #b6bbc5(neutral-300) → #85888e(neutral-400)
+   · figure opacity 는 0.8 그대로 (hover 에서도 동일)
+   접근성: 키보드 포커스(:focus-visible)에도 같은 강조를 적용
+   주의: 피그마 hover 노드의 range 글자가 14px→16px 로 잡혀 있으나(2px),
+   의도치 않은 불일치로 판단 + hover 시 레이아웃 흔들림(나쁜 UX)이라 크기는
+   고정합니다. 색상만 hover 강조로 적용. */
+.lfc-card:not(.is-selected):hover,
+.lfc-card:not(.is-selected):focus-visible {
+  color: var(--color-neutral-400);                 /* #85888e */
+}
+/* 일러스트 박스 (천장고 단면)
+   이미지는 바닥에서 24px 띄워 정렬 → 위·아래로 #ebeff9 여백이 생기고,
+   이미지 높이 차이(천장고)가 위쪽 여백으로 드러납니다(Figma 실측). */
+.lfc-card__figure {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 264px;
+  max-width: 100%;
+  height: 336px;
+  padding-bottom: 24px;                            /* 바닥 #ebeff9 여백 */
+  overflow: hidden;
+  background: var(--color-neutral-100);            /* #ebeff9 (이미지 위·아래 여백) */
+  opacity: 0.8;                                     /* 미선택: 흐리게 */
+}
+.lfc-card.is-selected .lfc-card__figure {
+  opacity: 1;
+}
+/* 비활성 카드(예: Night light→Trimless, Wall mounted @Mirror→Round) — 흐리게·클릭 불가 */
+.lfc-card.is-disabled {
+  cursor: not-allowed;
+  color: var(--color-neutral-300);
+  opacity: 0.45;
+}
+.lfc-card.is-disabled .lfc-card__figure {
+  opacity: 0.45;
+}
+.lfc-card__figure img {
+  width: 100%;
+  height: auto;
+  background: var(--color-white);                  /* 이미지 영역(투명부) 흰 배경 */
+}
+.lfc-card__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);                            /* 8px */
+  width: 264px;
+  max-width: 100%;
+  text-align: center;
+}
+.lfc-card__title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-subtitle);            /* 24px */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-subtitle);  /* 0.48px */
+}
+.lfc-card__range {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-caption);             /* 14px */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-caption);   /* 0.28px */
+}
+
+/* --- Step 2: Lighting Layout 카드 (Single / Double) ----------------------
+ * 셸·테두리·선택색은 .lfc-card 를 그대로 재사용하고, 다음만 다릅니다:
+ *   · 일러스트를 박스 안에서 세로 중앙 정렬(천장고 카드는 바닥 정렬이었음)
+ *   · 캡션은 제목만(범위 없음), 카드 폭 전체에 가운데 정렬
+ * Figma: 264×336 #ebeff9 박스, 이미지(264×289)가 중앙 → 위·아래 약 23px 여백. */
+.lfc-card--layout .lfc-card__figure {
+  align-items: center;
+  padding-bottom: 0;
+}
+.lfc-card--layout .lfc-card__figure img {
+  width: 264px;                                    /* 박스 폭을 꽉 채움 */
+  max-width: 100%;
+}
+.lfc-card--layout .lfc-card__title {
+  width: 100%;
+  text-align: center;
+}
+
+/* --- Step 3: Frame type 카드 (Trim / Trimless) ---------------------------
+ * 캡션은 Step 1 과 동일(제목 24px + 14px 설명). 다른 점은 일러스트가 아니라
+ * 제품 렌더라 박스(264×336)를 꽉 채우고(cover) 좌우가 잘립니다.
+ * Figma: 이미지 약 356×337 을 264×336 박스 중앙에 배치 → object cover 와 동일. */
+.lfc-card--frame .lfc-card__figure {
+  padding-bottom: 0;
+}
+.lfc-card--frame .lfc-card__figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;          /* 박스를 채우며 좌우 크롭(중앙 정렬) */
+  background: none;
+}
+
+/* 동적 카드(이미지) — 264×336 박스에 이미지 전체가 들어오도록 맞춤.
+   (가로형 Office 일러스트가 작게 보이던 문제 해결: contain 으로 박스를 채움) */
+[data-lfc-cards] .lfc-card__figure {
+  align-items: center;
+  padding-bottom: 0;
+}
+[data-lfc-cards] .lfc-card__figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: none;
+}
+
+/* Office 동적 카드(천장 타입/천장고/배치/개구부 등): 잘라낸 가로형 이미지를
+   그리드(264×336 박스)에 "전체가 보이도록" 맞춘다 — 박스 폭에 맞춰(width:100%),
+   박스는 흰 배경. 크롭(scale/cover) 없음. */
+[data-lfc-cards][data-step="ct"] .lfc-card__figure,
+[data-lfc-cards][data-step="ch"] .lfc-card__figure {
+  padding-bottom: 0;
+  background: var(--color-white);
+}
+[data-lfc-cards][data-step="ct"] .lfc-card__figure img,
+[data-lfc-cards][data-step="ch"] .lfc-card__figure img {
+  width: 100%;
+  height: auto;
+  object-fit: initial;
+  background: var(--color-white);
+}
+/* 천장 타입: 세로 중앙 정렬 */
+[data-lfc-cards][data-step="ct"] .lfc-card__figure { align-items: center; }
+/* 천장고: 바닥(floor) 정렬 → 카드끼리 바닥선이 일치해 천장 높이를 시각 비교할 수 있다. */
+[data-lfc-cards][data-step="ch"] .lfc-card__figure { align-items: flex-end; }
+
+/* 조명 타입 스텝(Figma node 6:603) — 카드 대신 행(.lf-option) 목록(세로 정렬) */
+.lfc-cards--list {
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+.lfc-cards--list .lf-option {
+  width: 400px;
+  max-width: 100%;
+}
+
+/* --- Step 4: Fixture Price 차트 ------------------------------------------
+ * 이전엔 PNG(lf-price-chart.png) 1장이었으나, 사용자가 price range 를 직접
+ * 드래그하고 수량이 갱신되도록 코드(.lfc-pc, js/light-find-price.js)로 재구현.
+ * Figma: 차트 위·아래 80px 여백(py-80). */
+.lfc-price {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 80px 0;
+}
+/* === Step 4: 가격 분포 차트 (코드 구현) ===
+ * 좌표는 원본 PNG(1248×330)에서 픽셀로 추출: baseline 80.9%, 최고막대 49.7%H,
+ * 트랙 11.2%~87.8%, 핸들 기본 29%/87.7%, 라벨 10%/48.5%/87%. aspect-ratio 로
+ * 세로 비율 고정 → % 좌표가 축소에도 정렬 유지. */
+.lfc-pc {
+  position: relative;
+  width: 1248px;
+  max-width: 100%;
+  aspect-ratio: 1248 / 330;
+  color: #111;
+}
+/* y축 캡션("number of products") + 실시간 수량 */
+.lfc-pc__caption {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  text-align: center;
+  font-size: 15px;
+  color: #4b4b4b;
+}
+/* 구체적 수량 숨김: "number of products" 라벨만 노출, 실시간 숫자 미표기 */
+.lfc-pc__count { display: none; }
+/* 캡션 아래 짧은 포인터 */
+.lfc-pc__pointer {
+  position: absolute;
+  left: 49.7%; top: 7%; height: 9%;
+  width: 1px;
+  background: #c9c9c9;
+}
+/* 막대 분포 영역 (28.4%~87.8%, baseline 19.1%, 높이 49.7%) */
+.lfc-pc__bars {
+  position: absolute;
+  left: 28.4%; right: 12.2%;
+  bottom: 19.1%; height: 49.7%;
+  display: flex;
+  align-items: flex-end;
+  gap: 1.8%;
+}
+.lfc-pc__bar {
+  flex: 1 1 0;
+  min-width: 0;
+  background: #111;
+  border-radius: 1px;
+  transition: background-color .12s ease;
+}
+.lfc-pc__bar.is-dim { background: #d6d6d6; }
+/* price range 슬라이더 */
+.lfc-pc__rangelabel {
+  position: absolute;
+  left: 2.5%; bottom: 14.5%;
+  font-size: 13px;
+  color: #8a8a8a;
+  white-space: nowrap;
+}
+.lfc-pc__track {
+  position: absolute;
+  left: 11.2%; right: 12.2%;
+  bottom: 16.4%;
+  height: 4px;
+  background: #e2e2e2;
+  border-radius: 2px;
+}
+.lfc-pc__fill {
+  position: absolute;
+  top: 0; bottom: 0;
+  background: #111;
+  border-radius: 2px;
+}
+.lfc-pc__thumb {
+  position: absolute;
+  top: 50%;
+  width: 22px; height: 22px;
+  margin: -11px 0 0 -11px;     /* 자기 left% 기준 중앙 정렬 */
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #111;
+  padding: 0;
+  cursor: grab;
+  touch-action: none;
+  z-index: 2;
+}
+.lfc-pc__thumb:active { cursor: grabbing; }
+.lfc-pc__thumb:focus-visible { outline: 2px solid #2f6df6; outline-offset: 2px; }
+/* 축 라벨 (Basic / Standard / Premium) */
+.lfc-pc__axis {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 10%;
+}
+.lfc-pc__tier {
+  position: absolute;
+  bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 19px;
+  font-weight: 500;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.lfc-pc__tier--basic    { left: 10%; }
+.lfc-pc__tier--standard { left: 48.5%; }
+.lfc-pc__tier--premium  { left: 87%; }
+.lfc-pc__info {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #9a9a9a;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+}
+.lfc-pc__info:hover { color: #111; }
+
+/* 작은 화면에서는 폰트 축소(좌표는 %라 유지) */
+@media (max-width: 720px) {
+  .lfc-pc__tier { font-size: 14px; }
+  .lfc-pc__caption { font-size: 12px; }
+  .lfc-pc__rangelabel { font-size: 11px; }
+}
+
+/* 위저드 단계 패널 전환: 비활성 패널 숨김
+ * (.lfc-cards / .lfc-price 가 flex 라 [hidden] 만으로는 안 숨겨지므로 명시) */
+.lfc-cards[hidden],
+.lfc-price[hidden] {
+  display: none;
+}
+
+/* ============================================================================
+ * Fixture Preview (결과 화면) — Figma 260426_light_find_UI_13 (node 5851:3144)
+ * 위저드와 같은 셸(.lfc__inner, .lfc-crumbs)을 쓰고, 단계 점 대신 자체 헤더와
+ * 매칭 카드(이미지+스펙)를 둡니다.
+ * ========================================================================== */
+
+/* BACK 회색 변형 (결과 화면의 BACK 은 #85888e) */
+.lfc-nav--muted {
+  color: var(--color-neutral-400);                 /* #85888e */
+}
+
+/* 헤더 묶음: (BACK·제목·NEXT) 행 + Refresh 버튼, 가운데 정렬로 세로 배치 */
+.lf-preview__bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);                            /* 24px */
+}
+.lf-preview__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 1248px;
+  max-width: 100%;
+  height: 40px;
+}
+.lf-preview__title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-subtitle);            /* 24px */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-subtitle);  /* 0.48px */
+  color: var(--color-black);
+  text-align: center;
+}
+/* Refresh 0/3 — 회색 보더 버튼 (동작 없음: 이후 디자인 없음) */
+.lf-preview__refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);                            /* 8px */
+  padding: var(--space-xs) var(--space-md);        /* 8px 16px */
+  border: 1px solid var(--color-neutral-400);      /* #85888e */
+  background: none;
+  cursor: pointer;
+  color: var(--color-neutral-400);
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-body-lg);             /* 20px */
+  line-height: 1;
+  letter-spacing: 0.4px;
+}
+/* 더 보여줄 대안이 없거나(잎 등기구 ≤ 3) 새로고침 한도 소진 시 비활성 */
+.lf-preview__refresh:disabled,
+.lf-preview__refresh.is-disabled {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+.lf-preview__refresh-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+/* 버튼 + (다 쓰면) 빨간 안내문구를 세로로 묶음 */
+.lf-preview__refresh-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);                            /* 8px */
+}
+/* Refresh 는 장식/부가 조명 타입에서만 노출 */
+.lf-preview__refresh-wrap[hidden] {
+  display: none;
+}
+/* 3/3 모두 사용 안내 (Figma: #ee1b5e, SemiBold 14px) */
+.lf-preview__refresh-note {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-caption);             /* 14px */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-caption);   /* 0.28px */
+  color: var(--color-danger);                      /* #ee1b5e */
+  text-align: center;
+}
+.lf-preview__refresh-note[hidden] {
+  display: none;
+}
+
+/* 매칭 결과 카드 행 */
+.lf-pcards {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--space-md);                            /* 16px */
+  width: 100%;
+}
+/* 카드: 선택 시 검은 테두리 + 진한 글자 + 이미지 불투명.
+   미선택은 회색이고, hover 시 선택과 동일한 풀컬러(테두리는 없음).
+   Figma hover: node 6383:22348 (03 카드 hover = 풀컬러·검정 글자) */
+.lf-pcard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);                            /* 16px */
+  width: 404px;                                    /* 가로 확장: 값이 최대 1~2줄로 줄바꿈 (3개 한 줄 유지) */
+  max-width: 100%;
+  padding: var(--space-sm);                        /* 12px */
+  border: 2px solid transparent;                   /* 선택 시 검정 (레이아웃 고정) */
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--color-neutral-300);                /* 미선택: 회색 #b6bbc5 */
+}
+.lf-pcard.is-selected {
+  border-color: var(--color-black);
+  color: var(--color-black);
+}
+/* hover: 이미지는 풀컬러(opacity 1)로, 글자는 한 단계 진한 회색으로.
+   Figma hover(node 6383:22348)는 #85888e(neutral-400)이며 검정이 아닙니다.
+   (위저드 .lfc-card hover 와 동일한 규칙) */
+.lf-pcard:not(.is-selected):hover,
+.lf-pcard:not(.is-selected):focus-visible {
+  color: var(--color-neutral-400);                 /* #85888e */
+}
+.lf-pcard__num {
+  width: 376px;
+  max-width: 100%;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-body);                /* 16px */
+  line-height: 1.2;
+  text-align: left;
+  color: inherit;
+}
+.lf-pcard__figure {
+  width: 376px;
+  max-width: 100%;
+  height: 220px;
+  overflow: hidden;
+  opacity: 0.8;                                     /* 미선택: 흐리게 */
+}
+.lf-pcard.is-selected .lf-pcard__figure,
+.lf-pcard:not(.is-selected):hover .lf-pcard__figure,
+.lf-pcard:not(.is-selected):focus-visible .lf-pcard__figure {
+  opacity: 1;
+}
+.lf-pcard__figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* 스펙 표: 라벨(120px, 600) + 값(400), 16px / line-height 1.2 */
+.lf-pcard__specs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                            /* 8px */
+  width: 376px;
+  max-width: 100%;
+  margin: 0;
+  color: inherit;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                /* 16px */
+  line-height: 1.2;
+}
+.lf-pcard__row {
+  display: flex;
+  gap: var(--space-md);                            /* 16px */
+  align-items: flex-start;
+  min-height: 2.4em;                               /* 2줄 높이 고정 → 카드 간 행 정렬 일치 */
+}
+.lf-pcard__row dt {
+  flex-shrink: 0;
+  width: 120px;
+  margin: 0;
+  font-weight: var(--font-weight-semibold);        /* 600 */
+}
+.lf-pcard__row dd {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  font-weight: var(--font-weight-regular);         /* 400 */
+}
+
+/* --- 결과 누적/펼치기 (아이템 3개 초과: Refresh 로 세트 누적) -------------
+ * 현재 세트(.lf-pcards) 아래에 "view previous N options" 토글, 그 아래에
+ * 이전 세트들(.lf-results__prev)이 펼쳐집니다. Figma: 세트↔토글 40px. */
+.lf-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+}
+.lf-results__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);                            /* 8px */
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-neutral-400);                 /* #85888e */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-body);                /* 16px */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-body);      /* 0.32px */
+}
+.lf-results__toggle[hidden] {
+  display: none;
+}
+.lf-results__toggle-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+.lf-results__toggle.is-expanded .lf-results__toggle-icon {
+  transform: rotate(180deg);                       /* ▼ 펼침 → ▲ */
+}
+.lf-results__prev {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+}
+.lf-results__prev[hidden] {
+  display: none;
+}
+
+.lf-preview[hidden] {
+  display: none;
+}
+
+/* ============================================================================
+ * Contact Distributer (문의 폼) — Figma 260426_light_find_UI_15 (node 5851:3916)
+ * Fixture Preview 에서 NEXT → 선택 fixture 요약 + 문의 폼.
+ * ========================================================================== */
+.lf-contact[hidden] {
+  display: none;
+}
+
+/* 헤더: BACK / 제목 / (대칭용 빈 자리, Figma 는 opacity-0 SUBMIT) */
+.lf-cd-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 1248px;
+  max-width: 100%;
+  height: 40px;
+}
+.lf-cd-head__title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-subtitle);            /* 24px */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-subtitle);  /* 0.48px */
+  color: var(--color-black);
+  text-align: center;
+}
+.lf-cd-head__spacer {
+  width: 113px;                                    /* BACK 폭과 대칭 */
+  flex-shrink: 0;
+}
+
+/* 안내문 */
+.lf-cd-sub {
+  width: 100%;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);
+  font-size: 18px;                                 /* Figma 실측 */
+  line-height: 1.2;
+  letter-spacing: 0.36px;
+  color: var(--color-black);
+  text-align: center;
+}
+
+/* 선택 fixture 요약 카드 (검은 2px 테두리) */
+.lf-cd-summary {
+  display: flex;
+  gap: var(--space-lg);                            /* 24px */
+  align-items: stretch;
+  width: 100%;
+  padding: var(--space-md);                        /* 16px */
+  border: 2px solid var(--color-black);
+}
+.lf-cd-summary__figure {
+  align-self: stretch;                             /* 높이는 specs 높이에 맞춤 */
+  flex-shrink: 0;
+  width: 196px;                                    /* specs 높이(약 128px)와 함께 ≈135/88 */
+  position: relative;                              /* img 를 절대배치해 내재크기 영향 제거 */
+  overflow: hidden;
+  background: var(--color-neutral-100);
+}
+.lf-cd-summary__figure img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.lf-cd-summary__specs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);                            /* 8px */
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  color: var(--color-black);
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                /* 16px */
+  line-height: 1.2;
+}
+.lf-cd-summary__row {
+  display: flex;
+  gap: var(--space-md);                            /* 16px */
+  align-items: flex-start;
+}
+.lf-cd-summary__row dt {
+  flex-shrink: 0;
+  width: 200px;
+  margin: 0;
+  font-weight: var(--font-weight-semibold);        /* 600 */
+}
+.lf-cd-summary__row dd {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  font-weight: var(--font-weight-regular);         /* 400 */
+}
+
+/* 문의 폼 (라벨 208px + 입력 flex, 행 간격 24) */
+.lf-cd-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);                            /* 24px */
+  width: 100%;
+}
+.lf-cd-field {
+  display: flex;
+  gap: var(--space-lg);                            /* 24px */
+  align-items: center;
+  width: 100%;
+}
+.lf-cd-label {
+  flex-shrink: 0;
+  width: 208px;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-body-lg);             /* 20px */
+  line-height: 1;
+  letter-spacing: 0.4px;
+  color: var(--color-black);
+}
+.lf-cd-req {
+  color: var(--color-danger);                      /* #ee1b5e */
+}
+
+/* 입력 (bg #ebeff9, placeholder #85888e, 보더 없음) */
+.lf-cd-input {
+  flex: 1 1 0;
+  min-width: 0;
+  width: 100%;
+  padding: var(--space-xs) var(--space-md);        /* 8px 16px */
+  border: none;
+  border-radius: 0;
+  background: var(--color-neutral-100);            /* #ebeff9 */
+  color: var(--color-black);
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);         /* 400 */
+  font-size: var(--font-size-body);                /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);      /* 0.32px */
+}
+.lf-cd-input::placeholder {
+  color: var(--color-neutral-400);                 /* #85888e */
+  opacity: 1;
+}
+.lf-cd-input:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+.lf-cd-textarea {
+  resize: vertical;
+  min-height: 54px;                                /* 약 2줄 */
+}
+
+/* Remarks / Business Card 블록 (라벨 위, 입력/드롭존 아래) */
+.lf-cd-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                            /* 16px */
+  width: 100%;
+}
+.lf-cd-blocklabel {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-body-lg);             /* 20px */
+  line-height: 1;
+  letter-spacing: 0.4px;
+  color: var(--color-black);
+}
+
+/* Business Card 드롭존 (점선 박스 + 아이콘 + 안내) */
+.lf-cd-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);                            /* 8px */
+  width: 100%;
+  padding: var(--space-md);                        /* 16px */
+  border: 2px dashed var(--color-neutral-500);     /* #5b5d62 */
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+}
+.lf-cd-dropzone__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.lf-cd-dropzone__icon {
+  width: 48px;
+  height: 48px;
+  color: var(--color-black);
+}
+.lf-cd-dropzone__title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-body);                /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);      /* 0.32px */
+  color: var(--color-black);
+}
+.lf-cd-dropzone__hint {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);         /* 400 */
+  font-size: var(--font-size-caption);             /* 14px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-caption);   /* 0.28px */
+  color: var(--color-neutral-400);                 /* #85888e */
+}
+.lf-cd-dropzone__note {
+  max-width: 588px;
+}
+
+/* SAVE / SUBMIT */
+.lf-cd-actions {
+  display: flex;
+  gap: 40px;
+  width: 100%;
+}
+.lf-cd-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) var(--space-md);        /* 8px 16px */
+  border: none;
+  cursor: pointer;
+  color: var(--color-neutral-50);                  /* #fbfdff */
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);          /* 500 */
+  font-size: var(--font-size-body-lg);             /* 20px */
+  line-height: 1;
+  letter-spacing: 0.8px;
+}
+.lf-cd-btn--save {
+  background: var(--color-neutral-300);            /* #b6bbc5 */
+}
+.lf-cd-btn--save:hover,
+.lf-cd-btn--save:focus-visible {
+  background: var(--color-neutral-400);            /* hover #85888e */
+}
+.lf-cd-btn--submit {
+  background: var(--color-primary);                /* #4428ff */
+}
+.lf-cd-btn--submit:hover,
+.lf-cd-btn--submit:focus-visible {
+  background: var(--color-primary-hover);          /* hover #2914b2 */
+}
+
+/* ============================================================================
+ * Submit 완료 · Thank you — Figma 260426_light_find_UI_16 (node 5851:1768)
+ * Contact 폼에서 SUBMIT → 제출 요약 + 첨부 문서 + 서비스 추천.
+ * 요약 카드(.lf-cd-summary)·필드 라벨 폭 등은 Contact 와 공유합니다.
+ * ========================================================================== */
+.lf-submit[hidden] {
+  display: none;
+}
+
+/* 감사 인사 */
+.lf-submit__thanks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                            /* 16px */
+  width: 100%;
+}
+.lf-submit__thanks-title {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-subtitle);            /* 24px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-subtitle);  /* 0.48px */
+  color: var(--color-black);
+  text-align: center;
+}
+.lf-submit__thanks-sub {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: 18px;
+  line-height: 1.2;
+  letter-spacing: 0.36px;
+  color: var(--color-black);
+  text-align: center;
+}
+
+/* 브레드크럼 가운데 정렬(완료 화면) */
+.lfc-crumbs--center {
+  justify-content: center;
+  width: 100%;
+}
+
+/* 제출 내용 (읽기 전용 행: 라벨 208 + 값) */
+.lf-submit__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                            /* 16px */
+  width: 100%;
+  margin: 0;
+  color: var(--color-black);
+}
+.lf-submit__row {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  width: 100%;
+}
+.lf-submit__row dt {
+  flex-shrink: 0;
+  width: 208px;
+  margin: 0;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-body-lg);             /* 20px */
+  line-height: 1.2;
+  letter-spacing: 0.4px;
+}
+.lf-submit__row dd {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);         /* 400 */
+  font-size: var(--font-size-body);                /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);      /* 0.32px */
+}
+.lf-submit__remarks {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-regular);         /* 400 */
+  font-size: var(--font-size-body);                /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);      /* 0.32px */
+  color: var(--color-black);
+}
+
+/* 첨부 문서 (라벨 + 파일명 + Preview/Download) */
+.lf-doc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);                            /* 16px */
+  width: 100%;
+}
+.lf-doc__label {
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-semibold);        /* 600 */
+  font-size: var(--font-size-body-lg);             /* 20px */
+  line-height: 1;
+  letter-spacing: 0.4px;
+  color: var(--color-black);
+}
+.lf-doc__file {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);                            /* 8px */
+  margin: 0;
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);          /* 500 */
+  font-size: var(--font-size-body);                /* 16px */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);
+  color: var(--color-black);
+}
+.lf-doc__file-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.lf-doc__actions {
+  display: flex;
+  gap: var(--space-md);                            /* 16px */
+}
+.lf-doc__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);                            /* 8px */
+  width: 180px;
+  height: 40px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-black);
+  background: none;
+  cursor: pointer;
+  color: var(--color-black);
+  font-family: var(--font-latin);
+  font-weight: var(--font-weight-medium);          /* 500 */
+  font-size: var(--font-size-body);                /* 16px */
+  line-height: 1.4;
+  letter-spacing: var(--letter-spacing-body);
+}
+.lf-doc__btn:hover,
+.lf-doc__btn:focus-visible {
+  background: var(--color-black);
+  color: var(--color-neutral-50);
+}
+.lf-doc__btn-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+/* Preview 클릭 시 버튼 아래 인라인으로 펼쳐지는 문서 미리보기
+   (복잡한 스펙 시트라 Figma 노드를 PNG 로 그대로 사용) */
+.lf-doc__preview {
+  width: 100%;
+  border: 1px solid var(--color-neutral-300);      /* #b6bbc5 */
+}
+.lf-doc__preview[hidden] {
+  display: none;
+}
+.lf-doc__preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* 서비스 추천 띠 (full-width #ebeff9) — light-design .ld-more 와 동일 패턴 */
+.lf-more {
+  width: 100%;
+  background-color: var(--color-neutral-100);      /* #ebeff9 */
+}
+.lf-more__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 40px var(--lf-gutter) 96px;             /* 40 96 96 */
+}
+.lf-more__intro {
+  margin: 0;
+  width: 100%;
+  font-family: var(--font-latin);
+  font-size: 18px;
+  font-weight: var(--font-weight-regular);         /* 400 */
+  line-height: 1.2;
+  letter-spacing: 0.36px;
+  color: var(--color-black);
+  text-align: center;
+}
+.lf-more__cards {
+  display: flex;
+  gap: var(--space-xl);                            /* 32px */
+  justify-content: center;
+  width: 100%;
+}
+.lf-more__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);                            /* 32px */
+  width: 400px;
+  padding: var(--space-xl);                        /* 32px */
+}
+.lf-more__ring {
+  flex-shrink: 0;
+  width: 201px;
+  height: 201px;
+}
+.lf-more__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);                            /* 16px */
+  text-align: center;
+  color: var(--color-black);
+}
+.lf-more__title {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-h3);                  /* 32px */
+  font-weight: var(--font-weight-medium);          /* 500 */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-h3);        /* 0.64px */
+}
+.lf-more__desc {
+  margin: 0;
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body);                /* 16px */
+  font-weight: var(--font-weight-regular);         /* 400 */
+  line-height: 1.2;
+  letter-spacing: var(--letter-spacing-body);      /* 0.32px */
+}
+.lf-more__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) var(--space-md);        /* 8px 16px */
+  border: 1px solid var(--color-black);
+  background: none;
+  color: var(--color-black);
+  font-family: var(--font-latin);
+  font-size: var(--font-size-body-lg);             /* 20px */
+  font-weight: var(--font-weight-medium);          /* 500 */
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-body-lg);   /* 0.8px */
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+}
+.lf-more__btn:hover,
+.lf-more__btn:focus-visible {
+  background-color: var(--color-black);
+  color: var(--color-text-on-dark);
+  outline: none;
+}
+
+/* ----------------------------------------------------------------------------
+ * 모바일 (<1024px) — 적응 규칙
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .lfc__inner { padding: var(--space-lg) var(--lf-gutter) var(--space-2xl); gap: var(--space-lg); }
+
+  /* 브레드크럼 줄바꿈 허용 (이미 flex-wrap) */
+
+  /* 스텝 행: BACK/NEXT 양옆, 가운데 묶음은 아래 줄 전체폭 */
+  .lfc-steps { flex-wrap: wrap; align-items: center; }
+  .lfc-progress { order: 3; flex-basis: 100%; width: 100%; margin-top: var(--space-md); }
+  .lfc-nav { font-size: var(--font-size-body-lg); }     /* 24 → 20 */
+  .lfc-steptitle { font-size: var(--font-size-body-lg); }
+
+  /* 카드: 세로로 쌓이도록 (flex-wrap 이미 있음) */
+}
