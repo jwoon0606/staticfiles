@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 강제 다크변환 옵트아웃(크롬 계열용). 삼성 강제 다크는 모든 선언을 무시하므로
+       삼성 대응은 CSS 쪽 노이즈 타일/SVG 페인트로 처리한다. -->
+  <meta name="color-scheme" content="only light">
+  <title>RINGCOMS</title>
+  <link rel="icon" type="image/svg+xml" href="https://staticfile-three.vercel.app/frontuser/frontringcoms/favicon.svg">
+  <link rel="stylesheet" href="/css/main.css">
+  <!-- 사업부 패널 배경(불투명 PNG) 선로딩 — 스크롤 진입 시 backing 색이 비치는 플래시 방지 -->
+  <link rel="preload" as="image" href="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/entertainment/ent.png">
+  <link rel="preload" as="image" href="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/cosmetics/bg.png">
+  <link rel="preload" as="image" href="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/mcn/mcn.png">
+  <script>
+    /* 1920×1080 데스크탑 스테이지를 가로 폭에 맞춰(fill-width) 스케일 — 좌우 여백 절대 없음.
+       scale = vw/1920, --mcn-x=0. 16:9 보다 낮은(가로로 긴) 화면은 위/아래가 pc-stage 로 잘린다.
+       그 잘리는 양을 --vclip(프레임 px) 로 노출 → Press/Contact 의 가장자리(상/하) 고정 요소를
+       CSS calc 로 그만큼 안쪽으로 밀어, 화면이 짧아도 제목·정보가 잘리지 않게 한다.
+       모바일(≤768px)은 .mo-root(별도 반응형) 사용하므로 스케일 미적용. */
+    (function () {
+      function applyScale() {
+        var root = document.documentElement;
+        if (window.innerWidth <= 768) {
+          root.style.setProperty('--mcn-scale', '1');
+          root.style.setProperty('--mcn-x', '0px');
+          root.style.setProperty('--mcn-y', '0px');
+          root.style.setProperty('--vclip', '0px');
+          return;
+        }
+        var scale = window.innerWidth / 1920;
+        root.style.setProperty('--mcn-scale', scale);
+        root.style.setProperty('--mcn-x', '0px');
+        root.style.setProperty('--mcn-y', ((window.innerHeight - 1080 * scale) / 2) + 'px');
+        /* 위/아래 한쪽이 잘리는 양(프레임 1920 좌표계 px). 안 잘리면 0. */
+        var vclip = Math.max(0, 540 - window.innerHeight / (2 * scale));
+        root.style.setProperty('--vclip', vclip + 'px');
+        /* Vision 브랜드필름 카드의 세로 위치(프레임 px).
+           이전에는 "제목 아래 공백 == 맨밑 공백" 으로 균형을 맞췄으나, 그 보정이
+           화면 비율에 따라 카드를 텍스트에서 너무 멀리 밀어내 보였다. 클라이언트
+           요청에 따라 균형 보정을 버리고, 화면 비율과 무관하게 카드를 제목
+           ("새로운 가능성을 찾습니다", 하단 334px) 바로 아래에 일정 간격으로 붙인다. */
+        var visionCardTop = 374;
+        root.style.setProperty('--vision-card-top', visionCardTop + 'px');
+      }
+      applyScale();
+      window.addEventListener('resize', applyScale);
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- ============================================================
+       모바일 전용 (≤768px) — 위에서부터 순차 구현
+       ============================================================ -->
+  <div class="mo-root">
+
+    <!-- GNB_MO: 상단 헤더 (Figma 452:3607) -->
+    <header class="mo-header">
+      <a class="mo-logo" href="/main" aria-label="RINGCOMS 홈">
+        <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/kv/logo-small.svg" alt="RINGCOMS">
+      </a>
+      <div class="mo-header-btns">
+        <button class="mo-hbtn mo-hbtn--global" type="button" aria-label="언어 변경">
+          <div class="kv-global-ic">
+            <div class="global-ellipse1"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/kv/global-ellipse1.svg" alt=""></div>
+            <div class="global-ellipse2"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/kv/global-ellipse2.svg" alt=""></div>
+            <div class="global-line"><div class="global-line-inner"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/kv/global-line.svg" alt=""></div></div>
+            <div class="global-en"><div class="global-en-inner"><div class="global-en-img"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/kv/global-en.svg" alt="EN"></div></div></div>
+          </div>
+        </button>
+        <button class="mo-hbtn mo-hbtn--menu" type="button" aria-label="메뉴" aria-expanded="false" aria-controls="moMenu">
+          <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="60" height="60" fill="#212121"/>
+            <line x1="14" y1="21" x2="46" y2="21" stroke="white" stroke-width="2"/>
+            <line x1="14" y1="37" x2="46" y2="37" stroke="white" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 모바일 전체화면 메뉴 (Figma MO_Main_GNB 452:3921) -->
+    <nav class="mo-menu" id="moMenu" aria-label="전체 메뉴" aria-hidden="true">
+      <!-- 대메뉴 탭 시 하위 아코디언 펼침. 하위 항목 텍스트는 추후 확정(placeholder). -->
+      <div class="mo-menu-list">
+        <div class="mo-menu-group">
+          <a class="mo-menu-item mo-menu-item--has-sub" href="#moAbout" aria-expanded="false">
+            <span class="mo-menu-text">About</span>
+          </a>
+          <div class="mo-menu-sub">
+            <a class="mo-menu-subitem" href="#moAbout">About Company</a>
+            <a class="mo-menu-subitem" href="#moHistory">History</a>
+            <a class="mo-menu-subitem" href="#moLocation">Location</a>
+          </div>
+        </div>
+        <div class="mo-menu-group">
+          <a class="mo-menu-item mo-menu-item--has-sub" href="/entertainment" aria-expanded="false"><span class="mo-menu-text">Entertainment</span></a>
+          <div class="mo-menu-sub">
+            <a class="mo-menu-subitem" href="/entertainment#artist">Artist</a>
+            <a class="mo-menu-subitem" href="/entertainment#audition">Audition</a>
+          </div>
+        </div>
+        <div class="mo-menu-group">
+          <a class="mo-menu-item mo-menu-item--has-sub" href="/mcn" aria-expanded="false"><span class="mo-menu-text">MCN</span></a>
+          <div class="mo-menu-sub">
+            <a class="mo-menu-subitem" href="/mcn#creator">Creator</a>
+            <a class="mo-menu-subitem" href="/mcn#apply">Apply</a>
+          </div>
+        </div>
+        <div class="mo-menu-group">
+          <a class="mo-menu-item" href="#moCosmetics"><span class="mo-menu-text">Cosmetics</span></a>
+        </div>
+        <div class="mo-menu-group">
+          <a class="mo-menu-item mo-menu-item--has-sub" href="/career" aria-expanded="false"><span class="mo-menu-text">Career</span></a>
+          <div class="mo-menu-sub">
+            <a class="mo-menu-subitem" href="/career#process">Process</a>
+            <a class="mo-menu-subitem" href="/career#faq">FAQ</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 우측 고정 CTA — 서브페이지와 동일하게 처음부터 우측에 붙어 스크롤을 따라다님 -->
+    <div class="mo-side-cta cta-btns">
+      <a class="cta-btn cta-inquire" href="#moContact">
+        <div class="cta-text-wrap"><p class="cta-text">문의하기</p></div>
+        <div class="cta-arrow"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/ic-arrow.svg" alt=""></div>
+      </a>
+      <div class="cta-btn cta-apply" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">
+        <div class="cta-text-wrap"><p class="cta-text">지원하기</p></div>
+        <div class="cta-arrow"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/ic-arrow.svg" alt=""></div>
+        <div class="cta-apply-flyout">
+          <a class="cta-apply-item" href="/entertainment#audition"><span>ARTIST</span></a>
+          <a class="cta-apply-item" href="/mcn#apply"><span>CREATOR</span></a>
+          <a class="cta-apply-item" href="/joinus"><span>RINGCREW</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 맨 위로 (모바일 세로 스크롤 전용 — menu.js 가 표시/클릭 제어) -->
+    <button class="scroll-top-btn" type="button" aria-label="맨 위로">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <!-- KV: 첫 화면 — 데스크탑과 동일한 인터랙티브 진입 화면(크림+로고 드로잉+파동).
+         로고 SVG 는 hero_kv.js 가 데스크탑(#heroLogoVisual)에서 복제해 채운다. -->
+    <section class="mo-kv" id="moKv">
+      <div class="mo-hero-noise" aria-hidden="true"></div>
+      <div class="mo-hero-ambient" id="moHeroAmbient" aria-hidden="true"></div>
+      <canvas class="mo-hero-ripple" id="moHeroRipple" aria-hidden="true"></canvas>
+      <div class="mo-hero-center">
+        <div class="mo-hero-logo-visual" id="moHeroLogoVisual"></div>
+        <div class="mo-hero-scroll">
+          <div class="mo-hero-scroll-line"></div>
+          <span>SCROLL</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ③ Vision / Brand Film (Figma 452:3666) — 처음부터 세로 카드, ⛶ 탭 시 휴대폰 전체 세로 확대 -->
+    <section class="mo-vision">
+      <div class="mo-vision-con">
+        <h2 class="mo-vision-title">새로운 가능성을<br>찾습니다</h2>
+        <div class="mo-vision-img mo-vision-video-wrap">
+          <!-- 세로 브랜드 필름 하나만 사용: 카드 상태 음소거·루프 자동재생 → ⛶ 탭 시 전체화면(소리) -->
+          <video class="mo-vision-video mo-vision-video--tall" id="moVisionVideo"
+                 muted loop playsinline preload="none"
+                 poster="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/vision/main.jpg">
+            <source src="https://ringcoms-nine.vercel.app/images/main/brand-film/brandfilm_mo.mp4" type="video/mp4">
+          </video>
+          <button class="mo-vision-play" type="button" aria-label="영상 재생">
+            <span class="mo-vision-play-ic" aria-hidden="true"></span>
+          </button>
+          <button class="mo-vision-fs" type="button" aria-label="세로 전체화면으로 보기">
+            <svg class="mo-vision-fs-ic mo-vision-fs-open" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none"
+                    stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <svg class="mo-vision-fs-ic mo-vision-fs-close" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18" fill="none"
+                    stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ About (Company 452:3642 / History 452:3911) — 탭으로 전환 -->
+    <section class="mo-about mo-about-company" id="moAbout">
+      <!-- 탭 바: About Company / History -->
+      <div class="mo-about-tabs">
+        <button class="mo-about-tab mo-about-tab--active" type="button" data-motab="company">About Company</button>
+        <button class="mo-about-tab" type="button" data-motab="history">History</button>
+        <button class="mo-about-tab" type="button" data-motab="location">Location</button>
+      </div>
+
+      <!-- ── About Company ── -->
+      <div class="mo-about-pane mo-about-pane--company">
+        <!-- 배경: 그라데이션 + unsplash 텍스처 + 3D 디스크 -->
+        <div class="mo-about-bg" aria-hidden="true">
+          <img class="mo-about-bg-img" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/bg-company.jpg" alt="">
+          <div class="mo-about-disc"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/disc.png" alt=""></div>
+        </div>
+
+        <!-- 소개 문구 -->
+        <p class="mo-about-desc">
+          저희는 가능성을 찾아 섬세하게 성장시키는<br>
+          글로벌 기업입니다.<br>
+          엔터테인먼트, MCN, 코스메틱 3개 사업부를<br>
+          연결하고 콘텐츠와 브랜드의 가치를<br>
+          극대화합니다.
+        </p>
+
+        <!-- 사업부 -->
+        <div class="mo-about-units">
+          <a class="mo-unit mo-unit-link" href="#moBizEnt">
+            <p class="mo-unit-title">Enterainment</p>
+            <p class="mo-unit-sub">콘텐츠 IP&nbsp;&nbsp;I&nbsp;&nbsp;배우 자산</p>
+          </a>
+          <img class="mo-unit-sep" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/object.svg" alt="">
+          <a class="mo-unit mo-unit-link" href="#moMcn">
+            <p class="mo-unit-title">MCN</p>
+            <p class="mo-unit-sub">스트리머&nbsp;&nbsp;I&nbsp;&nbsp;트래픽&nbsp;&nbsp;I&nbsp;&nbsp;확산</p>
+          </a>
+          <img class="mo-unit-sep" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/object.svg" alt="">
+          <a class="mo-unit mo-unit-link" href="#moCosmetics">
+            <p class="mo-unit-title">Cosmetics</p>
+            <p class="mo-unit-sub">K-BEAUTY</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- ── History (Figma 452:3911) ── -->
+      <div class="mo-about-pane mo-about-pane--history" hidden>
+        <div class="mo-history-bg" aria-hidden="true">
+          <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/bg-history.jpg" alt="">
+        </div>
+        <div class="mo-history-body">
+          <p class="mo-history-year">2026</p>
+          <span class="mo-history-line" aria-hidden="true"></span>
+          <div class="mo-history-events">
+            <p>공도유, 최서은, 이서이, 강필선 전속계약</p>
+            <p>파이온텍 MOU 체결</p>
+            <p>셀백영 MOU 체결</p>
+            <p>링컴즈 설립</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Location ── -->
+      <div class="mo-about-pane mo-about-pane--location" hidden>
+        <div class="mo-location-body">
+          <div class="mo-location-item">
+            <a class="mo-location-map-wrap" href="https://map.naver.com/p/search/서울특별시%20강남구%20도산대로165%20신사힐빌딩" target="_blank" rel="noopener" aria-label="본사 네이버 지도에서 보기">
+              <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/map-hq.png" alt="본사 위치 지도">
+            </a>
+            <div class="mo-location-info">
+              <div class="mo-location-sep"></div>
+              <p class="mo-location-name">본사</p>
+              <a class="mo-location-addr" href="https://map.naver.com/p/search/서울특별시%20강남구%20도산대로165%20신사힐빌딩" target="_blank" rel="noopener">서울특별시 강남구 도산대로165,<br>신사힐빌딩12층</a>
+            </div>
+          </div>
+          <div class="mo-location-item">
+            <a class="mo-location-map-wrap" href="https://map.naver.com/p/search/경기도%20화성시%20동탄첨단산업1로%2027%20금강펜테리움IX타워" target="_blank" rel="noopener" aria-label="R&amp;D 센터 네이버 지도에서 보기">
+              <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/map-rd.png" alt="R&amp;D 센터 위치 지도">
+            </a>
+            <div class="mo-location-info">
+              <div class="mo-location-sep"></div>
+              <p class="mo-location-name">R&amp;D 센터 및 콘텐츠 스튜디오</p>
+              <a class="mo-location-addr" href="https://map.naver.com/p/search/경기도%20화성시%20동탄첨단산업1로%2027%20금강펜테리움IX타워" target="_blank" rel="noopener">경기도 화성시 동탄첨단산업1로 27,<br>금강펜테리움IX타워 A동 3401~3405호</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 사업부 — Entertainment (Figma 452:3678) -->
+    <section class="mo-biz-ent" id="moBizEnt">
+      <div class="mo-biz-ent-bg" aria-hidden="true">
+        <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/entertainment/mo-bg.png" alt="">
+      </div>
+      <div class="mo-biz-ent-con">
+        <div class="mo-biz-ent-tit">
+          <p class="mo-biz-ent-title">Entertainment</p>
+          <p class="mo-biz-ent-desc">아티스트 고유의 재능이 날개를 달 수 있도록,<br>국내를 넘어 글로벌 비즈니스 확장까지<br>매니지먼트를 담당합니다.</p>
+        </div>
+        <a class="mo-biz-ent-more" href="/entertainment">
+          <span>MORE</span>
+          <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/entertainment/ic-more-arrow.svg" alt="">
+        </a>
+      </div>
+    </section>
+
+    <!-- ⑦ 사업부 — MCN (Figma 556:8969, TV 스택) -->
+    <section class="mo-mcn" id="moMcn">
+      <div class="mo-mcn-bg" aria-hidden="true">
+        <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/mcn/mo-bg.png" alt="">
+      </div>
+      <div class="mo-mcn-con">
+        <div class="mo-mcn-tit">
+          <p class="mo-mcn-title">MCN</p>
+          <p class="mo-mcn-desc">숏폼 크리에이터부터 라이브 스트리머까지,<br>당신의 채널을 미디어 브랜드로 성장시키고<br>수익 채널을 확장합니다.</p>
+        </div>
+        <a class="mo-mcn-more" href="/mcn">
+          <span>MORE</span>
+          <img class="mo-mcn-more-arrow" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/mcn/ic-more-arrow.svg" alt="">
+        </a>
+      </div>
+    </section>
+
+    <!-- ⑧ 사업부 — Cosmetics (Figma 452:3703) -->
+    <section class="mo-cosmetics" id="moCosmetics">
+      <div class="mo-cosmetics-bg" aria-hidden="true">
+        <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/cosmetics/mo-bg.png" alt="">
+      </div>
+      <div class="mo-cosmetics-con">
+        <div class="mo-cosmetics-tit">
+          <h2 class="mo-cosmetics-title">Cosmetics</h2>
+          <p class="mo-cosmetics-desc">
+            바이오 융합 기술과 데이터 기반 연구개발을<br>
+            바탕으로, 링컴즈는 시장성과 제품력을 갖춘<br>
+            뷰티 브랜드를 설계합니다.
+          </p>
+        </div>
+        <div class="mo-cosmetics-actions">
+          <button class="mo-cos-btn mo-cos-btn--explore" type="button" data-skinego-soon><span>SKINEGO</span><img class="mo-cos-btn-arrow" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/cosmetics/ic-more-arrow.svg" alt=""></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑨ 보도자료 — Press Center (Figma 452:3713) -->
+    <section class="mo-press">
+      <div class="mo-press-hero">
+        <div class="mo-press-hero-bg" aria-hidden="true">
+          <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/press/bg.jpg" alt="">
+        </div>
+        <h2 class="mo-press-title">Press Center</h2>
+        <p class="mo-press-desc">
+          아티스트 고유의 재능이 날개를 달 수 있도록,<br>
+          국내를 넘어 글로벌 비즈니스 확장까지<br>
+          매니지먼트를 담당합니다.
+        </p>
+        <a class="mo-press-more" href="/press_center">
+          <span>MORE</span>
+          <img class="mo-press-more-arrow" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/press/ic-more-arrow.svg" alt="">
+        </a>
+      </div>
+
+      <!-- 보도자료 목록: 정적 기본값(=DB 시드와 동일). press_main.js 가 /api/press 로 최신화. -->
+      <ul class="mo-press-list">
+        <li class="mo-press-item" data-url="https://isplus.com/article/view/isp202606110085">
+          <div class="mo-press-txt">
+            <span class="mo-press-tag">News</span>
+            <p class="mo-press-item-title">'별똥별'·'오아시스' 강필선, 링컴즈 새 식구 됐다 [공식]</p>
+          </div>
+          <span class="mo-press-arrow"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/press/ic-news-arrow.svg" alt=""></span>
+        </li>
+        <li class="mo-press-item" data-url="https://www.gokorea.kr/news/articleView.html?idxno=860033">
+          <div class="mo-press-txt">
+            <span class="mo-press-tag">News</span>
+            <p class="mo-press-item-title">링컴즈, '2026 미스월드코리아' 심사위원 참여</p>
+          </div>
+          <span class="mo-press-arrow"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/press/ic-news-arrow.svg" alt=""></span>
+        </li>
+        <li class="mo-press-item" data-url="https://www.osen.co.kr/article/G1112783131">
+          <div class="mo-press-txt">
+            <span class="mo-press-tag">News</span>
+            <p class="mo-press-item-title">이서이, 링컴즈와 전속계약..공도유·최서은과 한솥밥</p>
+          </div>
+          <span class="mo-press-arrow"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/press/ic-news-arrow.svg" alt=""></span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ⑩ 문의사항 — Business Contact (Figma 452:3789) -->
+    <section class="mo-contact" id="moContact">
+      <!-- hero -->
+      <div class="mo-contact-hero">
+        <img class="mo-contact-hero-img" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/bg.jpg" alt="">
+        <h2 class="mo-contact-title">BUSINESS<br>CONTACT</h2>
+        <div class="mo-contact-info">
+          <div class="mo-contact-info-labels">
+            <span>E.</span>
+            <span>P.</span>
+            <span>L.</span>
+            <span>W.</span>
+          </div>
+          <div class="mo-contact-info-values">
+            <span>ringcoms@ringcoms.com</span>
+            <span>+82.031.784.8478</span>
+            <span>12F, Sinsahill B/D, 165, Dosan- daero</span>
+            <span>www.ringcoms.com</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- form -->
+      <form class="mo-contact-form" action="#" method="post">
+        <!-- 비지니스 문의 종류 — 드롭다운 -->
+        <div class="mo-contact-dd">
+          <button type="button" class="mo-contact-select" aria-expanded="false">
+            <span class="mo-contact-select-label">비지니스 문의 종류</span>
+            <img class="mo-contact-select-icon" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/chevron.svg" alt="">
+          </button>
+          <div class="mo-contact-dd-list" hidden>
+            <div class="mo-contact-cat">
+              <button type="button" class="mo-contact-cat-head" aria-expanded="false">
+                <span>Entertainment</span>
+                <img class="mo-contact-cat-chevron" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/chevron.svg" alt="">
+              </button>
+              <ul class="mo-contact-cat-sub" hidden>
+                <li>사업/제휴 문의</li>
+                <li>광고 문의</li>
+                <li>일반 문의</li>
+              </ul>
+            </div>
+            <div class="mo-contact-cat">
+              <button type="button" class="mo-contact-cat-head" aria-expanded="false">
+                <span>MCN</span>
+                <img class="mo-contact-cat-chevron" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/chevron.svg" alt="">
+              </button>
+              <ul class="mo-contact-cat-sub" hidden>
+                <li>사업/제휴 문의</li>
+                <li>광고 문의</li>
+                <li>일반 문의</li>
+              </ul>
+            </div>
+            <div class="mo-contact-cat">
+              <button type="button" class="mo-contact-cat-head" aria-expanded="false">
+                <span>Cosmetics</span>
+                <img class="mo-contact-cat-chevron" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/chevron.svg" alt="">
+              </button>
+              <ul class="mo-contact-cat-sub" hidden>
+                <li>사업/제휴 문의</li>
+                <li>광고 문의</li>
+                <li>일반 문의</li>
+              </ul>
+            </div>
+            <div class="mo-contact-cat">
+              <button type="button" class="mo-contact-cat-head" aria-expanded="false">
+                <span>기타 일반 문의</span>
+                <img class="mo-contact-cat-chevron" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/chevron.svg" alt="">
+              </button>
+              <ul class="mo-contact-cat-sub" hidden>
+                <li>사업/제휴 문의</li>
+                <li>광고 문의</li>
+                <li>일반 문의</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 이름 / 직함 -->
+        <div class="mo-contact-field">
+          <label class="mo-contact-label">
+            이름 / 직함
+            <img class="mo-contact-point" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/point.svg" alt="필수">
+          </label>
+          <input class="mo-contact-input" type="text" placeholder="이름/직함을 작성해주세요.">
+        </div>
+
+        <!-- 기업(단체)명 -->
+        <div class="mo-contact-field">
+          <label class="mo-contact-label">
+            기업(단체)명
+            <img class="mo-contact-point" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/point.svg" alt="필수">
+          </label>
+          <input class="mo-contact-input" type="text" placeholder="기업(단체)명을 작성해주세요.">
+        </div>
+
+        <!-- 연락처 -->
+        <div class="mo-contact-field">
+          <label class="mo-contact-label">
+            연락처
+            <img class="mo-contact-point" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/point.svg" alt="필수">
+          </label>
+          <input class="mo-contact-input" type="tel" placeholder="연락 가능한 번호를 작성해주세요.">
+        </div>
+
+        <!-- 이메일 -->
+        <div class="mo-contact-field">
+          <label class="mo-contact-label">
+            이메일
+            <img class="mo-contact-point" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/point.svg" alt="필수">
+          </label>
+          <input class="mo-contact-input" type="email" placeholder="이메일 주소를 작성해주세요.">
+        </div>
+
+        <!-- 문의 제목 -->
+        <div class="mo-contact-field">
+          <label class="mo-contact-label">
+            문의 제목
+            <img class="mo-contact-point" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/point.svg" alt="필수">
+          </label>
+          <input class="mo-contact-input" type="text" placeholder="문의하시는 사업의 제목을 작성해주세요.">
+        </div>
+
+        <!-- 문의 요청 내용 -->
+        <div class="mo-contact-field">
+          <label class="mo-contact-label">
+            문의 요청 내용
+            <img class="mo-contact-point" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/point.svg" alt="필수">
+          </label>
+          <textarea class="mo-contact-textarea" placeholder="기업(단체) 소개:&#10;사업 진행 시점 :&#10;사업 형태 : &#10;협업 희망 크리에이터 :&#10;상세 문의 내용 :"></textarea>
+        </div>
+
+        <!-- 파일 첨부 -->
+        <button type="button" class="mo-contact-file">
+          파일 첨부
+          <img class="mo-contact-file-icon" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/paperclip.svg" alt="">
+        </button>
+        <input class="mo-contact-file-input" type="file" hidden accept=".zip,.doc,.docx,.ppt,.pptx,.pdf,.hwp">
+        <span class="mo-contact-file-name"></span>
+        <p class="mo-contact-filenote">*10MB 이내로 업로드<br>*회사소개서, 제안서, 포트폴리오 등 첨부해주세요. (선택사항)<br>*허용 확장자 : zip, doc, docx, ppt, pptx, pdf, hwp</p>
+
+        <!-- 개인정보 안내 -->
+        <div class="mo-contact-field">
+          <label class="mo-contact-label">문의를 위해 다음 사항을 확인해 주세요.</label>
+          <div class="mo-contact-policy">사업 문의시 회사는 아래와 같이 이용자의 개인정보를 수집 및 이용하고 있습니다. 내용을 자세히 읽으신 후 동의 여부를 결정하여 주십시오.
+이용자는 개인정보 수집 및 이용에 대한 동의를 거부할 권리가 있습니다. 다만 동의를 거부하는 경우 사업 문의 서비스가 제한될 수 있습니다.
+
+1. 수집하는 개인정보
+담당자 이름, 기업(단체)명칭, 연락처, 이메일
+
+2. 개인정보의 수집 및 이용 목적
+회사는 사업 문의를 신청하는 담당자의 의사를 확인하고 담당자의 신원을 확인하며, 서비스를 부정 이용하는 것을 방지하기 위해 개인정보를 수집 및 이용하며,
+사업 문의에 따른 기타 각종 안내사항이나 고지사항을 전달하기 위해 개인정보를 수집 및 이용합니다. 또한 추후 발생할 수 있는 분쟁 등을 위하여 개인정보를 보유합니다.
+
+3. 개인정보 보유기간
+회사는 이용자가 개인정보 수집 및 이용에 동의한 날로부터 1년간 개인정보를 보유합니다. 또한 회사는 개인정보보호법령 등에 따라 특별히 보유하여야 할 필요가 있는
+경우에는 법령상 기간을 준수하여 보유하고 있습니다.
+
+4. 개인정보의 파기
+회사는 수집 및 처리목적을 달성하여 개인정보 처리가 불필요한 것으로 인정되거나 개인정보 보유기간의 종료, 또는 정보주체의 별도 요청이 있는 경우 수집한 개인정보를 지체없이 파기하고 있습니다.</div>
+        </div>
+
+        <!-- 동의 -->
+        <label class="mo-contact-agree">
+          <input type="checkbox">
+          <img class="mo-contact-checkbox" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/check.svg" alt="">
+          <span class="mo-contact-agree-text">
+            <span class="mo-contact-agree-main">
+              개인정보 수집 및 이용 동의 (필수<img class="mo-contact-agree-point" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/point.svg" alt="">)
+            </span>
+            <span class="mo-contact-agree-sub">개인정보 수집 및 이용약관에 동의하셔야 접수가 가능합니다.</span>
+          </span>
+        </label>
+
+        <!-- SEND REQUEST -->
+        <button type="submit" class="mo-contact-submit">
+          <span>SEND REQUEST</span>
+          <img class="mo-contact-submit-icon" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/send-arrow.svg" alt="">
+        </button>
+      </form>
+    </section>
+
+    <!-- ⑪ Footer (Figma 452:3885) -->
+    <footer class="mo-footer">
+      <div class="mo-footer-email">
+        <p>E. ringcoms@ringcoms.com</p>
+        <p>H. www.ringcoms.com</p>
+      </div>
+
+      <div class="mo-footer-contact mo-footer-office">
+        <p class="mo-footer-label">Head Office.</p>
+        <p class="mo-footer-addr">서울특별시 강남구 도산대로165,<br>신사힐빌딩12층</p>
+      </div>
+
+      <div class="mo-footer-contact mo-footer-rnd">
+        <p class="mo-footer-label">R&amp;D Center I Studio.</p>
+        <p class="mo-footer-addr">경기도 화성시 동탄첨단산업1로 27,<br>금강펜테리움IX타워 A동 3401~3405호</p>
+      </div>
+
+      <a class="mo-footer-privacy" href="#">개인정보처리방침</a>
+
+      <div class="mo-footer-txt">
+        <div class="mo-footer-logo">
+          <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/footer/logo.svg" alt="RINGCOMS">
+        </div>
+        <p class="mo-footer-copy">Copyright © 2026 RINGCOMS.<br>All Rights Reserved.</p>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- 1920×1080 스테이지: chrome + 본문 패널을 함께 담아 콘텐츠 프레임 기준으로 정렬.
+       (가로로 넓어져도 chrome 이 콘텐츠 옆에 붙어 있음. brand 오버레이만 이 밖에 둔다.) -->
+  <div class="pc-stage">
+
+  <!-- 고정 UI(chrome): 콘텐츠 프레임(1920×1080) 기준 -->
+  <div class="fixed-ui" data-panel="0">
+
+    <!-- 항상 표시 -->
+    <div class="kv-logo-small">
+      <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/kv/logo-small.svg" alt="RINGCOMS">
+    </div>
+    <div class="gnb">
+      <button class="kv-menu" id="kvMenuBtn" type="button" aria-label="메뉴" aria-expanded="false" aria-controls="menuOverlay">
+        <span class="kv-menu-icon"><span class="kv-menu-icon-inner"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/kv/menu.svg" alt=""></span></span>
+        <span class="kv-menu-close" aria-hidden="true"></span>
+      </button>
+      <div class="kv-global" style="position:relative;top:0;"><div class="kv-global-ic">
+        <div class="global-ellipse1"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/kv/global-ellipse1.svg" alt=""></div>
+        <div class="global-ellipse2"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/kv/global-ellipse2.svg" alt=""></div>
+        <div class="global-line"><div class="global-line-inner"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/kv/global-line.svg" alt=""></div></div>
+        <div class="global-en"><div class="global-en-inner"><div class="global-en-img"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/kv/global-en.svg" alt="EN"></div></div></div>
+      </div></div>
+    </div>
+
+    <!-- GNB_open: 메뉴 버튼 hover/선택 시 펼쳐지는 메뉴 (Figma 452:435) -->
+    <div class="menu-backdrop" id="menuBackdrop"></div>
+    <nav class="menu-overlay" id="menuOverlay" aria-label="전체 메뉴" aria-hidden="true">
+      <!-- 대메뉴 hover/포커스 시 하위 펼침. 하위 항목 텍스트는 추후 확정(placeholder). -->
+      <div class="menu-list">
+        <div class="menu-group">
+          <button class="menu-item menu-item--has-sub" type="button" data-nav="about">
+            <span class="menu-text">About</span>
+          </button>
+          <div class="menu-sub">
+            <button class="menu-subitem" type="button" data-nav="about-company">About Company</button>
+            <button class="menu-subitem menu-subitem--muted" type="button" data-nav="about-history">History</button>
+            <button class="menu-subitem menu-subitem--muted" type="button" data-nav="about-location">Location</button>
+          </div>
+        </div>
+        <div class="menu-group">
+          <button class="menu-item menu-item--has-sub" type="button" data-nav="entertainment"><span class="menu-text">Entertainment</span></button>
+          <div class="menu-sub">
+            <button class="menu-subitem" type="button" data-nav="entertainment-artist">Artist</button>
+            <button class="menu-subitem" type="button" data-nav="entertainment-audition">Audition</button>
+          </div>
+        </div>
+        <div class="menu-group">
+          <button class="menu-item menu-item--has-sub" type="button" data-nav="mcn"><span class="menu-text">MCN</span></button>
+          <div class="menu-sub">
+            <button class="menu-subitem" type="button" data-nav="mcn-creator">Creator</button>
+            <button class="menu-subitem" type="button" data-nav="mcn-apply">Apply</button>
+          </div>
+        </div>
+        <div class="menu-group">
+          <button class="menu-item" type="button" data-nav="cosmetics"><span class="menu-text">Cosmetics</span></button>
+        </div>
+        <div class="menu-group">
+          <button class="menu-item menu-item--has-sub" type="button" data-nav="career"><span class="menu-text">Career</span></button>
+          <div class="menu-sub">
+            <button class="menu-subitem" type="button" data-nav="career-process">Process</button>
+            <button class="menu-subitem" type="button" data-nav="career-faq">FAQ</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- About 패널에서만 표시 -->
+    <div class="side-menu">
+      <p class="side-active">About Company</p>
+      <p class="side-inactive">History</p>
+      <p class="side-inactive">Location</p>
+    </div>
+
+    <!-- KV 제외하고 표시 -->
+    <div class="cta-btns">
+      <div class="cta-btn cta-inquire"><div class="cta-text-wrap"><p class="cta-text">문의하기</p></div><div class="cta-arrow"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/ic-arrow.svg" alt=""></div></div>
+      <div class="cta-btn cta-apply"><div class="cta-text-wrap"><p class="cta-text">지원하기</p></div><div class="cta-arrow"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/ic-arrow.svg" alt=""></div>
+        <div class="cta-apply-flyout">
+          <a class="cta-apply-item" href="/entertainment#audition"><span>ARTIST</span></a>
+          <a class="cta-apply-item" href="/mcn#apply"><span>CREATOR</span></a>
+          <a class="cta-apply-item" href="/joinus"><span>RINGCREW</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-indicator"><p>SCROLL</p><div class="scroll-bar"><div class="scroll-progress" id="scrollProgress"></div></div></div>
+    <footer class="panel-footer">
+      <p class="footer-copy">Copyright © 2026 RINGCOMS. All Rights Reserved.</p>
+      <p class="footer-privacy">개인정보처리방침</p>
+      <div class="footer-address">
+        <div class="addr-item"><span class="addr-label">Head Office.</span><span class="addr-text">서울특별시 강남구 도산대로165, 신사힐빌딩12층</span></div>
+        <div class="addr-item"><span class="addr-label">R&amp;D Center I Studio.</span><span class="addr-text">경기도 화성시 동탄첨단산업1로 27, 금강펜테리움IX타워 A동 3401~3405호</span></div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- 콘텐츠 스테이지: 비율 유지(contain) 스케일. 헤더/푸터/CTA(.fixed-ui)는 이 스테이지
+       밖(뷰포트 전체)에 있어 화면 가장자리(풀폭)에 정렬된다. 콘텐츠는 그대로(잘림 없음). -->
+  <div class="content-stage">
+
+  <!-- 가로 스크롤 래퍼: 패널별 고유 콘텐츠만 -->
+  <div class="horizontal-wrapper">
+
+    <!-- Panel 0: KV — 인터랙티브 진입 화면. 실제 시각 연출은 .pc-hero 레이어가
+         이 패널 위(뷰포트 기준)를 덮는다. 패널 자체는 크림색 배경 슬롯만 유지. -->
+    <section class="panel panel-kv"></section>
+
+    <!-- Panel 1: Vision (카드 → Brand Film 풀스크린 확장 전환의 시작) -->
+    <section class="panel panel-vision">
+      <!-- 단일 상태: "새로운 가능성을 찾습니다" (이미지는 고정) -->
+      <div class="vision-inner" id="visionInner">
+        <div class="vision-sub">
+          <p class="vision-title vision-title--ko">새로운 가능성을 찾습니다</p>
+        </div>
+      </div>
+      <div class="vision-img-wrap">
+        <div class="vision-img-inner">
+          <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/vision/main.jpg" alt="">
+        </div>
+        <!-- "이건 영상이다" 표시용 재생 버튼 오버레이(장식). pointer-events:none 이라
+             카드 클릭이 그대로 Brand Film 진입(영상 재생)으로 이어진다. -->
+        <div class="vision-play" aria-hidden="true">
+          <span class="vision-play-ic"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Panel 2: Brand Film ── -->
+    <section class="panel panel-brand-film">
+      <div class="brand-film-img">
+        <video class="brand-film-video" id="brandFilmVideo"
+               muted loop playsinline preload="none"
+               poster="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/brand-film/main.jpg">
+          <source src="https://staticfile-three.vercel.app/frontuser/frontringcoms/files/index.mp4" type="video/mp4">
+        </video>
+        <!-- 중앙 재생 버튼: 영상 시작 전/일시정지 시 노출, 클릭하면 재생(재생 중 숨김) -->
+        <button class="brand-film-play" id="brandFilmPlay" type="button" aria-label="영상 재생">
+          <span class="brand-film-play-ic" aria-hidden="true"></span>
+        </button>
+      </div>
+      <!-- 소리 토글: 자동재생은 정책상 음소거여야 하므로, 클릭 시 소리 켜기/끄기 -->
+      <button class="brand-film-sound is-muted" id="brandFilmSound" type="button" aria-label="소리 켜기" aria-pressed="false">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/>
+          <path class="snd-wave" d="M16 8.6a4 4 0 0 1 0 6.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <path class="snd-wave" d="M18.6 6a7.5 7.5 0 0 1 0 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <line class="snd-slash" x1="3.5" y1="3.5" x2="20.5" y2="20.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </section>
+
+    <!-- Panel 3: About (Company + History 세로 스크롤) -->
+    <section class="panel panel-about">
+      <div class="about-inner">
+
+        <!-- Sub 0: About Company -->
+        <div class="about-sub about-company">
+          <div class="about-bg">
+            <img class="about-bg-img" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/bg-company.jpg" alt="">
+            <div class="about-disc-wrap">
+              <div class="about-disc-inner">
+                <img class="about-disc-img" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/disc.png" alt="">
+              </div>
+            </div>
+            <div class="about-dim"></div>
+          </div>
+          <div class="about-desc">
+            <p>저희는 가능성을 찾아 섬세하게 성장시키는 글로벌 기업입니다.</p>
+            <p>엔터테인먼트, MCN, 코스메틱 3개 사업부를 연결하고</p>
+            <p>콘텐츠와 브랜드의 가치를 극대화합니다.</p>
+          </div>
+          <div class="about-units">
+            <div class="unit about-unit-link" data-nav="entertainment">
+              <p class="unit-title">Enterainment</p>
+              <p class="unit-subtitle unit-sub-ent">콘텐츠 IP  I  배우 자산</p>
+            </div>
+            <img class="unit-sep" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/object.svg" alt="">
+            <div class="unit about-unit-link" data-nav="mcn">
+              <p class="unit-title unit-title-mcn">MCN</p>
+              <p class="unit-subtitle unit-sub-mcn">크리에이터 육성  I  광고 사업</p>
+            </div>
+            <img class="unit-sep" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/object.svg" alt="">
+            <div class="unit about-unit-link" data-nav="cosmetics">
+              <p class="unit-title">Cosmetics</p>
+              <p class="unit-subtitle unit-sub-cos">K-BEAUTY</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub 1: About History -->
+        <div class="about-sub about-history">
+          <div class="about-bg">
+            <img class="history-bg-img" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/bg-history.jpg" alt="">
+            <div class="about-dim"></div>
+          </div>
+          <p class="history-year">2026</p>
+          <div class="history-line"><div class="history-line-inner"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/line-h.svg" alt=""></div></div>
+          <div class="history-events">
+            <p>공도유, 최서은, 이서이, 강필선 전속계약</p>
+            <p>파이온텍 MOU 체결</p>
+            <p>셀백영 MOU 체결</p>
+            <p>링컴즈 설립</p>
+          </div>
+        </div>
+
+        <!-- Sub 2: About Location (데스크탑 리디자인 — 좌우 2 지도 카드) -->
+        <div class="about-sub about-location">
+          <div class="location-content">
+            <div class="location-head">
+              <p class="location-eyebrow">LOCATION</p>
+              <h2 class="location-headline">Head Office &amp; R&amp;D Center</h2>
+            </div>
+            <div class="location-cards">
+              <article class="location-card">
+                <a class="location-card-map" href="https://map.naver.com/p/search/서울특별시%20강남구%20도산대로165%20신사힐빌딩" target="_blank" rel="noopener" aria-label="본사 네이버 지도에서 보기">
+                  <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/map-hq.png" alt="본사 위치 지도">
+                </a>
+                <div class="location-card-body">
+                  <p class="location-card-en">HEAD OFFICE</p>
+                  <p class="location-card-ko">본사</p>
+                  <div class="location-card-line"></div>
+                  <a class="location-card-addr" href="https://map.naver.com/p/search/서울특별시%20강남구%20도산대로165%20신사힐빌딩" target="_blank" rel="noopener">서울특별시 강남구 도산대로165,<br>신사힐빌딩12층</a>
+                </div>
+              </article>
+              <article class="location-card">
+                <a class="location-card-map" href="https://map.naver.com/p/search/경기도%20화성시%20동탄첨단산업1로%2027%20금강펜테리움IX타워" target="_blank" rel="noopener" aria-label="R&amp;D 센터 네이버 지도에서 보기">
+                  <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/about/map-rd.png" alt="R&amp;D 센터 위치 지도">
+                </a>
+                <div class="location-card-body">
+                  <p class="location-card-en">R&amp;D CENTER / STUDIO</p>
+                  <p class="location-card-ko">R&amp;D 센터 및 콘텐츠 스튜디오</p>
+                  <div class="location-card-line"></div>
+                  <a class="location-card-addr" href="https://map.naver.com/p/search/경기도%20화성시%20동탄첨단산업1로%2027%20금강펜테리움IX타워" target="_blank" rel="noopener">경기도 화성시 동탄첨단산업1로 27,<br>금강펜테리움IX타워 A동 3401~3405호</a>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Panel 4: Entertainment (사업부 - 엔터테인먼트) ── -->
+    <section class="panel panel-entertainment">
+      <div class="ent-bg">
+        <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/entertainment/ent.png" alt="">
+      </div>
+      <div class="ent-title-group">
+        <p class="ent-title">Entertainment</p>
+        <p class="ent-desc">아티스트 고유의 재능이 날개를 달 수 있도록,<br>국내를 넘어 글로벌 비즈니스 확장까지 매니지먼트를 담당합니다.</p>
+        <a class="ent-more" href="/entertainment">
+          <span>MORE</span>
+          <img class="ent-more-arrow" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/entertainment/ic-more-arrow.svg" alt="">
+        </a>
+      </div>
+    </section>
+
+    <!-- ── Panel 5: MCN (세 번째 배경 C 단일) — Figma 556:6124 ── -->
+    <section class="panel panel-mcn" data-sub="0">
+      <div class="mcn-inner">
+        <div class="mcn-sub mcn-sub-c"><div class="mcn-bg mcn-bg-c"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/mcn/mcn.png" alt=""></div></div>
+      </div>
+      <!-- 고정 요소: 제목/설명/버튼은 제자리 (배경 밝기에 맞춰 색만 전환) -->
+      <div class="mcn-title-group">
+        <p class="mcn-title">MCN</p>
+        <p class="mcn-desc">숏폼 크리에이터부터 라이브 스트리머까지,<br>당신의 채널을 미디어 브랜드로 성장시키고 수익 채널을 확장합니다.</p>
+        <a class="mcn-more" href="/mcn">
+          <span>MORE</span>
+          <img class="mcn-more-arrow" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/mcn/ic-more-arrow.svg" alt="">
+        </a>
+      </div>
+    </section>
+
+    <!-- ── Panel 6: Cosmetics (사업부 - 코스메틱) ── -->
+    <section class="panel panel-cosmetics">
+      <div class="cos-bg">
+        <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/cosmetics/bg.png" alt="">
+        <div class="cos-bg-dim"></div>
+      </div>
+      <div class="cos-title-group">
+        <p class="cos-title">Cosmetics</p>
+        <p class="cos-desc">바이오 융합 기술과 데이터 기반 연구개발을 바탕으로,<br>링컴즈는 시장성과 제품력을 갖춘 뷰티 브랜드를 설계합니다.</p>
+        <div class="cos-actions">
+          <button class="cos-btn cos-btn--explore" type="button" data-skinego-soon><span>SKINEGO</span><img class="cos-btn-arrow" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/cosmetics/ic-more-arrow.svg" alt=""></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Panel 7: Press Center (보도 자료) ── -->
+    <section class="panel panel-press">
+      <div class="press-left">
+        <div class="press-left-bg"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/press/bg.jpg" alt=""></div>
+        <p class="press-eyebrow">Press Center</p>
+        <p class="press-title">보도 자료</p>
+        <a class="press-more" href="/press_center">
+          <span>MORE</span>
+          <img class="press-more-arrow" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/press/ic-more-arrow.svg" alt="">
+        </a>
+      </div>
+      <!-- 보도자료 목록: 정적 기본값(=DB 시드와 동일). press_main.js 가 /api/press 로 최신화. -->
+      <div class="press-list">
+        <a class="press-item" href="https://isplus.com/article/view/isp202606110085" target="_blank" rel="noopener"><div class="press-item-txt"><span class="press-tag">News</span><span class="press-item-title">'별똥별'·'오아시스' 강필선, 링컴즈 새 식구 됐다 [공식]</span></div><img class="press-item-arrow" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/press/ic-news-arrow.svg" alt=""></a>
+        <a class="press-item" href="https://www.gokorea.kr/news/articleView.html?idxno=860033" target="_blank" rel="noopener"><div class="press-item-txt"><span class="press-tag">News</span><span class="press-item-title">링컴즈, '2026 미스월드코리아' 심사위원 참여</span></div><img class="press-item-arrow" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/press/ic-news-arrow.svg" alt=""></a>
+        <a class="press-item" href="https://www.osen.co.kr/article/G1112783131" target="_blank" rel="noopener"><div class="press-item-txt"><span class="press-tag">News</span><span class="press-item-title">이서이, 링컴즈와 전속계약..공도유·최서은과 한솥밥</span></div><img class="press-item-arrow" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/press/ic-news-arrow.svg" alt=""></a>
+        <a class="press-item" href="https://www.edaily.co.kr/News/Read?newsId=05513686645415792&amp;mediaCodeNo=257" target="_blank" rel="noopener"><div class="press-item-txt"><span class="press-tag">News</span><span class="press-item-title">링컴즈·파이온텍, 바이오 융합 화장품 공동 개발 MOU</span></div><img class="press-item-arrow" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/press/ic-news-arrow.svg" alt=""></a>
+        <a class="press-item" href="https://www.stardailynews.co.kr/news/articleView.html?idxno=531633" target="_blank" rel="noopener"><div class="press-item-txt"><span class="press-tag">News</span><span class="press-item-title">최서은, '미스코리아 진(眞)'→'솔로지옥2' 출연 이후 연기 활동 본격화...'링컴즈'와 전속계약 체결</span></div><img class="press-item-arrow" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/press/ic-news-arrow.svg" alt=""></a>
+        <a class="press-item" href="https://www.topstarnews.net/news/articleView.html?idxno=16015514" target="_blank" rel="noopener"><div class="press-item-txt"><span class="press-tag">News</span><span class="press-item-title">공도유, 링컴즈와 전속계약 "무한한 잠재력…전폭 지원"</span></div><img class="press-item-arrow" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/press/ic-news-arrow.svg" alt=""></a>
+        <a class="press-item" href="https://www.mt.co.kr/future/2026/03/20/2026032014285639722" target="_blank" rel="noopener"><div class="press-item-txt"><span class="press-tag">News</span><span class="press-item-title">한양대 교원창업 '셀백영', 링컴즈와 바이오 코스메틱 신사업 발굴</span></div><img class="press-item-arrow" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/press/ic-news-arrow.svg" alt=""></a>
+      </div>
+    </section>
+
+    <!-- ── Panel 8: Business Contact (문의사항) ── -->
+    <section class="panel panel-contact">
+      <!-- 좌측 다크 박스 -->
+      <div class="contact-left">
+        <div class="contact-left-bg"><img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/bg.jpg" alt=""></div>
+        <p class="contact-eyebrow">Business Contact</p>
+        <div class="contact-info">
+          <div class="ci-labels"><p>E.</p><p>P.</p><p>L.</p><p>W.</p></div>
+          <div class="ci-values">
+            <p>ringcoms@ringcoms.com</p>
+            <p>+82.031.784.8478</p>
+            <p>12F, Sinsahill B/D, 165, Dosan-daero</p>
+            <p>www.ringcoms.com</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 우측 폼 (세로 스크롤) -->
+      <div class="contact-form-wrap">
+        <form class="contact-form" onsubmit="return false">
+          <div class="cf-select">
+            <button type="button" class="cf-dropdown" aria-expanded="false">
+              <span class="cf-dropdown-label">비지니스 문의 종류</span>
+              <img class="cf-chevron" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/chevron.svg" alt="">
+            </button>
+            <div class="cf-dropdown-list" hidden>
+              <div class="cf-cat">
+                <button type="button" class="cf-cat-head" aria-expanded="true">
+                  <span>Entertainment</span>
+                  <img class="cf-cat-chevron" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/chevron.svg" alt="">
+                </button>
+                <ul class="cf-cat-sub">
+                  <li>사업/제휴 문의</li>
+                  <li>광고 문의</li>
+                  <li>일반 문의</li>
+                </ul>
+              </div>
+              <div class="cf-cat">
+                <button type="button" class="cf-cat-head" aria-expanded="false">
+                  <span>MCN</span>
+                  <img class="cf-cat-chevron" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/chevron.svg" alt="">
+                </button>
+                <ul class="cf-cat-sub" hidden>
+                  <li>사업/제휴 문의</li>
+                  <li>광고 문의</li>
+                  <li>일반 문의</li>
+                </ul>
+              </div>
+              <div class="cf-cat">
+                <button type="button" class="cf-cat-head" aria-expanded="false">
+                  <span>Cosmetics</span>
+                  <img class="cf-cat-chevron" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/chevron.svg" alt="">
+                </button>
+                <ul class="cf-cat-sub" hidden>
+                  <li>사업/제휴 문의</li>
+                  <li>광고 문의</li>
+                  <li>일반 문의</li>
+                </ul>
+              </div>
+              <div class="cf-cat">
+                <button type="button" class="cf-cat-head" aria-expanded="false">
+                  <span>기타 일반 문의</span>
+                  <img class="cf-cat-chevron" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/chevron.svg" alt="">
+                </button>
+                <ul class="cf-cat-sub" hidden>
+                  <li>사업/제휴 문의</li>
+                  <li>광고 문의</li>
+                  <li>일반 문의</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="cf-grid">
+            <div class="cf-field">
+              <label class="cf-label">이름 / 직함<i class="cf-dot"></i></label>
+              <input class="cf-input" type="text" placeholder="이름/직함을 작성해주세요.">
+            </div>
+            <div class="cf-field">
+              <label class="cf-label">기업(단체)명<i class="cf-dot"></i></label>
+              <input class="cf-input" type="text" placeholder="기업(단체)명을 작성해주세요.">
+            </div>
+            <div class="cf-field">
+              <label class="cf-label">연락처<i class="cf-dot"></i></label>
+              <input class="cf-input" type="text" placeholder="연락 가능한 번호를 작성해주세요.">
+            </div>
+            <div class="cf-field">
+              <label class="cf-label">이메일<i class="cf-dot"></i></label>
+              <input class="cf-input" type="email" placeholder="이메일 주소를 작성해주세요.">
+            </div>
+            <div class="cf-field cf-full">
+              <label class="cf-label">문의 제목<i class="cf-dot"></i></label>
+              <input class="cf-input" type="text" placeholder="문의하시는 사업의 제목을 작성해주세요.">
+            </div>
+            <div class="cf-field cf-full">
+              <label class="cf-label">문의 요청 내용<i class="cf-dot"></i></label>
+              <textarea class="cf-input cf-textarea" placeholder="기업(단체) 소개:&#10;사업 진행 시점 :&#10;사업 형태 : &#10;협업 희망 크리에이터 :&#10;상세 문의 내용 :"></textarea>
+              <div class="cf-file-row">
+                <button type="button" class="cf-file-btn">파일 첨부<img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/paperclip.svg" alt=""></button>
+                <input class="cf-file-input" type="file" hidden accept=".zip,.doc,.docx,.ppt,.pptx,.pdf,.hwp">
+                <span class="cf-file-name"></span>
+                <div class="cf-file-notes">
+                  <p>*10MB 이내로 업로드</p>
+                  <p>*회사소개서, 제안서, 포트폴리오 등 첨부해주세요. (선택사항)</p>
+                  <p>*허용 확장자 : zip, doc, docx, ppt, pptx, pdf, hwp</p>
+                </div>
+              </div>
+            </div>
+            <div class="cf-field cf-full">
+              <label class="cf-label">문의를 위해 다음 사항을 확인해 주세요.</label>
+              <div class="cf-notice">
+                <p>사업 문의시 회사는 아래와 같이 이용자의 개인정보를 수집 및 이용하고 있습니다. 내용을 자세히 읽으신 후 동의 여부를 결정하여 주십시오.</p>
+                <p>이용자는 개인정보 수집 및 이용에 대한 동의를 거부할 권리가 있습니다. 다만 동의를 거부하는 경우 사업 문의 서비스가 제한될 수 있습니다.</p>
+                <p>&nbsp;</p>
+                <p>1. 수집하는 개인정보</p>
+                <p>담당자 이름, 기업(단체)명칭, 연락처, 이메일</p>
+                <p>&nbsp;</p>
+                <p>2. 개인정보의 수집 및 이용 목적</p>
+                <p>회사는 사업 문의를 신청하는 담당자의 의사를 확인하고 담당자의 신원을 확인하며, 서비스를 부정 이용하는 것을 방지하기 위해 개인정보를 수집 및 이용하며, 사업 문의에 따른 기타 각종 안내사항이나 고지사항을 전달하기 위해 개인정보를 수집 및 이용합니다. 또한 추후 발생할 수 있는 분쟁 등을 위하여 개인정보를 보유합니다.</p>
+                <p>&nbsp;</p>
+                <p>3. 개인정보 보유기간</p>
+                <p>회사는 이용자가 개인정보 수집 및 이용에 동의한 날로부터 1년간 개인정보를 보유합니다. 또한 회사는 개인정보보호법령 등에 따라 특별히 보유하여야 할 필요가 있는 경우에는 법령상 기간을 준수하여 보유하고 있습니다.</p>
+                <p>&nbsp;</p>
+                <p>4. 개인정보의 파기</p>
+                <p>회사는 수집 및 처리목적을 달성하여 개인정보 처리가 불필요한 것으로 인정되거나 개인정보 보유기간의 종료, 또는 정보주체의 별도 요청이 있는 경우 수집한 개인정보를 지체없이 파기하고 있습니다.</p>
+              </div>
+              <label class="cf-agree">
+                <input type="checkbox">
+                <span class="cf-checkbox"></span>
+                <span class="cf-agree-body">
+                  <span class="cf-agree-title">개인정보 수집 및 이용 동의 (필수<i class="cf-dot-sm"></i>)</span>
+                  <span class="cf-agree-warn">개인정보 수집 및 이용약관에 동의하셔야 접수가 가능합니다.</span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="cf-send">
+            <span>SEND REQUEST</span>
+            <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/contact/send-arrow.svg" alt="">
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ── Panel 9: Career (채용) ──
+         BUSINESS CONTACT 다음에 가로 슬라이드로 이어지는 Career.
+         별도 요소를 새로 만들지 않고 기존 career.html 을 그대로 패널 안에
+         iframe(1920×1080)으로 싣는다 → career 자체 스크롤/탭/FAQ(career.js)가
+         네이티브로 동작하고, 패널 전체는 content-stage 가 다른 패널과 똑같이
+         스케일한다. career 맨 위에서 위로 스크롤하면 postMessage 로 Contact 로
+         되돌아간다(career.js → main.js). -->
+    <section class="panel panel-career">
+      <iframe class="career-frame" src="/career" title="Career" loading="lazy"></iframe>
+    </section>
+
+    <!-- 다음 패널들을 여기에 추가 -->
+
+  </div>
+
+  </div><!-- /.content-stage -->
+
+
+  <!-- ====== Panel 0 인터랙티브 히어로 (데스크탑 전용 · panel 0 에서만 활성) ======
+       뷰포트 기준 풀스크린 레이어. content-stage(패널) 위, fixed-ui(메뉴) 아래(z).
+       클릭하면 큰 파동 + 다크 오버레이 전환 후 다음 패널(About)로 이동한다. -->
+  <div class="pc-hero" id="pcHero">
+    <div class="hero-noise" aria-hidden="true"></div>
+    <div class="hero-ambient" id="heroAmbient" aria-hidden="true"></div>
+    <canvas id="heroRipple" class="hero-ripple" aria-hidden="true"></canvas>
+    <div class="hero-center">
+      <div class="hero-logo-wrap" id="heroLogoWrap">
+        <div class="hero-logo-visual" id="heroLogoVisual">
+                <svg class="logo-draw-svg" viewBox="0 0 3508 2481" xmlns="http://www.w3.org/2000/svg">
+        <!-- 강제 다크모드(삼성 인터넷 등)는 단색 fill 은 밝기 반전시키지만 그라데이션 페인트는 안 건드린다
+             (배경의 --hero-cream-bg 트릭과 동일 원리). 단일 stop 그라데이션 = 사실상 단색.
+             색값은 --hero-burgundy(#4A1028)/--hero-cream(#f9f6ef) 과 동기 유지할 것. -->
+        <defs>
+          <linearGradient id="heroInk"><stop stop-color="#4A1028"/></linearGradient>
+          <linearGradient id="heroCounterInk"><stop stop-color="#f9f6ef"/></linearGradient>
+        </defs>
+        <g transform="matrix(33.1276,0,0,33.1276,1356.1027,597)"><path fill-rule="evenodd" d="M14.9468 6.80016C14.1215 3.6698 11.0334 1.62945 7.83481 1.99496C4.61997 2.36047 1.95908 5.05223 1.95421 8.39052L1.92821 23.3227L-0.0195312 23.3292L0.00808483 8.32229C0.0178317 3.61781 4.04978 -0.0226367 8.61131 0.000105975C13.2541 0.0228486 17.0342 3.72503 17.1658 8.35153C17.2974 12.9569 13.73 16.9304 8.99306 17.1887C10.0555 21.0566 14.3262 23.0904 17.9975 21.5033C21.6607 19.9194 23.1764 15.4732 21.0678 11.966L22.728 10.9409C25.4717 15.4456 23.5175 21.2856 18.7448 23.3081C13.847 25.3842 8.31403 22.5819 7.04856 17.4925C5.75873 12.3104 9.38456 7.1543 14.9468 6.79691V6.80016ZM15.2083 8.7609C11.5873 8.8535 8.80462 11.7889 8.75264 15.2458C12.3167 15.1175 15.1238 12.2714 15.2083 8.7609Z" style="animation-duration:0.835s;animation-delay:0.0s;"/></g>
+        <g transform="matrix(32.978,0,0,32.978,1360.0179,598.2063)"><path d="M20.0431 10.5159C20.7465 10.5159 21.3167 9.94572 21.3167 9.24234C21.3167 8.53896 20.7465 7.96875 20.0431 7.96875C19.3397 7.96875 18.7695 8.53896 18.7695 9.24234C18.7695 9.94572 19.3397 10.5159 20.0431 10.5159Z" style="animation-duration:0.042s;animation-delay:0.94s;"/></g>
+        <g transform="matrix(21.3889,0,0,21.3889,157.9576,1493.7345)"><path d="M33.2349 11.9094L35.3304 11.8477C36.4643 11.8152 37.2197 10.8957 37.1872 9.78296C37.158 8.75467 36.4529 7.87745 35.3662 7.86771L32.0571 7.83522L32.0539 17.9914L30.2734 18.0028V6.27734H35.2281C35.8389 6.27734 36.4221 6.44142 36.9712 6.64448C38.2675 7.20167 39.0066 8.40541 39.0196 9.79596C39.0342 11.31 38.1944 12.6274 36.7031 13.1554L40.1876 17.9508C39.5135 18.0337 38.8832 18.0158 38.1911 17.9947L33.2332 11.9094H33.2349Z" style="animation-duration:0.223s;animation-delay:0.982s;"/></g>
+        <g transform="matrix(21.3768,0,0,21.3768,158.6568,1494.0608)"><path d="M43.4523 6.26562H41.6719V18.0073H43.4523V6.26562Z" style="animation-duration:0.091s;animation-delay:1.204s;"/></g>
+        <g transform="matrix(21.3772,0,0,21.3772,159.4899,1494.3176)"><path d="M55.7682 18.1024C55.6561 18.2389 55.2744 18.2811 55.1574 18.1479L47.9106 9.90046L47.8944 17.9952L46.1172 17.992V6.12355C46.2715 6.06994 46.6386 6.01958 46.7507 6.14304L53.9732 14.3434L53.9926 6.27788H55.7682V18.1008V18.1024Z" style="animation-duration:0.225s;animation-delay:1.295s;"/></g>
+        <g transform="matrix(21.4201,0,0,21.4201,159.6138,1493.8896)"><path d="M67.5953 14.8106L67.6131 13.446L63.9759 13.4379L63.9629 11.88L69.3903 11.8735L69.3838 15.1566C68.2239 17.1401 66.1219 18.2269 63.8427 18.2122C61.3118 18.196 59.0489 16.6706 58.1619 14.4175C57.2002 11.9726 57.8468 9.24188 59.8156 7.55568C62.3888 5.35451 66.6774 5.56245 68.734 8.47351L67.4409 9.53429C66.5069 8.19085 65.0854 7.59467 63.5292 7.70675C61.5262 7.85133 59.9602 9.27925 59.6467 11.2774C59.4306 12.65 59.7133 14.0373 60.6149 15.1079C62.3823 17.2067 65.9919 17.1758 67.5904 14.8073L67.5953 14.8106Z" style="animation-duration:0.239s;animation-delay:1.52s;"/></g>
+        <g transform="matrix(21.4244,0,0,21.4244,159.7371,1493.7798)"><path d="M77.1938 16.5793C78.6185 16.4802 79.7166 15.7281 80.5077 14.5666L81.8463 15.5575C80.2917 18.0787 77.0021 18.8162 74.3802 17.7229C72.1238 16.7823 70.6927 14.6462 70.6683 12.1997C70.6423 9.66227 72.1433 7.41887 74.5118 6.50917C77.1353 5.50199 80.3372 6.26712 81.8431 8.7282L80.5045 9.7175C79.5509 8.22624 77.9313 7.48385 76.1964 7.74214C73.4007 8.15801 71.963 10.9229 72.7216 13.5139C73.2951 15.473 75.1047 16.7255 77.1938 16.5793Z" style="animation-duration:0.192s;animation-delay:1.758s;"/></g>
+        <g transform="matrix(21.1117,0,0,21.1117,187.6102,1498.165)"><path fill-rule="evenodd" d="M95.3195 12.1418C95.3195 15.5289 92.5741 18.2759 89.1871 18.2759C85.8 18.2759 83.0547 15.5305 83.0547 12.1418C83.0547 8.75318 85.8 6.00781 89.1871 6.00781C92.5741 6.00781 95.3195 8.75318 95.3195 12.1418ZM89.0457 16.588C90.6621 16.6351 92.0819 15.87 92.8779 14.5136C93.7307 13.0629 93.7421 11.2532 92.9023 9.78634C92.0559 8.30969 90.4574 7.56893 88.7793 7.71189C87.1159 7.85322 85.7188 8.87501 85.1616 10.4556C84.749 11.6252 84.7734 12.8728 85.2477 14.0165C85.8878 15.5614 87.3206 16.5377 89.0457 16.588Z" style="animation-duration:0.13s;animation-delay:1.951s;"/></g>
+        <g transform="matrix(21.3701,0,0,21.3701,166.0349,1494.1099)"><path d="M106.678 18.0107L106.654 10.491L103.226 14.9697C103.031 15.0184 102.789 15.0298 102.574 14.9989L99.0997 10.4667L99.0819 17.9912H97.3047V6.11469C97.498 6.06758 97.7319 6.06433 97.9122 6.11469L102.886 12.7377L107.883 6.08869C108.067 6.0757 108.281 6.08545 108.447 6.11469V17.9896L106.676 18.0107H106.678Z" style="animation-duration:0.244s;animation-delay:2.175s;"/></g>
+        <g transform="matrix(21.3209,0,0,21.3209,172.9717,1494.4922)"><path d="M117.016 17.6127C114.777 18.9155 111.572 18.0578 110.289 15.7169L111.52 14.7715C111.951 15.2994 112.342 15.7689 112.904 16.1214C113.782 16.6705 114.859 16.807 115.796 16.3976C116.387 16.1393 116.724 15.613 116.767 15.0379C116.815 14.4044 116.482 13.8455 115.889 13.532C115.201 13.1698 114.509 12.8497 113.796 12.52C112.341 11.8507 110.923 10.9605 110.947 9.19954C110.96 8.2541 111.394 7.35739 112.211 6.78882C114.11 5.46812 117.183 6.01557 118.366 8.12089L117.135 9.06309C116.343 7.88372 114.995 7.36876 113.687 7.82524C113.132 8.02017 112.812 8.53676 112.771 9.04684C112.724 9.64952 113.026 10.1791 113.588 10.452L116.097 11.6704C116.844 12.0326 117.585 12.4582 118.067 13.1551C119.1 14.6415 118.556 16.716 117.016 17.6127Z" style="animation-duration:0.182s;animation-delay:2.418s;"/></g>
+                </svg>
+          <img class="brand-logo-img" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/kv/hero-logo.png" alt="RINGCOMS">
+        </div>
+      </div>
+      <div class="hero-scroll" id="heroScroll">
+        <div class="hero-scroll-line"></div>
+        <span>CLICK</span>
+      </div>
+    </div>
+  </div>
+  <!-- 커스텀 커서 + 화면 전환 오버레이 (fixed-ui 위까지 덮어야 하므로 pc-hero 밖) -->
+  <div class="hero-cursor" id="heroCursor" aria-hidden="true"></div>
+  <div class="hero-cursor-follower" id="heroFollower" aria-hidden="true"></div>
+  <div class="hero-transition" id="heroTransition" aria-hidden="true"></div>
+
+  </div><!-- /.pc-stage -->
+
+  <!-- Vision 카드 → 풀스크린 전환 오버레이: 확대되는 동안 영상이 재생되도록 video 사용
+       (panel-brand-film 의 영상과 동일 소스/포스터 → 확대 완료 후 패널 영상으로 자연스럽게 이어짐) -->
+  <div id="brandTransitionOverlay" class="brand-transition-overlay">
+    <!-- TODO: 실제 브랜드 필름 클립으로 교체. 현재는 데모용 임시 영상(로컬 샘플). -->
+    <video class="brand-overlay-video" id="brandOverlayVideo"
+           muted loop playsinline preload="none"
+           poster="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/vision/main.jpg">
+      <source src="https://staticfile-three.vercel.app/frontuser/frontringcoms/files/index.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- SKINEGO 제품 라인업 팝업 -->
+  <div class="skinego-popup" id="skinegoPopup" aria-hidden="true">
+    <div class="skinego-popup-dim" data-skinego-close></div>
+    <div class="skinego-popup-box" role="dialog" aria-modal="true" aria-labelledby="skinegoPopupTitle">
+      <button class="skinego-popup-x" type="button" data-skinego-close aria-label="닫기">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <div class="skinego-slides">
+
+        <!-- 1페이지 : 브랜드 인트로 -->
+        <section class="skinego-slide is-active" data-slide="0">
+          <header class="skinego-pop-head">
+            <h2 class="skinego-pop-title" id="skinegoPopupTitle">SKINEGO <span>스킨에고</span></h2>
+            <p class="skinego-pop-tagline">피부에 수분 광채를 채우고 콜라겐을 생성해, 피부에 탄력감을 부여하는 스킨에고의 슬로에이징 라인</p>
+          </header>
+          <div class="skinego-hero">
+            <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/cosmetics/skinego-hero.png" alt="SKINEGO SUPER GLOW DEEP COLLAGEN 제품 라인업">
+          </div>
+        </section>
+
+        <!-- 2페이지 : 제품 라인업 -->
+        <section class="skinego-slide" data-slide="1">
+          <header class="skinego-pop-head">
+            <h2 class="skinego-pop-title">SUPER GLOW DEEP COLLAGEN <span>Line up</span></h2>
+            <p class="skinego-pop-tagline">탄력과 윤기를 잃은 오늘의 피부를, 촉촉하게 차오르는 탄력광으로</p>
+          </header>
+
+          <div class="skinego-pop-grid">
+
+        <article class="skinego-prod">
+          <div class="skinego-prod-img">
+            <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/cosmetics/skinego-serum.png" alt="SKINEGO 버블 세럼">
+          </div>
+          <h3 class="skinego-prod-kr">버블 세럼 <span class="skinego-prod-sep">I</span> 콜라겐 글로우 부스트</h3>
+          <p class="skinego-prod-en">SUPER GLOW DEEP COLLAGEN<br>BUBBLE SERUM</p>
+          <p class="skinego-prod-desc">풍성한 마이크로 콜라겐 버블제형으로<br>피부에 광채와 탄력감을 부여하는 버블 세럼</p>
+          <div class="skinego-prod-tags">
+            <span class="skinego-tag">#미백광채</span>
+            <span class="skinego-tag">#탄력케어</span>
+          </div>
+        </article>
+
+        <article class="skinego-prod">
+          <div class="skinego-prod-img">
+            <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/cosmetics/skinego-cream.png" alt="SKINEGO PDRN 크림">
+          </div>
+          <h3 class="skinego-prod-kr">PDRN 크림 <span class="skinego-prod-sep">I</span> 수딩 핑크 글로우 케어</h3>
+          <p class="skinego-prod-en">SUPER GLOW DEEP COLLAGEN<br>PDRN CREAM</p>
+          <p class="skinego-prod-desc">PDRN과 TECA-SX™를 담아<br>예민해진 피부를 편안하게 케어하고<br>매끈한 핑크빛 피부결을 완성하는 크림</p>
+          <div class="skinego-prod-tags">
+            <span class="skinego-tag">#진정효과</span>
+            <span class="skinego-tag">#핑크빛화잘먹</span>
+          </div>
+        </article>
+
+        <article class="skinego-prod">
+          <div class="skinego-prod-img">
+            <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/cosmetics/skinego-mask.png" alt="SKINEGO 하이드로겔 마스크">
+          </div>
+          <h3 class="skinego-prod-kr">하이드로겔 마스크 <span class="skinego-prod-sep">I</span> 인텐시브 앰플 충전</h3>
+          <p class="skinego-prod-en">SUPER GLOW DEEP COLLAGEN<br>HYDROGEL MASK</p>
+          <p class="skinego-prod-desc">히알루론산과 콜라겐이 함유된<br>42g 고농축 앰플을 그대로 굳힌 겔 마스크</p>
+          <div class="skinego-prod-tags">
+            <span class="skinego-tag">#수분광채</span>
+            <span class="skinego-tag">#탄력케어</span>
+          </div>
+        </article>
+
+          </div>
+        </section>
+
+      </div>
+
+      <!-- 페이지 네비게이션 -->
+      <div class="skinego-pop-nav">
+        <button class="skinego-nav-btn" type="button" data-skinego-prev aria-label="이전 페이지">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 5L8 12L15 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="skinego-dots">
+          <button class="skinego-dot is-active" type="button" data-skinego-goto="0" aria-label="1페이지로 이동"></button>
+          <button class="skinego-dot" type="button" data-skinego-goto="1" aria-label="2페이지로 이동"></button>
+        </div>
+        <button class="skinego-nav-btn" type="button" data-skinego-next aria-label="다음 페이지">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 5L16 12L9 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/vendor/gsap.min.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/menu.js"></script>
+  <script src="/js/press_main.js"></script>
+  <script src="/js/privacy.js"></script>
+  <!-- 푸터부터는 스냅 경계 없이 자유 스크롤(위로 나갈 땐 컨택트 하단 경계에 정착) -->
+  <script>window.MO_SNAP_FREE_TAIL = '.mo-footer';</script>
+  <script src="/js/mo-snap.js"></script>
+  <script src="/js/hero_kv.js"></script>
+  <!-- 강제 다크모드(삼성) 방어: 밝은 배경/사진을 canvas 로 재도색 (실기기 테스트 근거: /css/darktest.html) -->
+  <script src="/js/fd-canvas.js"></script>
+</body>
+</html>

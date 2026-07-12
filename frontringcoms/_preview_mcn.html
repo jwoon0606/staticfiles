@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RINGCOMS - MCN</title>
+  <link rel="icon" type="image/svg+xml" href="https://staticfile-three.vercel.app/frontuser/frontringcoms/favicon.svg">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/mcn.css?v=4">
+  <link rel="stylesheet" href="/css/menu.css">
+  <script>
+    /* 1920×1080 데스크탑 프레임을 뷰포트에 맞춰 축소 — 잘림 방지 */
+    (function () {
+      function applyScale() {
+        var root = document.documentElement;
+        if (window.innerWidth <= 768) {        /* 모바일은 .mo-root(별도 반응형) 사용 */
+          root.style.setProperty('--mcn-scale', '1');
+          root.style.setProperty('--mcn-x', '0px');
+          root.style.setProperty('--chrome-scale', '1');
+          root.style.setProperty('--mcn-vclip', '0px');
+          return;
+        }
+        /* 가로폭 맞춤(width-fit): 가로폭을 100% 채우고 세로는 스크롤.
+           좌우 여백(레터박스) 완전 제거 — 1920 초과 화면에서도 확대해 폭을 꽉 채운다. */
+        var scale = window.innerWidth / 1920;
+        root.style.setProperty('--mcn-scale', scale);
+        /* 1920 초과 화면에서만 가로 중앙 정렬 (그 이하에선 폭을 꽉 채우므로 0) */
+        root.style.setProperty('--mcn-x', ((window.innerWidth - 1920 * scale) / 2) + 'px');
+        /* GNB 햄버거 / 우측 CTA(문의·지원) 는 메인과 동일하게 contain 스케일로 축소 */
+        root.style.setProperty('--chrome-scale', Math.min(window.innerWidth / 1920, window.innerHeight / 1080));
+        /* 세로가 16:9보다 짧을 때, 섹션(1080) 하단이 폴드 아래로 잘리는 양(프레임 px).
+           히어로처럼 하단 고정 텍스트를 이만큼 위로 올려 첫 화면에서 안 잘리게 한다. */
+        root.style.setProperty('--mcn-vclip', Math.max(0, 1080 - window.innerHeight / scale) + 'px');
+      }
+      applyScale();
+      window.addEventListener('resize', applyScale);
+    })();
+  </script>
+</head>
+<body>
+
+  <div class="mcn-container" id="mcnContainer">
+
+    <!-- ══════════════════════════════════════════════════════
+         SLIDE 1  –  mcn-1  OUR VISION
+    ═══════════════════════════════════════════════════════ -->
+    <div class="mcn-slide mcn-1">
+      <div class="mcn">
+
+        <!-- Bottom image (888 × 480px at left:516, top:600) -->
+        <div class="mcn1-bottom-img"></div>
+
+        <!-- Text frame: "It's Not Easy, But We Go Together" -->
+        <div class="mcn1-text-frame">
+          <p class="mcn1-heading">It's Not Easy,<br>But We Go Together</p>
+          <p class="mcn1-subheading">"쉽지 않아도, 같이가요"</p>
+        </div>
+
+        <!-- GNB 로고는 .gnb-logo-float(컨테이너 밖, 상단 고정)로 분리됨 -->
+        <div class="mcn-gnb" style="display:none">
+          <div class="mcn-logo-bar">
+            <a class="mcn-logo" href="/main" aria-label="RINGCOMS 홈">
+              <svg width="120" height="24" viewBox="0 0 240 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_mcn_logo)">
+<path d="M29.8818 13.6003C28.2313 7.33959 22.0551 3.25891 15.6579 3.98992C9.22822 4.72094 3.90644 10.1045 3.89669 16.781L3.84471 46.6454L-0.0507812 46.6584L0.00445091 16.6446C0.0239446 7.23563 8.08784 -0.0452734 17.2109 0.00021195C26.4964 0.0456973 34.0567 7.45006 34.3199 16.7031C34.583 25.9138 27.4483 33.8608 17.9744 34.3774C20.0992 42.1131 28.6407 46.1808 35.9833 43.0066C43.3097 39.8389 46.341 30.9465 42.1239 23.932L45.4443 21.8819C50.9318 30.8912 47.0233 42.5712 37.4778 46.6162C27.6823 50.7683 16.6163 45.1639 14.0854 34.9849C11.5057 24.6208 18.7574 14.3086 29.8818 13.5938V13.6003ZM30.4049 17.5218C23.163 17.707 17.5975 23.5779 17.4936 30.4916C24.6218 30.235 30.2359 24.5428 30.4049 17.5218Z" fill="white"/>
+<path d="M213.348 36.0292L213.299 20.9899L206.444 29.9472C206.054 30.0447 205.57 30.0674 205.141 30.0057L198.192 20.9411L198.156 35.9903H194.602V12.2372C194.988 12.143 195.456 12.1365 195.817 12.2372L205.765 25.4832L215.759 12.1852C216.126 12.1592 216.555 12.1787 216.886 12.2372V35.987L213.345 36.0292H213.348Z" fill="white"/>
+<path d="M190.631 24.2915C190.631 31.0655 185.14 36.5595 178.366 36.5595C171.592 36.5595 166.102 31.0688 166.102 24.2915C166.102 17.5142 171.592 12.0234 178.366 12.0234C185.14 12.0234 190.631 17.5142 190.631 24.2915ZM178.084 33.1839C181.316 33.2781 184.156 31.7478 185.748 29.0349C187.454 26.1336 187.476 22.5143 185.797 19.5805C184.104 16.6272 180.907 15.1457 177.551 15.4316C174.224 15.7142 171.43 17.7578 170.315 20.9191C169.49 23.2583 169.539 25.7535 170.488 28.0408C171.768 31.1305 174.633 33.0831 178.084 33.1839Z" fill="white"/>
+<path d="M135.171 29.6212L135.207 26.8921L127.932 26.8758L127.906 23.7601L138.761 23.7471L138.748 30.3132C136.428 34.2802 132.224 36.4537 127.666 36.4245C122.604 36.392 118.078 33.3412 116.304 28.8349C114.381 23.9453 115.674 18.4838 119.612 15.1114C124.758 10.709 133.335 11.1249 137.448 16.947L134.862 19.0686C132.994 16.3817 130.151 15.1893 127.039 15.4135C123.033 15.7027 119.901 18.5585 119.274 22.5547C118.842 25.3001 119.407 28.0747 121.21 30.2157C124.745 34.4134 131.964 34.3516 135.161 29.6147L135.171 29.6212Z" fill="white"/>
+<path d="M111.529 36.2049C111.304 36.4778 110.541 36.5622 110.307 36.2958L95.8134 19.8009L95.7809 35.9904L92.2266 35.9839V12.2471C92.5352 12.1399 93.2695 12.0392 93.4937 12.2861L107.938 28.6868L107.977 12.5558H111.529V36.2016V36.2049Z" fill="white"/>
+<path d="M66.4736 23.8188L70.6648 23.6953C72.9325 23.6304 74.4433 21.7915 74.3783 19.5659C74.3198 17.5093 72.9098 15.7549 70.7362 15.7354L64.1181 15.6704L64.1116 35.9829L60.5508 36.0056V12.5547H70.4601C71.6817 12.5547 72.8481 12.8828 73.9462 13.289C76.5389 14.4033 78.0171 16.8108 78.0431 19.5919C78.0724 22.6199 76.3927 25.2548 73.4101 26.3107L80.3791 35.9016C79.0308 36.0673 77.7702 36.0316 76.3862 35.9894L66.4704 23.8188H66.4736Z" fill="white"/>
+<path d="M154.403 33.1664C157.253 32.9682 159.449 31.4639 161.031 29.1409L163.708 31.1228C160.599 36.1652 154.02 37.6402 148.776 35.4537C144.263 33.5725 141.401 29.3001 141.352 24.4072C141.3 19.3324 144.302 14.8456 149.039 13.0261C154.286 11.0118 160.69 12.542 163.702 17.4642L161.025 19.4428C159.117 16.4603 155.878 14.9755 152.408 15.4921C146.817 16.3238 143.942 21.8535 145.459 27.0356C146.606 30.9539 150.225 33.4588 154.403 33.1664Z" fill="white"/>
+<path d="M234.028 35.2293C229.551 37.835 223.141 36.1195 220.574 31.4378L223.037 29.5469C223.898 30.6028 224.681 31.5417 225.805 32.2468C227.559 33.3449 229.714 33.6178 231.588 32.7991C232.771 32.2825 233.443 31.2298 233.531 30.0797C233.625 28.8126 232.959 27.695 231.773 27.0679C230.399 26.3434 229.015 25.7034 227.589 25.0438C224.678 23.7053 221.841 21.9249 221.89 18.403C221.916 16.5121 222.784 14.7187 224.418 13.5815C228.216 10.9402 234.363 12.035 236.728 16.2457L234.265 18.1301C232.683 15.7713 229.986 14.7414 227.371 15.6544C226.26 16.0443 225.62 17.0774 225.539 18.0976C225.444 19.303 226.049 20.3621 227.173 20.9079L232.189 23.3446C233.684 24.0692 235.165 24.9204 236.13 26.3142C238.197 29.287 237.108 33.4359 234.028 35.2293Z" fill="white"/>
+<path d="M86.8968 12.5312H83.3359V36.0147H86.8968V12.5312Z" fill="white"/>
+<path d="M40.0706 21.0319C41.4774 21.0319 42.6178 19.8914 42.6178 18.4847C42.6178 17.0779 41.4774 15.9375 40.0706 15.9375C38.6638 15.9375 37.5234 17.0779 37.5234 18.4847C37.5234 19.8914 38.6638 21.0319 40.0706 21.0319Z" fill="white"/>
+</g>
+<defs>
+<clipPath id="clip0_mcn_logo">
+<rect width="240" height="48" fill="white"/>
+</clipPath>
+</defs>
+              </svg>
+            </a>
+          </div>
+          <!-- 햄버거/한영 버튼은 스크롤해도 고정되도록 컨테이너 밖(.gnb-float)으로 분리됨 -->
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         SLIDE 2  –  mcn-2  OUR VISION DESCRIPTION
+    ═══════════════════════════════════════════════════════ -->
+    <div class="mcn-slide mcn-2">
+      <div class="mcn">
+
+        <p class="mcn2-text">성장의 무게를 나누고, 브랜드의 가치를 곱합니다.<br>
+링컴즈 MCN 사업부는 크리에이터를<br>
+단순한 수익 창출 수단이 아닌, 미래를 함께 설계하는<br>
+'전략적 동료'로 바라봅니다.<br>
+<span>소속 크리에이터가 세상에 주는 영향력의 가치를 키우는것,<br>
+그것이 진정한 우리의 목표 입니다.</span></p>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         SLIDE 6  –  mcn-6  CREATOR
+    ═══════════════════════════════════════════════════════ -->
+    <div class="mcn-slide mcn-6">
+      <div class="mcn">
+
+        <!-- Title block -->
+        <div class="mcn6-tit">
+          <span class="mcn6-label">CREATOR</span>
+          <p class="mcn6-heading">다양한 크리에이터와 함께 트렌드를 만들어가고,<br>
+콘텐츠를 통해 팬과 브랜드를 연결합니다.</p>
+        </div>
+
+        <!-- CTA button -->
+        <!-- 떠나기 전 복귀 앵커를 #creator 로 고정 → 뒤로가기 시 apply 가 아니라 creator 섹션으로 복귀 -->
+        <button class="mcn6-btn" onclick="history.replaceState(null,'','#creator');location.href='/main#contact'">크리에이터 협업 문의하기</button>
+
+        <!-- Creator list: filter bar + grid + view-all button -->
+        <div class="mcn6-list">
+
+          <!-- Filter bar: 구분 탭(좌) + 활동 플랫폼 필터(우) (백엔드 연동 예정) -->
+          <div class="mcn6-filter">
+            <!-- 구분 탭: 어드민 분류 기준대로 노출 (백엔드 연동 예정) -->
+            <div class="mcn6-cat" role="tablist" aria-label="크리에이터 구분">
+              <button class="mcn6-cat-item is-active" type="button" data-category="all">전체</button>
+              <button class="mcn6-cat-item" type="button" data-category="streamer">스트리머</button>
+              <button class="mcn6-cat-item" type="button" data-category="creator">크리에이터</button>
+            </div>
+            <!-- 활동 플랫폼 필터 (백엔드 연동 예정) -->
+            <div class="mcn6-platform" role="tablist" aria-label="활동 플랫폼 필터">
+              <button class="mcn6-plat-item is-active" type="button" data-platform="all">전체</button>
+              <button class="mcn6-plat-item" type="button" data-platform="youtube">유튜브</button>
+              <button class="mcn6-plat-item" type="button" data-platform="soop">SOOP</button>
+              <button class="mcn6-plat-item" type="button" data-platform="chzzk">치지직</button>
+              <button class="mcn6-plat-item" type="button" data-platform="instagram">인스타</button>
+              <button class="mcn6-plat-item" type="button" data-platform="tiktok">틱톡</button>
+              <button class="mcn6-plat-item" type="button" data-platform="etc">기타</button>
+            </div>
+          </div>
+
+          <!-- Creator grid: wraps 3 per row, up to 16 cards (백엔드 연동 예정) -->
+          <div class="mcn6-grid">
+
+            <div class="mcn6-card" data-category="creator" data-platform="instagram">
+              <div class="mcn6-img mcn6-img-1"></div>
+              <div class="mcn6-txt">
+                <p class="mcn6-name">Aesther</p>
+                <div class="mcn6-sns">
+                  <span class="mcn6-sns-link">Instagram</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mcn6-card" data-category="creator" data-platform="instagram">
+              <div class="mcn6-img mcn6-img-2"></div>
+              <div class="mcn6-txt">
+                <p class="mcn6-name">Yoonju</p>
+                <div class="mcn6-sns">
+                  <span class="mcn6-sns-link">Instagram</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mcn6-card" data-category="streamer" data-platform="instagram">
+              <div class="mcn6-img mcn6-img-3"></div>
+              <div class="mcn6-txt">
+                <p class="mcn6-name">Heeseo</p>
+                <div class="mcn6-sns">
+                  <span class="mcn6-sns-link">Instagram</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mcn6-card" data-category="creator" data-platform="instagram etc">
+              <div class="mcn6-img mcn6-img-4"></div>
+              <div class="mcn6-txt">
+                <p class="mcn6-name">Choo Yukyung</p>
+                <div class="mcn6-sns">
+                  <span class="mcn6-sns-link">Instagram</span>
+                  <span class="mcn6-sns-sep">I</span>
+                  <span class="mcn6-sns-link">Threads</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mcn6-card" data-category="streamer" data-platform="instagram youtube">
+              <div class="mcn6-img mcn6-img-5"></div>
+              <div class="mcn6-txt">
+                <p class="mcn6-name">Rael</p>
+                <div class="mcn6-sns">
+                  <span class="mcn6-sns-link">Instagram</span>
+                  <span class="mcn6-sns-sep">I</span>
+                  <span class="mcn6-sns-link mcn6-sns-underline">YouTube</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mcn6-card" data-category="creator" data-platform="instagram">
+              <div class="mcn6-img mcn6-img-6"></div>
+              <div class="mcn6-txt">
+                <p class="mcn6-name">Lee Naahyun</p>
+                <div class="mcn6-sns">
+                  <span class="mcn6-sns-link">Instagram</span>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /.mcn6-grid -->
+
+          <!-- 전체보기 버튼 (6명 초과 시 노출, 클릭하면 나머지 모두 표시) -->
+          <button class="mcn6-more" type="button">
+            <span class="mcn6-more-txt">전체보기</span>
+            <span class="mcn6-more-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 3.333V12.667M3.333 8H12.667" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </span>
+          </button>
+
+        </div><!-- /.mcn6-list -->
+
+      </div>
+    </div><!-- /.mcn-6 -->
+
+    <!-- ══════════════════════════════════════════════════════
+         SLIDE 3  –  mcn-3  AD BUSINESS
+    ═══════════════════════════════════════════════════════ -->
+    <div class="mcn-slide mcn-3">
+      <div class="mcn">
+
+        <!-- Left: title block -->
+        <div class="mcn3-tit">
+          <span class="mcn3-label">AD BUSINESS</span>
+          <div class="mcn3-title-frame">
+            <p class="mcn3-main-title">Sustainable AD Strategy</p>
+            <p class="mcn3-sub-title">"단기 수익보다는 지속 가능한 가치"</p>
+          </div>
+        </div>
+
+        <!-- Right: list — 각 챕터 마우스 오버 시 하단 문구 노출 (기본 활성: 01) -->
+        <div class="mcn3-list">
+
+          <!-- Item 01 -->
+          <div class="mcn3-item">
+            <div class="mcn3-item-row">
+              <span class="mcn3-num">01</span>
+              <span class="mcn3-title">Creator-centric AD</span>
+            </div>
+            <div class="mcn3-desc-wrap">
+              <p class="mcn3-desc">크리에이터와 채널의 아이덴티티를 해치는 소액 협찬은 거절하고,<br>
+크리에이터의 브랜드 가치를 보호합니다.</p>
+            </div>
+          </div>
+
+          <div class="mcn3-divider"></div>
+
+          <!-- Item 02 -->
+          <div class="mcn3-item">
+            <div class="mcn3-item-row">
+              <span class="mcn3-num">02</span>
+              <span class="mcn3-title">AD Business Model Design</span>
+            </div>
+            <div class="mcn3-desc-wrap">
+              <p class="mcn3-desc">고부가가치 광고 비즈니스 모델을 지향하여 압도적이고<br>
+안정적인 광고 비즈니스 모델을 설계합니다.</p>
+            </div>
+          </div>
+
+          <div class="mcn3-divider"></div>
+
+          <!-- Item 03 -->
+          <div class="mcn3-item">
+            <div class="mcn3-item-row">
+              <span class="mcn3-num">03</span>
+              <span class="mcn3-title">Authentic Connection</span>
+            </div>
+            <div class="mcn3-desc-wrap">
+              <p class="mcn3-desc">브랜드와 크리에이터가 윈윈하는 ‘진정성 있는 협업’ 을<br>
+연결합니다.</p>
+            </div>
+          </div>
+
+        </div><!-- /.mcn3-list -->
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         SLIDE 4  –  mcn-4  CONTENTS PRODUCTION (horizontal)
+    ═══════════════════════════════════════════════════════ -->
+    <div class="mcn-slide mcn-4" id="mcn4Slide">
+      <div class="prod-stage">
+
+        <!-- Title block -->
+        <div class="mcn4-tit">
+          <span class="mcn4-label">CONTENTS PRODUCTION</span>
+          <div class="mcn4-title-frame">
+            <p class="mcn4-main-title">Data-Driven Creative</p>
+            <p class="mcn4-sub-title">"데이터로 증명하는 제작 능력"</p>
+          </div>
+        </div>
+
+        <!-- 3가지 항목을 한 화면에 카드로 나열 -->
+        <div class="prod-cards">
+
+          <div class="prod-card">
+            <div class="prod-card-img-wrap prod-bg-1">
+              <div class="prod-card-img prod-card-img-1"></div>
+            </div>
+            <p class="prod-card-title">Growth Hack</p>
+            <p class="prod-card-desc">데이터 기반 분석으로 평균 3,000뷰 채널을 100만뷰 메가 콘텐츠로 전환시킵니다.</p>
+          </div>
+
+          <div class="prod-card">
+            <div class="prod-card-img-wrap prod-bg-2">
+              <div class="prod-card-img prod-card-img-2"></div>
+            </div>
+            <p class="prod-card-title">1:1 Exclusive PD</p>
+            <p class="prod-card-desc">전담 PD가 컨셉 설계부터 촬영 디렉팅까지 전 과정을 밀착 서포트합니다.</p>
+          </div>
+
+          <div class="prod-card">
+            <div class="prod-card-img-wrap prod-bg-3">
+              <div class="prod-card-img prod-card-img-3"></div>
+            </div>
+            <p class="prod-card-title">Multi-Channel</p>
+            <p class="prod-card-desc">유튜브, 틱톡, 릴스 3개 플랫폼을 동시에 공략하는 성장 전략을 제공합니다.</p>
+          </div>
+
+        </div><!-- /.prod-cards -->
+
+      </div><!-- /.prod-stage -->
+    </div><!-- /.mcn-4 -->
+
+    <!-- ══════════════════════════════════════════════════════
+         SLIDE 5  –  mcn-5  STUDIO / CREATIVE PLAYGROUND
+    ═══════════════════════════════════════════════════════ -->
+    <div class="mcn-slide mcn-5">
+      <div class="mcn">
+
+        <!-- Title block -->
+        <div class="mcn5-tit">
+          <span class="mcn5-label">STUDIO</span>
+          <div class="mcn5-title-frame">
+            <p class="mcn5-main-title">Creative Playground</p>
+            <p class="mcn5-sub-title">"몸만 오세요. 세팅은 되어있습니다"</p>
+          </div>
+        </div>
+
+        <!-- Studio 3단 카드 — 한 화면에 모두 노출 -->
+        <div class="mcn5-cards">
+
+          <div class="mcn5-con mcn5-con-1">
+            <div class="mcn5-img mcn5-img-1"></div>
+            <div class="mcn5-txt">
+              <p class="mcn5-card-title">40평형<br>올인원 스튜디오</p>
+              <p class="mcn5-card-desc">장소 섭외 스트레스 끝! 링컴즈 크리에이터라면<br>
+언제든 즉시 촬영 가능합니다.</p>
+            </div>
+          </div>
+
+          <div class="mcn5-con mcn5-con-2">
+            <div class="mcn5-img mcn5-img-2"></div>
+            <div class="mcn5-txt">
+              <p class="mcn5-card-title">취향저격<br>컨셉존</p>
+              <p class="mcn5-card-desc mcn5-card-desc-tall">거실존 &amp; 자취방존: 편안한 토크와 일상 브이로그 최적화<br>
+주방존: 쿡방, 먹방도 고퀄리티 조명 아래에서!<br>
+파우더룸: 뷰티 및 언박싱 콘텐츠의 성지</p>
+            </div>
+          </div>
+
+          <div class="mcn5-con mcn5-con-3">
+            <div class="mcn5-img mcn5-img-3"></div>
+            <div class="mcn5-txt">
+              <p class="mcn5-card-title">크리에이터의<br>시간은 소중하니까</p>
+              <p class="mcn5-card-desc">주 1회 방문만으로 일주일치 콘텐츠 뽑아내기.<br>
+링컴즈 스튜디오에선 가능합니다.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div><!-- /.mcn-5 -->
+
+    <!-- ══════════════════════════════════════════════════════
+         SLIDE 7  –  mcn-7  APPLY (Creator Application)
+    ═══════════════════════════════════════════════════════ -->
+    <div class="mcn-slide mcn-7">
+      <div class="mcn">
+
+        <!-- Background image -->
+        <div class="mcn7-bg"></div>
+
+        <!-- Left text block -->
+        <div class="mcn7-tit">
+          <span class="mcn7-apply-label">APPLY</span>
+          <p class="mcn7-heading">당신의 무대가 어디든,<br>더 넓은 세상으로 연결해 드릴게요.<br>지금 링컴즈와 함께하세요.</p>
+        </div>
+
+        <!-- Right white form container -->
+        <div class="mcn7-container">
+
+          <!-- Field 03: 이름 -->
+          <div class="mcn7-field mcn7-f-name">
+            <div class="mcn7-flabel">
+              <span class="mcn7-flabel-txt">이름</span>
+              <div class="mcn7-dot-wrap"><div class="mcn7-dot"></div></div>
+            </div>
+            <input class="mcn7-input" type="text" placeholder="이름을 작성해주세요.">
+          </div>
+
+          <!-- Field 4: 생년월일 -->
+          <div class="mcn7-field mcn7-f-birth">
+            <div class="mcn7-flabel">
+              <span class="mcn7-flabel-txt">생년월일</span>
+              <div class="mcn7-dot-wrap"><div class="mcn7-dot"></div></div>
+            </div>
+            <input class="mcn7-input mcn7-input-birth" type="text" placeholder="YYMMDD">
+          </div>
+
+          <!-- Field 5: 성별 -->
+          <div class="mcn7-field mcn7-f-gender">
+            <div class="mcn7-flabel">
+              <span class="mcn7-flabel-txt">성별</span>
+              <div class="mcn7-dot-wrap"><div class="mcn7-dot"></div></div>
+            </div>
+            <div class="mcn7-gender">
+              <button class="mcn7-gender-btn mcn7-gender-left">남성</button>
+              <button class="mcn7-gender-btn mcn7-gender-right">여성</button>
+            </div>
+          </div>
+
+          <!-- Field 6: 연락처 -->
+          <div class="mcn7-field mcn7-f-contact">
+            <div class="mcn7-flabel">
+              <span class="mcn7-flabel-txt">연락처</span>
+              <div class="mcn7-dot-wrap"><div class="mcn7-dot"></div></div>
+            </div>
+            <input class="mcn7-input" type="tel" placeholder="연락 가능한 번호를 작성해주세요.">
+          </div>
+
+          <!-- Field 7: 이메일 -->
+          <div class="mcn7-field mcn7-f-email">
+            <div class="mcn7-flabel">
+              <span class="mcn7-flabel-txt">이메일</span>
+              <div class="mcn7-dot-wrap"><div class="mcn7-dot"></div></div>
+            </div>
+            <input class="mcn7-input" type="email" placeholder="이메일 주소를 작성해주세요.">
+          </div>
+
+          <!-- Field 8: 운영 중인 플랫폼 -->
+          <div class="mcn7-field mcn7-f-platform">
+            <div class="mcn7-flabel">
+              <span class="mcn7-flabel-txt">운영 중인 플랫폼</span>
+            </div>
+
+            <!-- Row 1: Instagram -->
+            <div class="mcn7-prow">
+              <div class="mcn7-pselect">
+                <span class="mcn7-pname">Instagram</span>
+                <svg class="mcn7-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M6 9L12 15L18 9" stroke="#D9D9D9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="mcn7-purl-wrap">
+                <input class="mcn7-purl" type="url" placeholder="운영 중인 플랫폼의 url을 입력해주세요.">
+                <button class="mcn7-padd">
+                  <div class="mcn7-plus">
+                    <div class="mcn7-plus-h"></div>
+                    <div class="mcn7-plus-v"></div>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+          </div><!-- /.mcn7-f-platform -->
+
+          <!-- Field 9: 자기소개 -->
+          <div class="mcn7-field mcn7-f-bio">
+            <div class="mcn7-flabel">
+              <span class="mcn7-flabel-txt">자기소개</span>
+              <div class="mcn7-dot-wrap"><div class="mcn7-dot"></div></div>
+            </div>
+            <textarea class="mcn7-textarea" placeholder="자기소개를 작성해주세요."></textarea>
+          </div>
+
+          <!-- 이용 동의 -->
+          <div class="mcn7-terms">
+            <div class="mcn7-chkbox">
+              <div class="mcn7-chk-inner"></div>
+            </div>
+            <div class="mcn7-terms-body">
+              <div class="mcn7-terms-row">
+                <span class="mcn7-terms-main">개인정보 수집 및 이용 동의 (필수</span>
+                <div class="mcn7-dot-sm-wrap"><div class="mcn7-dot-sm"></div></div>
+                <span class="mcn7-terms-main">)</span>
+                <button type="button" class="mcn7-terms-detail">자세히보기</button>
+              </div>
+              <p class="mcn7-terms-sub">개인정보 수집 및 이용약관에 동의하셔야 접수가 가능합니다.</p>
+            </div>
+
+            <!-- 자세히보기: 개인정보 수집·이용 동의서 전문 -->
+            <div class="mcn7-terms-detail-box">
+              <p class="mcn7-terms-detail-title">개인정보 수집·이용에 관한 동의서</p>
+              <p class="mcn7-terms-detail-p">주식회사 링컴즈(이하 "회사")는 크리에이터 지원 접수를 위해 아래와 같이 개인정보를 수집·이용합니다. 내용을 확인하신 후 동의 여부를 선택하여 주시기 바랍니다.</p>
+              <p class="mcn7-terms-detail-h">1. 수집하는 개인정보 항목</p>
+              <p class="mcn7-terms-detail-li">· 수집항목 : 이름, 연락처(휴대전화번호), 생년월일, 성별, 이메일 주소, SNS 계정 링크, 자기소개, 쿠키</p>
+              <p class="mcn7-terms-detail-li">· 개인정보 수집방법 : 홈페이지 (크리에이터 지원하기)</p>
+              <p class="mcn7-terms-detail-h">2. 개인정보의 수집 및 이용목적</p>
+              <p class="mcn7-terms-detail-li">· 지원자 본인 확인 및 지원자 심사, 미팅·면담 일정 안내 및 합격 여부 통보 및 계약 검토</p>
+              <p class="mcn7-terms-detail-h">3. 개인정보의 보유 및 이용기간</p>
+              <p class="mcn7-terms-detail-li">· 수집일로부터 2년 이내 파기합니다. 단, 지원자가 파기를 요청하는 경우 즉시 파기합니다.</p>
+              <p class="mcn7-terms-detail-li">· 관계 법령에 따라 보존이 필요한 경우 해당 기간 동안 보관합니다.</p>
+              <p class="mcn7-terms-detail-h">4. 동의 거부 시 불이익 안내</p>
+              <p class="mcn7-terms-detail-li">· 필수 항목에 대한 동의를 거부하실 수 있으나, 이 경우 지원 접수가 불가합니다.</p>
+            </div>
+          </div>
+
+        </div><!-- /.mcn7-container -->
+
+      </div>
+    </div><!-- /.mcn-7 -->
+
+    <!-- Footer (Figma 452:2482) -->
+    <footer class="mcn-footer">
+      <div class="mcn-footer-logo">
+        <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/footer/logo.svg" alt="RINGCOMS">
+      </div>
+      <div class="mcn-footer-email">
+        <p>E. ringcoms@ringcoms.com</p>
+        <p>H. www.ringcoms.com</p>
+      </div>
+      <div class="mcn-footer-contact mcn-footer-office">
+        <p class="mcn-footer-label">Head Office.</p>
+        <p class="mcn-footer-addr">서울특별시 강남구 도산대로165,<br>신사힐빌딩12층</p>
+      </div>
+      <div class="mcn-footer-contact mcn-footer-rnd">
+        <p class="mcn-footer-label">R&amp;D Center I Studio.</p>
+        <p class="mcn-footer-addr">경기도 화성시 동탄첨단산업1로 27,<br>금강펜테리움IX타워 A동 3401~3405호</p>
+      </div>
+      <a class="mcn-footer-privacy" href="#">개인정보처리방침</a>
+      <p class="mcn-footer-copy">Copyright © 2026 RINGCOMS. All Rights Reserved.</p>
+    </footer>
+
+  </div><!-- /.mcn-container -->
+
+  <!-- ============================================================
+       좌상단 로고 바 — 스케일 컨테이너 밖에 두어 스크롤과 무관하게
+       상단에 항상 고정. 클릭하면 메인 페이지로 이동. (데스크탑 전용)
+       ============================================================ -->
+  <div class="gnb-logo-float">
+    <a class="gnb-logo-link" href="/main" aria-label="RINGCOMS 홈">
+      <svg width="120" height="24" viewBox="0 0 240 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_logobar)">
+<path d="M29.8818 13.6003C28.2313 7.33959 22.0551 3.25891 15.6579 3.98992C9.22822 4.72094 3.90644 10.1045 3.89669 16.781L3.84471 46.6454L-0.0507812 46.6584L0.00445091 16.6446C0.0239446 7.23563 8.08784 -0.0452734 17.2109 0.00021195C26.4964 0.0456973 34.0567 7.45006 34.3199 16.7031C34.583 25.9138 27.4483 33.8608 17.9744 34.3774C20.0992 42.1131 28.6407 46.1808 35.9833 43.0066C43.3097 39.8389 46.341 30.9465 42.1239 23.932L45.4443 21.8819C50.9318 30.8912 47.0233 42.5712 37.4778 46.6162C27.6823 50.7683 16.6163 45.1639 14.0854 34.9849C11.5057 24.6208 18.7574 14.3086 29.8818 13.5938V13.6003ZM30.4049 17.5218C23.163 17.707 17.5975 23.5779 17.4936 30.4916C24.6218 30.235 30.2359 24.5428 30.4049 17.5218Z" fill="white"/>
+<path d="M213.348 36.0292L213.299 20.9899L206.444 29.9472C206.054 30.0447 205.57 30.0674 205.141 30.0057L198.192 20.9411L198.156 35.9903H194.602V12.2372C194.988 12.143 195.456 12.1365 195.817 12.2372L205.765 25.4832L215.759 12.1852C216.126 12.1592 216.555 12.1787 216.886 12.2372V35.987L213.345 36.0292H213.348Z" fill="white"/>
+<path d="M190.631 24.2915C190.631 31.0655 185.14 36.5595 178.366 36.5595C171.592 36.5595 166.102 31.0688 166.102 24.2915C166.102 17.5142 171.592 12.0234 178.366 12.0234C185.14 12.0234 190.631 17.5142 190.631 24.2915ZM178.084 33.1839C181.316 33.2781 184.156 31.7478 185.748 29.0349C187.454 26.1336 187.476 22.5143 185.797 19.5805C184.104 16.6272 180.907 15.1457 177.551 15.4316C174.224 15.7142 171.43 17.7578 170.315 20.9191C169.49 23.2583 169.539 25.7535 170.488 28.0408C171.768 31.1305 174.633 33.0831 178.084 33.1839Z" fill="white"/>
+<path d="M135.171 29.6212L135.207 26.8921L127.932 26.8758L127.906 23.7601L138.761 23.7471L138.748 30.3132C136.428 34.2802 132.224 36.4537 127.666 36.4245C122.604 36.392 118.078 33.3412 116.304 28.8349C114.381 23.9453 115.674 18.4838 119.612 15.1114C124.758 10.709 133.335 11.1249 137.448 16.947L134.862 19.0686C132.994 16.3817 130.151 15.1893 127.039 15.4135C123.033 15.7027 119.901 18.5585 119.274 22.5547C118.842 25.3001 119.407 28.0747 121.21 30.2157C124.745 34.4134 131.964 34.3516 135.161 29.6147L135.171 29.6212Z" fill="white"/>
+<path d="M111.529 36.2049C111.304 36.4778 110.541 36.5622 110.307 36.2958L95.8134 19.8009L95.7809 35.9904L92.2266 35.9839V12.2471C92.5352 12.1399 93.2695 12.0392 93.4937 12.2861L107.938 28.6868L107.977 12.5558H111.529V36.2016V36.2049Z" fill="white"/>
+<path d="M66.4736 23.8188L70.6648 23.6953C72.9325 23.6304 74.4433 21.7915 74.3783 19.5659C74.3198 17.5093 72.9098 15.7549 70.7362 15.7354L64.1181 15.6704L64.1116 35.9829L60.5508 36.0056V12.5547H70.4601C71.6817 12.5547 72.8481 12.8828 73.9462 13.289C76.5389 14.4033 78.0171 16.8108 78.0431 19.5919C78.0724 22.6199 76.3927 25.2548 73.4101 26.3107L80.3791 35.9016C79.0308 36.0673 77.7702 36.0316 76.3862 35.9894L66.4704 23.8188H66.4736Z" fill="white"/>
+<path d="M154.403 33.1664C157.253 32.9682 159.449 31.4639 161.031 29.1409L163.708 31.1228C160.599 36.1652 154.02 37.6402 148.776 35.4537C144.263 33.5725 141.401 29.3001 141.352 24.4072C141.3 19.3324 144.302 14.8456 149.039 13.0261C154.286 11.0118 160.69 12.542 163.702 17.4642L161.025 19.4428C159.117 16.4603 155.878 14.9755 152.408 15.4921C146.817 16.3238 143.942 21.8535 145.459 27.0356C146.606 30.9539 150.225 33.4588 154.403 33.1664Z" fill="white"/>
+<path d="M234.028 35.2293C229.551 37.835 223.141 36.1195 220.574 31.4378L223.037 29.5469C223.898 30.6028 224.681 31.5417 225.805 32.2468C227.559 33.3449 229.714 33.6178 231.588 32.7991C232.771 32.2825 233.443 31.2298 233.531 30.0797C233.625 28.8126 232.959 27.695 231.773 27.0679C230.399 26.3434 229.015 25.7034 227.589 25.0438C224.678 23.7053 221.841 21.9249 221.89 18.403C221.916 16.5121 222.784 14.7187 224.418 13.5815C228.216 10.9402 234.363 12.035 236.728 16.2457L234.265 18.1301C232.683 15.7713 229.986 14.7414 227.371 15.6544C226.26 16.0443 225.62 17.0774 225.539 18.0976C225.444 19.303 226.049 20.3621 227.173 20.9079L232.189 23.3446C233.684 24.0692 235.165 24.9204 236.13 26.3142C238.197 29.287 237.108 33.4359 234.028 35.2293Z" fill="white"/>
+<path d="M86.8968 12.5312H83.3359V36.0147H86.8968V12.5312Z" fill="white"/>
+<path d="M40.0706 21.0319C41.4774 21.0319 42.6178 19.8914 42.6178 18.4847C42.6178 17.0779 41.4774 15.9375 40.0706 15.9375C38.6638 15.9375 37.5234 17.0779 37.5234 18.4847C37.5234 19.8914 38.6638 21.0319 40.0706 21.0319Z" fill="white"/>
+</g>
+<defs>
+<clipPath id="clip0_logobar">
+<rect width="240" height="48" fill="white"/>
+</clipPath>
+</defs>
+      </svg>
+    </a>
+  </div>
+
+  <!-- ============================================================
+       GNB 플로팅 버튼 (한영/햄버거) — 스케일 컨테이너 밖에 두어
+       스크롤과 무관하게 뷰포트 우측 상단에 고정. (데스크탑 전용)
+       ============================================================ -->
+  <div class="gnb-float">
+    <button class="btn-global" aria-label="Language">
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="60" height="60" fill="white"/>
+        <circle cx="30" cy="30" r="15" stroke="#212121" stroke-width="2"/>
+        <path d="M30 15C30.6356 15 31.3197 15.2905 32.0293 15.9766C32.7437 16.6672 33.4328 17.7147 34.0332 19.0869C35.2327 21.8286 36 25.6863 36 30C36 34.3137 35.2327 38.1714 34.0332 40.9131C33.4328 42.2853 32.7437 43.3328 32.0293 44.0234C31.3197 44.7095 30.6356 45 30 45C29.3644 45 28.6803 44.7095 27.9707 44.0234C27.2563 43.3328 26.5672 42.2853 25.9668 40.9131C24.7673 38.1714 24 34.3137 24 30C24 25.6863 24.7673 21.8286 25.9668 19.0869C26.5672 17.7147 27.2563 16.6672 27.9707 15.9766C28.6803 15.2905 29.3644 15 30 15Z" stroke="#212121" stroke-width="2"/>
+        <line x1="15" y1="29" x2="45" y2="29" stroke="#212121" stroke-width="2"/>
+        <rect width="20" height="12" transform="translate(30 34)" fill="white"/>
+        <path d="M48.5 36V45.8984H46.7227L42.375 39.6094H42.293V45.8984H40.2422V36H42.0469L46.3672 42.2891H46.4629V36H48.5Z" fill="#212121"/>
+        <path d="M32 45.8984V36H38.6445V37.6953H34.0508V40.1016H38.3027V41.7969H34.0508V44.2031H38.6582V45.8984H32Z" fill="#212121"/>
+      </svg>
+    </button>
+    <button class="btn-hamburger" aria-label="Menu">
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="60" height="60" fill="#212121"/>
+        <line x1="14" y1="21" x2="46" y2="21" stroke="white" stroke-width="2"/>
+        <line x1="14" y1="37" x2="46" y2="37" stroke="white" stroke-width="2"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- 스크롤 최상단 이동 버튼 (우측 하단 고정, menu.js 제어) -->
+  <button class="scroll-top-btn" type="button" aria-label="맨 위로">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <!-- ============================================================
+       MOBILE (≤768px) — mo-mcn 1~5 통합 (원본 mo-mcn*.html)
+       각 섹션은 .mo-sec-N 로 스코프되어 세로로 쌓인다.
+       ============================================================ -->
+  <div class="mo-root">
+
+    <!-- ── GNB_MO 헤더 (다른 페이지 공용 헤더, 상단 고정) ── -->
+    <header class="mo-header">
+      <a class="mo-logo" href="/main" aria-label="RINGCOMS 홈">
+        <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/kv/logo-small.svg" alt="RINGCOMS">
+      </a>
+      <div class="mo-header-btns">
+        <button class="mo-hbtn mo-hbtn--global" type="button" aria-label="언어 변경">
+          <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="60" height="60" fill="white"/>
+            <circle cx="30" cy="30" r="15" stroke="#212121" stroke-width="2"/>
+            <path d="M30 15C30.6356 15 31.3197 15.2905 32.0293 15.9766C32.7437 16.6672 33.4328 17.7147 34.0332 19.0869C35.2327 21.8286 36 25.6863 36 30C36 34.3137 35.2327 38.1714 34.0332 40.9131C33.4328 42.2853 32.7437 43.3328 32.0293 44.0234C31.3197 44.7095 30.6356 45 30 45C29.3644 45 28.6803 44.7095 27.9707 44.0234C27.2563 43.3328 26.5672 42.2853 25.9668 40.9131C24.7673 38.1714 24 34.3137 24 30C24 25.6863 24.7673 21.8286 25.9668 19.0869C26.5672 17.7147 27.2563 16.6672 27.9707 15.9766C28.6803 15.2905 29.3644 15 30 15Z" stroke="#212121" stroke-width="2"/>
+            <line x1="15" y1="29" x2="45" y2="29" stroke="#212121" stroke-width="2"/>
+            <rect width="20" height="12" transform="translate(30 34)" fill="white"/>
+            <path d="M48.5 36V45.8984H46.7227L42.375 39.6094H42.293V45.8984H40.2422V36H42.0469L46.3672 42.2891H46.4629V36H48.5Z" fill="#212121"/>
+            <path d="M32 45.8984V36H38.6445V37.6953H34.0508V40.1016H38.3027V41.7969H34.0508V44.2031H38.6582V45.8984H32Z" fill="#212121"/>
+          </svg>
+        </button>
+        <button class="mo-hbtn mo-hbtn--menu" type="button" aria-label="메뉴" aria-expanded="false" aria-controls="moMenu">
+          <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="60" height="60" fill="#212121"/>
+            <line x1="14" y1="21" x2="46" y2="21" stroke="white" stroke-width="2"/>
+            <line x1="14" y1="37" x2="46" y2="37" stroke="white" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 모바일 전체화면 메뉴 (Figma MO_Main_GNB 452:3921) -->
+    <nav class="mo-menu" id="moMenu" aria-label="전체 메뉴" aria-hidden="true">
+      <div class="mo-menu-list">
+        <div class="mo-menu-group">
+          <a class="mo-menu-item mo-menu-item--has-sub" href="/main#moAbout">
+            <span class="mo-menu-dash" aria-hidden="true"></span>
+            <span class="mo-menu-text">About</span>
+          </a>
+          <div class="mo-menu-sub">
+            <a class="mo-menu-subitem" href="/main#moAbout">About Company</a>
+            <a class="mo-menu-subitem" href="/main#moHistory">History</a>
+          </div>
+        </div>
+        <a class="mo-menu-item" href="/entertainment"><span class="mo-menu-text">Entertainment</span></a>
+        <a class="mo-menu-item" href="/mcn"><span class="mo-menu-text">MCN</span></a>
+        <span class="mo-menu-item mo-menu-item--disabled"><span class="mo-menu-text">Cosmetics</span></span>
+        <a class="mo-menu-item" href="/career"><span class="mo-menu-text">Career</span></a>
+      </div>
+    </nav>
+
+    <!-- ── MO 1 : OUR VISION (mo-mcn.html, 다크) ── -->
+    <section class="mo-sec mo-sec-1">
+      <div class="frame-wrap">
+        <div class="frame">
+
+          <!-- 배경 이미지 + 검정 40% 오버레이 -->
+          <div class="hero">
+            <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/mcn/mcn_hero.png" alt="">
+          </div>
+
+          <!-- 중앙 텍스트 -->
+          <div class="vision-txt">
+            <p class="vision-heading">It’s Not Easy,<br>But We Go Together</p>
+            <p class="vision-sub">"쉽지 않아도, 같이가요"</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── MO 2 : OUR VISION 설명 (mo-mcn2.html, 흰 배경) ── -->
+    <section class="mo-sec mo-sec-2">
+      <div class="frame-wrap">
+        <div class="frame">
+          <div class="vision-txt">
+            <p>성장의 무게를 나누고,</p>
+            <p>브랜드의 가치를 곱합니다.</p>
+            <p>링컴즈 MCN 사업부는 크리에이터를</p>
+            <p>단순한 수익 창출 수단이 아닌,</p>
+            <p>미래를 함께 설계하는</p>
+            <p>‘전략적 동료’로 바라봅니다.</p>
+            <p class="muted">소속 크리에이터가 세상에 주는</p>
+            <p class="muted">영향력의 가치를 키우는것,</p>
+            <p class="muted">그것이 진정한 우리의 목표 입니다.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── MO 6 : CREATOR (mo-mcn6.html, 흰 배경, 카드 6개 세로) ── -->
+    <section class="mo-sec mo-sec-6">
+      <div class="frame-wrap">
+
+        <div class="tit">
+          <span class="label">CREATOR</span>
+          <!-- <br> 앞 공백: 폴더블에서 br 을 숨기고 자연 줄바꿈할 때 단어 사이가 붙지 않게 -->
+          <p class="heading">다양한 크리에이터와 함께 트렌드를 만들어가고, <br>콘텐츠를 통해 팬과 브랜드를 연결합니다.</p>
+          <!-- CTA 를 타이틀 흐름 안에 → 헤딩 줄 수(폰 4줄/폴더블 3줄)가 달라져도 헤딩 바로 아래에 붙는다.
+               떠나기 전 복귀 앵커를 #creator 로 고정 → 뒤로가기 시 apply 가 아니라 creator 섹션으로 복귀 -->
+          <button class="cta" onclick="history.replaceState(null,'','#creator');location.href='/main#moContact'">크리에이터 협업 문의하기</button>
+        </div>
+
+        <!-- 필터 (모바일: 드롭다운) — 구분 / 활동 플랫폼 (백엔드 연동 예정) -->
+        <div class="mo-mcn6-filter">
+          <div class="mo-mcn6-dd" data-filter="category">
+            <button class="mo-mcn6-dd-btn" type="button" aria-haspopup="true" aria-expanded="false">
+              <span class="mo-mcn6-dd-label">전체</span>
+              <svg class="mo-mcn6-dd-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 15L7 10H17L12 15Z" fill="currentColor"/>
+              </svg>
+            </button>
+            <ul class="mo-mcn6-dd-menu" role="menu">
+              <li><button class="mo-mcn6-dd-item is-active" type="button" role="menuitem" data-value="all">전체</button></li>
+              <li><button class="mo-mcn6-dd-item" type="button" role="menuitem" data-value="streamer">스트리머</button></li>
+              <li><button class="mo-mcn6-dd-item" type="button" role="menuitem" data-value="creator">크리에이터</button></li>
+            </ul>
+          </div>
+          <div class="mo-mcn6-dd" data-filter="platform">
+            <button class="mo-mcn6-dd-btn" type="button" aria-haspopup="true" aria-expanded="false">
+              <span class="mo-mcn6-dd-label">전체</span>
+              <svg class="mo-mcn6-dd-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 15L7 10H17L12 15Z" fill="currentColor"/>
+              </svg>
+            </button>
+            <ul class="mo-mcn6-dd-menu" role="menu">
+              <li><button class="mo-mcn6-dd-item is-active" type="button" role="menuitem" data-value="all">전체</button></li>
+              <li><button class="mo-mcn6-dd-item" type="button" role="menuitem" data-value="youtube">유튜브</button></li>
+              <li><button class="mo-mcn6-dd-item" type="button" role="menuitem" data-value="soop">SOOP</button></li>
+              <li><button class="mo-mcn6-dd-item" type="button" role="menuitem" data-value="chzzk">치지직</button></li>
+              <li><button class="mo-mcn6-dd-item" type="button" role="menuitem" data-value="instagram">인스타</button></li>
+              <li><button class="mo-mcn6-dd-item" type="button" role="menuitem" data-value="tiktok">틱톡</button></li>
+              <li><button class="mo-mcn6-dd-item" type="button" role="menuitem" data-value="etc">기타</button></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 제목·필터는 고정, 이 래퍼(그리드+전체보기)만 내부 스크롤(mo-snap EXEMPT) -->
+        <div class="mo-sec6-scroll">
+        <div class="con-list">
+
+          <div class="con" data-category="creator" data-platform="instagram">
+            <div class="con-img con-img-1"></div>
+            <div class="con-txt">
+              <p class="name">Aesther</p>
+              <div class="sns">
+                <span class="sns-item">Instagram</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="con" data-category="creator" data-platform="instagram">
+            <div class="con-img con-img-2"></div>
+            <div class="con-txt">
+              <p class="name">Yoonju</p>
+              <div class="sns">
+                <span class="sns-item">Instagram</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="con" data-category="streamer" data-platform="instagram">
+            <div class="con-img con-img-3"></div>
+            <div class="con-txt">
+              <p class="name">Heeseo</p>
+              <div class="sns">
+                <span class="sns-item">Instagram</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="con" data-category="creator" data-platform="instagram etc">
+            <div class="con-img con-img-4"></div>
+            <div class="con-txt">
+              <p class="name">Choo Yukyung</p>
+              <div class="sns">
+                <span class="sns-item">Instagram</span>
+                <span class="sns-sep">I</span>
+                <span class="sns-item">Threads</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="con" data-category="streamer" data-platform="instagram youtube">
+            <div class="con-img con-img-5"></div>
+            <div class="con-txt">
+              <p class="name">Rael</p>
+              <div class="sns">
+                <span class="sns-item">Instagram</span>
+                <span class="sns-sep">I</span>
+                <span class="sns-item underline">YouTube</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="con" data-category="creator" data-platform="instagram">
+            <div class="con-img con-img-6"></div>
+            <div class="con-txt">
+              <p class="name">Lee Naahyun</p>
+              <div class="sns">
+                <span class="sns-item">Instagram</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 전체보기 버튼 -->
+        <button class="mo-mcn6-more" type="button">
+          <span class="mo-mcn6-more-txt">전체보기</span>
+          <span class="mo-mcn6-more-icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 3.333V12.667M3.333 8H12.667" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </button>
+        </div><!-- /.mo-sec6-scroll -->
+
+      </div>
+    </section>
+
+    <!-- ── MO 3 : AD BUSINESS (mo-mcn3.html, 흰 배경) ── -->
+    <section class="mo-sec mo-sec-3">
+      <div class="frame-wrap">
+
+        <div class="ad-head">
+          <div class="ad-head-top">
+            <p class="ad-label">AD BUSINESS</p>
+            <h1 class="ad-title">Sustainable AD Strategy</h1>
+          </div>
+          <p class="ad-sub">"단기 수익보다는 지속 가능한 가치"</p>
+        </div>
+
+        <div class="con">
+
+          <div class="item">
+            <div class="item-tit">
+              <span class="num">01</span>
+              <h2 class="name">Creator-centric AD</h2>
+            </div>
+            <div class="item-desc">
+              <p>크리에이터와 채널의 아이덴티티를 해치는 소액<br>협찬은 거절하고, 크리에이터의 브랜드 가치를<br>보호합니다.</p>
+            </div>
+          </div>
+
+          <hr class="divider">
+
+          <div class="item">
+            <div class="item-tit">
+              <span class="num">02</span>
+              <h2 class="name">AD Business Model Design</h2>
+            </div>
+            <div class="item-desc">
+              <p>고부가가치 광고 비즈니스 모델을 지향하여<br>압도적이고 안정적인 광고 비즈니스 모델을<br>설계합니다.</p>
+            </div>
+          </div>
+
+          <hr class="divider">
+
+          <div class="item">
+            <div class="item-tit">
+              <span class="num">03</span>
+              <h2 class="name">Authentic Connection</h2>
+            </div>
+            <div class="item-desc">
+              <p>브랜드와 크리에이터가 윈윈하는 ‘진정성 있는<br>협업’ 을 연결합니다.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── MO 4 : CONTENTS PRODUCTION (mo-mcn4.html, 슬라이더) ── -->
+    <section class="mo-sec mo-sec-4">
+      <div class="frame-wrap">
+
+        <!-- 타이틀 블록 -->
+        <div class="tit">
+          <div class="tit-inner">
+            <p class="label">CONTENTS PRODUCTION</p>
+            <p class="main-title">Data-Driven Creative</p>
+          </div>
+          <p class="section-desc">"데이터로 증명하는 제작 능력"</p>
+        </div>
+
+        <!-- 슬라이더 -->
+        <div class="prod-slider" id="moProdSlider" data-lenis-prevent>
+          <div class="prod-slide">
+            <div class="prod-slide-img prod-slide-img-1"></div>
+            <p class="prod-slide-title">Growth Hack</p>
+            <p class="prod-slide-desc">데이터 기반 분석으로 평균 3,000뷰 채널을<br>100만뷰 메가 콘텐츠로 전환시킵니다.</p>
+          </div>
+          <div class="prod-slide">
+            <div class="prod-slide-img prod-slide-img-2"></div>
+            <p class="prod-slide-title">1:1 Exclusive PD</p>
+            <p class="prod-slide-desc">전담 PD가 컨셉 설계부터 촬영 디렉팅까지<br>전 과정을 밀착 서포트합니다.</p>
+          </div>
+          <div class="prod-slide">
+            <div class="prod-slide-img prod-slide-img-3"></div>
+            <p class="prod-slide-title">Multi-Channel</p>
+            <p class="prod-slide-desc">주활동 플랫폼 외에도 다양한 플랫폼을<br>동시 공략하는 성장 전략을 제공합니다.</p>
+          </div>
+        </div>
+
+        <!-- 도트 -->
+        <div class="mo-prod-dots" role="tablist" aria-label="콘텐츠 슬라이드">
+          <button type="button" class="mo-prod-dot is-active" aria-label="1번째 슬라이드"></button>
+          <button type="button" class="mo-prod-dot" aria-label="2번째 슬라이드"></button>
+          <button type="button" class="mo-prod-dot" aria-label="3번째 슬라이드"></button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── MO 5 : STUDIO / Creative Playground (mo-mcn5.html, 다크) ── -->
+    <section class="mo-sec mo-sec-5">
+      <div class="frame-wrap">
+
+        <div class="tit">
+          <div class="tit-inner">
+            <p class="label">STUDIO</p>
+            <p class="main-title">Creative Playground</p>
+          </div>
+          <p class="section-desc">“몸만 오세요. 세팅은 되어있습니다"</p>
+        </div>
+
+        <div class="con-row" data-lenis-prevent>
+
+          <div class="con">
+            <div class="img img-1"></div>
+            <div class="txt">
+              <p class="card-title">40평형<br>올인원 스튜디오</p>
+              <p class="card-desc">장소 섭외 스트레스 끝!<br>링컴즈 크리에이터라면 언제든 즉시 촬영<br>가능합니다.</p>
+            </div>
+          </div>
+
+          <div class="con">
+            <div class="img img-2"></div>
+            <div class="txt">
+              <p class="card-title">취향저격<br>컨셉존</p>
+              <p class="card-desc">거실존 &amp; 자취방존: 편안한 토크와 일상<br>브이로그 최적화<br>주방존: 쿡방, 먹방도 고퀄리티 조명<br>아래에서!<br>파우더룸: 뷰티 및 언박싱 콘텐츠의 성지</p>
+            </div>
+          </div>
+
+          <div class="con">
+            <div class="img img-3"></div>
+            <div class="txt">
+              <p class="card-title">크리에이터의<br>시간은 소중하니까</p>
+              <p class="card-desc">주 1회 방문만으로 일주일치 콘텐츠<br>뽑아내기.<br>링컴즈 스튜디오에선 가능합니다.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 스와이프 힌트 — 페이지 도트 -->
+        <div class="mo5-dots" role="tablist" aria-label="스튜디오 슬라이드">
+          <button type="button" class="mo5-dot is-active" aria-label="1번째 슬라이드"></button>
+          <button type="button" class="mo5-dot" aria-label="2번째 슬라이드"></button>
+          <button type="button" class="mo5-dot" aria-label="3번째 슬라이드"></button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ── MO 7 : APPLY / 크리에이터 지원 폼 (mo-mcn7.html, voyage 배경 + 흰 폼 카드) ── -->
+    <section class="mo-sec mo-sec-7">
+      <div class="frame-wrap">
+
+        <div class="bg"></div>
+
+        <div class="tit">
+          <p class="label">APPLY</p>
+          <p class="desc">당신의 무대가 어디든,<br>더 넓은 세상으로<br>연결해 드릴게요.<br>지금 링컴즈와 함께하세요.</p>
+        </div>
+
+        <form class="con" onsubmit="return false">
+
+          <div class="field">
+            <span class="flabel">이름<i class="req">*</i></span>
+            <div class="input"><input type="text" placeholder="이름을 작성해주세요."></div>
+          </div>
+
+          <div class="field">
+            <span class="flabel">생년월일<i class="req">*</i></span>
+            <div class="input"><input type="text" placeholder="YYMMDD"></div>
+          </div>
+
+          <div class="field">
+            <span class="flabel">성별<i class="req">*</i></span>
+            <div class="segmented">
+              <button type="button" class="seg seg-l">남성</button>
+              <button type="button" class="seg seg-r">여성</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="flabel">연락처<i class="req">*</i></span>
+            <div class="input"><input type="text" placeholder="연락 가능한 번호를 작성해주세요."></div>
+          </div>
+
+          <div class="field">
+            <span class="flabel">이메일<i class="req">*</i></span>
+            <div class="input"><input type="email" placeholder="이메일 주소를 작성해주세요."></div>
+          </div>
+
+          <div class="platform">
+            <span class="flabel">운영 중인 플랫폼</span>
+            <div class="input input-select">
+              <input type="text" placeholder="Instargram">
+              <span class="chevron"></span>
+            </div>
+            <div class="input input-url"><input type="text" placeholder="운영 중인 플랫폼의 url을 입력해주세요."></div>
+            <button type="button" class="add-btn" aria-label="플랫폼 추가"><span class="plus"></span></button>
+          </div>
+
+          <div class="intro">
+            <div class="field">
+              <span class="flabel">자기소개<i class="req">*</i></span>
+              <div class="input input-area"><textarea></textarea></div>
+            </div>
+
+            <div class="agree">
+              <span class="checkbox"></span>
+              <div class="agree-txt">
+                <p class="agree-main">개인정보 수집 및 이용 동의 (필수<i class="req">*</i>)<button type="button" class="agree-detail">자세히보기</button></p>
+                <p class="agree-note">개인정보 수집 및 이용약관에 동의하셔야 접수가 가능합니다.</p>
+
+                <!-- 자세히보기: 개인정보 수집·이용 동의서 전문 -->
+                <div class="agree-detail-box">
+                  <p class="agree-detail-title">개인정보 수집·이용에 관한 동의서</p>
+                  <p class="agree-detail-p">주식회사 링컴즈(이하 "회사")는 크리에이터 지원 접수를 위해 아래와 같이 개인정보를 수집·이용합니다. 내용을 확인하신 후 동의 여부를 선택하여 주시기 바랍니다.</p>
+                  <p class="agree-detail-h">1. 수집하는 개인정보 항목</p>
+                  <p class="agree-detail-li">· 수집항목 : 이름, 연락처(휴대전화번호), 생년월일, 성별, 이메일 주소, SNS 계정 링크, 자기소개, 쿠키</p>
+                  <p class="agree-detail-li">· 개인정보 수집방법 : 홈페이지 (크리에이터 지원하기)</p>
+                  <p class="agree-detail-h">2. 개인정보의 수집 및 이용목적</p>
+                  <p class="agree-detail-li">· 지원자 본인 확인 및 지원자 심사, 미팅·면담 일정 안내 및 합격 여부 통보 및 계약 검토</p>
+                  <p class="agree-detail-h">3. 개인정보의 보유 및 이용기간</p>
+                  <p class="agree-detail-li">· 수집일로부터 2년 이내 파기합니다. 단, 지원자가 파기를 요청하는 경우 즉시 파기합니다.</p>
+                  <p class="agree-detail-li">· 관계 법령에 따라 보존이 필요한 경우 해당 기간 동안 보관합니다.</p>
+                  <p class="agree-detail-h">4. 동의 거부 시 불이익 안내</p>
+                  <p class="agree-detail-li">· 필수 항목에 대한 동의를 거부하실 수 있으나, 이 경우 지원 접수가 불가합니다.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </section>
+
+    <!-- ── MO 8 : FOOTER (mo-mcn8.html, 다크) ── -->
+    <section class="mo-sec mo-sec-8">
+      <div class="frame-wrap">
+        <footer class="mo-footer">
+          <div class="mo-footer-email">
+            <p>E. ringcoms@ringcoms.com</p>
+            <p>H. www.ringcoms.com</p>
+          </div>
+
+          <div class="mo-footer-contact mo-footer-office">
+            <p class="mo-footer-label">Head Office.</p>
+            <p class="mo-footer-addr">서울특별시 강남구 도산대로165,<br>신사힐빌딩12층</p>
+          </div>
+
+          <div class="mo-footer-contact mo-footer-rnd">
+            <p class="mo-footer-label">R&amp;D Center I Studio.</p>
+            <p class="mo-footer-addr">경기도 화성시 동탄첨단산업1로 27,<br>금강펜테리움IX타워 A동 3401~3405호</p>
+          </div>
+
+          <a class="mo-footer-privacy" href="#">개인정보처리방침</a>
+
+          <div class="mo-footer-txt">
+            <div class="mo-footer-logo">
+              <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/footer/logo.svg" alt="RINGCOMS">
+            </div>
+            <p class="mo-footer-copy">Copyright © 2026 RINGCOMS.<br>All Rights Reserved.</p>
+          </div>
+        </footer>
+      </div>
+    </section>
+
+  </div><!-- /.mo-root -->
+
+  <!-- ============================================================
+       공통 GNB 펼침 메뉴 (Figma menu_open 452:435) — menu.css / menu.js
+       ============================================================ -->
+  <div class="site-menu-backdrop" data-menu-backdrop></div>
+  <nav class="site-menu" data-menu-overlay aria-label="전체 메뉴" aria-hidden="true">
+    <!-- 메뉴 항목은 js/menu.js 의 SITE_MENU 데이터로 렌더됩니다 (추가·수정은 거기서). -->
+    <div class="site-menu-list" data-menu-list></div>
+  </nav>
+
+  <script src="/js/mcn.js"></script>
+  <script src="/js/menu.js"></script>
+  <script src="/js/privacy.js"></script>
+  <!-- mcn 모바일 스크롤 = main 과 동일 방식(mo-snap). 모든 섹션 = 한 화면(자유 스크롤 없음).
+       '.mo-sec' 하나로 8개 섹션(footer=sec-8 포함) 모두 스냅 대상. STEP_LONG/자유 꼬리 없음.
+       긴 섹션(sec-6 크리에이터 그리드 / sec-7 APPLY 폼)은 제목·필터/히어로 고정 +
+       본문(.mo-sec6-scroll / .mo-sec-7 .con)만 내부 스크롤(mo-snap EXEMPT).
+       PC 는 무영향(mcn.js/.mcn-container 데스크탑 엔진 그대로). -->
+  <script>window.MO_SNAP_SELECTOR = '.mo-sec';</script>
+  <script src="/js/mo-snap.js"></script>
+
+  <!-- 모바일 MO 7 (APPLY 폼) 성별 세그먼트 / 동의 체크박스 토글 -->
+  <script>
+    (function () {
+      var form = document.querySelector('.mo-sec-7');
+      if (!form) return;
+      form.querySelectorAll('.segmented .seg').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          this.parentElement.querySelectorAll('.seg').forEach(function (b) { b.classList.remove('active'); });
+          this.classList.add('active');
+        });
+      });
+      var chk = form.querySelector('.checkbox');
+      if (chk) chk.addEventListener('click', function () { this.classList.toggle('checked'); });
+      var detail = form.querySelector('.agree-detail');
+      var box = form.querySelector('.agree-detail-box');
+      if (detail && box) detail.addEventListener('click', function () { box.classList.toggle('open'); });
+    })();
+  </script>
+
+</body>
+</html>

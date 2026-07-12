@@ -1,0 +1,676 @@
+/* ============================================================
+   menu.css — 공통 GNB 펼침 메뉴 (Figma menu_open 452:435)
+   서브 페이지(mcn / entertainment / career / press_center)에서
+   .btn-hamburger 클릭 시 펼쳐지는 흰색 메뉴 패널.
+   각 항목은 해당 페이지로 이동하며 Cosmetics 는 비활성.
+   ============================================================ */
+
+/* 백드롭 요소는 마크업 호환용으로만 남겨둠 — 바깥 닫기는 menu.js 의
+   document 클릭 핸들러가 처리하므로 항상 비활성(hover 감지 방해 방지). */
+.site-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* 펼침 메뉴 패널 (우상단, 404×536, 흰색) — 60px 버튼 레일 + 6px 틈 */
+.site-menu {
+  position: fixed;
+  /* 버튼이 스케일·중앙정렬되는 캔버스 우상단(레터박스만큼 안쪽)에 있으므로,
+     오버레이도 그 여백만큼 안쪽으로 정렬한다.
+       · entertainment: --ent-x/--ent-y (가로·세로 중앙정렬)
+       · mcn/career   : --mcn-x        (>1920 화면 가로 중앙정렬, 세로 오프셋 없음)
+     각 페이지는 자기 변수만 설정하므로 미설정 변수는 fallback 0 → 서로 간섭 없음.
+     --embed-clip-top: 메인 Career 패널(iframe) 임베드 시 부모 스테이지의 세로 클립만큼
+     아래로 내려 잘림 방지 — 햄버거(.gnb-float)와 동일 보정(단독 실행 시 0). */
+  top: calc(var(--ent-y, 0px) + var(--embed-clip-top, 0px));
+  /* 66px(버튼 레일 60+틈 6)은 캔버스 좌표값이므로 scale 을 곱해 버튼에 붙인다.
+     햄버거(.gnb-float)·CTA(.cta-btns)와 동일한 chrome 스케일을 써야 패널이 버튼과 정확히
+     붙는다. (--chrome-scale 미설정 페이지는 종전대로 --mcn-scale 로 폴백) */
+  right: calc(66px * var(--chrome-scale, var(--mcn-scale, 1)) + var(--ent-x, 0px) + var(--mcn-x, 0px));
+  z-index: 1000;
+  width: 404px;
+  height: 536px;
+  background: #ffffff;
+  padding: 60px 50px 60px 30px;
+  opacity: 0;
+  visibility: hidden;
+  /* 캔버스 scale(모든 서브페이지가 :root 에 --mcn-scale 로 설정, main 의 .pc-stage 와 동일)
+     을 그대로 받아 main 과 같은 체감 크기로 축소. 우상단(버튼 코너) 기준 축소. */
+  --gnb-scale: var(--chrome-scale, var(--mcn-scale, 1));
+  transform-origin: top right;
+  transform: translateY(-12px) scale(var(--gnb-scale));
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease, visibility 0s linear 0.35s;
+}
+body.site-menu-open .site-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(var(--gnb-scale));
+  pointer-events: auto;
+  transition: opacity 0.35s ease, transform 0.35s ease, visibility 0s;
+}
+/* 오버레이↔버튼 레일 사이 6px 틈을 투명 영역으로 메워 hover 끊김 방지.
+   ::after 위 호버는 .site-menu 로 잡혀 relatedTarget 판정이 유지된다. */
+.site-menu::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 10px;
+  height: 100%;
+}
+
+.site-menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;           /* 대메뉴 간 간격 */
+  width: 324px;
+}
+/* 각 대메뉴 + (접힌) 하위메뉴 묶음. 하위가 접혔을 땐 main 높이만 차지. */
+.site-menu-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 공통 메뉴 항목 (32px) */
+.site-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  font-family: 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 1.3;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+  transition: opacity 0.25s ease;
+}
+.site-menu-item .site-menu-text { white-space: nowrap; }
+.site-menu-item:not(.site-menu-item--disabled):hover { opacity: 0.55; }
+
+/* 대시(−) 마커는 제거 — 데스크탑은 미렌더, 모바일 잔여분은 숨김 */
+.site-menu-dash,
+.mo-menu-dash { display: none; }
+
+/* 하위 항목 (24px, 회색) — 기본 접힘, 대메뉴 hover/포커스 시 fade+slide 로 펼침 */
+.site-menu-sub {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 22px;
+  margin-top: 0;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-6px);
+  transition:
+    max-height 0.35s ease,
+    opacity 0.25s ease,
+    transform 0.35s ease,
+    margin-top 0.35s ease;
+}
+/* hover(데스크탑) · focus-within(키보드) — 한 번에 한 그룹만 자연히 열림 */
+.site-menu-group:hover > .site-menu-sub,
+.site-menu-group:focus-within > .site-menu-sub {
+  max-height: 200px;
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: 8px;
+}
+.site-menu-subitem {
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  font-family: 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #a4a4a4;
+  transition: opacity 0.25s ease;
+}
+.site-menu-subitem:hover { opacity: 0.6; }
+
+/* 비활성 항목 (Cosmetics) */
+.site-menu-item--disabled {
+  color: #e8e8e8;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* 모션 최소화 선호 시 전환 애니메이션 생략 (즉시 표시/숨김) */
+@media (prefers-reduced-motion: reduce) {
+  .site-menu {
+    transition: visibility 0s;
+  }
+  body.site-menu-open .site-menu {
+    transition: visibility 0s;
+  }
+  .site-menu,
+  body.site-menu-open .site-menu {
+    transform: none;
+  }
+  .site-menu-sub,
+  .mo-menu-sub {
+    transition: none;
+    transform: none;
+  }
+  .site-menu-group:hover > .site-menu-sub,
+  .site-menu-group:focus-within > .site-menu-sub,
+  .mo-menu-group.is-open > .mo-menu-sub {
+    transform: none;
+  }
+}
+
+/* 햄버거 버튼 공통 크기·hover (위치는 각 페이지 CSS 그대로) —
+   크기 60×60 고정(career/_shot 등 미명시 페이지 포함), hover 시 아이콘 배경을
+   #000 으로 어둡게(main .kv-menu:hover 와 동일). 배경은 SVG 내부 rect 라 rect 를 칠한다. */
+.btn-hamburger { position: relative; width: 60px; height: 60px; }
+.btn-hamburger svg rect { transition: fill 0.3s ease; }
+.btn-hamburger:hover svg rect { fill: #000; }
+body.site-menu-open .btn-hamburger { background: #212121; }
+body.site-menu-open .btn-hamburger > svg { opacity: 0; }
+body.site-menu-open .btn-hamburger::before,
+body.site-menu-open .btn-hamburger::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 22px;
+  height: 2px;
+  background: #ffffff;
+  pointer-events: none;
+}
+body.site-menu-open .btn-hamburger::before { transform: translate(-50%, -50%) rotate(45deg); }
+body.site-menu-open .btn-hamburger::after  { transform: translate(-50%, -50%) rotate(-45deg); }
+
+/* ============================================================
+   모바일 전체화면 메뉴 (Figma MO_Main_GNB 452:3921)
+   모바일(≤768px)에서 .mo-hbtn--menu 클릭 시 펼쳐지는 전체화면 다크 메뉴.
+   데스크탑에선 숨김(모바일 전용). main.html 은 main.css 에 동일 구현.
+   ============================================================ */
+.mo-menu { display: none; }   /* 데스크탑: 숨김 */
+
+@media (max-width: 768px) {
+  /* 모바일에선 흰색 site-menu 대신 다크 mo-menu 사용 */
+  .site-menu { display: none; }
+
+  /* 헤더 크기를 메인과 '똑같이' 맞춘다.
+     메인은 --u 가 높이 인지형 min(vw/360, dvh/780) 인데 서브페이지 전역 --u 는
+     vw/360(가로 전용)이라, 세로로 짧거나 넓은 화면(주소창 때문에 실기기는 거의
+     항상 짧음)에서 헤더(로고·버튼·아이콘)가 메인보다 컸다(예: 412×732 에서 헤더
+     69 vs 메인 56). 헤더에만 메인과 같은 단위를 덮어쓰면 하위 요소가 이를 상속해
+     크기가 정확히 일치한다. (CTA 와 동일 원인·해법. 다른 섹션의 --u 는 그대로.)
+     menu.css 가 각 페이지 CSS 보다 나중에 로드되므로 이 덮어쓰기가 적용된다. */
+  .mo-header,
+  .mo-menu {
+    --u: min(100vw / 360, 100dvh / 780);
+  }
+  /* 헤더가 높이 인지형으로 작아진 만큼 본문 시작 위치(헤더 높이 보정)도 같은 식으로
+     맞춘다. 안 그러면 헤더 아래에 빈 띠(gap)가 생긴다(메인은 전역 --u 가 이미 이 식). */
+  .mo-root { padding-top: calc(60 * min(100vw / 360, 100dvh / 780)); }
+
+  /* 헤더(z-index 100) 아래 전체화면 다크 패널 */
+  .mo-menu {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    background: #212121;
+    padding: calc(116 * var(--u)) calc(32 * var(--u)) calc(40 * var(--u));   /* 헤더 60 + 56 여백, 좌우 32 (Figma top 168 / left 32) — main 과 동일하게 --u 비례 */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    overflow-y: auto;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+  }
+  body.mo-menu-open { overflow: hidden; }
+  body.mo-menu-open .mo-menu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 0.3s ease, visibility 0s;
+  }
+
+  /* 햄버거 → X : 메인 페이지와 동일 방식.
+     메인은 버튼 배경이 CSS #212121 라 아이콘만 숨기면 흰 X 가 보인다.
+     서브페이지는 다크 배경이 SVG 내부 rect 였어서, SVG 전체를 숨기면 배경까지
+     사라져 X 가 안 보였다 → 버튼에 #212121 배경을 직접 주고 아이콘(svg/kv)을 숨긴다. */
+  .mo-hbtn--menu { position: relative; }
+  body.mo-menu-open .mo-hbtn--menu { background: #212121; }
+  body.mo-menu-open .mo-hbtn--menu > svg,
+  body.mo-menu-open .mo-hbtn--menu .kv-menu-icon { opacity: 0; }
+  body.mo-menu-open .mo-hbtn--menu::before,
+  body.mo-menu-open .mo-hbtn--menu::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 22px;
+    height: 2px;
+    background: #fff;
+    pointer-events: none;
+  }
+  body.mo-menu-open .mo-hbtn--menu::before { transform: translate(-50%, -50%) rotate(45deg); }
+  body.mo-menu-open .mo-hbtn--menu::after  { transform: translate(-50%, -50%) rotate(-45deg); }
+
+  /* 메뉴 리스트/항목 치수 — main(main.css)과 1:1 동일하게 --u 비례 (360 넘는 폭에서도 일치) */
+  .mo-menu-list { display: flex; flex-direction: column; gap: calc(12 * var(--u)); }
+  .mo-menu-group { display: flex; flex-direction: column; }
+  .mo-menu-item {
+    display: flex;
+    align-items: center;
+    gap: calc(6 * var(--u));
+    text-decoration: none;
+    font-family: 'Geist', sans-serif;
+    font-weight: 600;
+    font-size: calc(32 * var(--u));
+    line-height: 1.3;
+    letter-spacing: calc(-1 * var(--u));
+    text-transform: uppercase;
+    color: #fff;
+  }
+  /* 하위 메뉴 — 기본 접힘, 대메뉴 탭(.is-open) 시 아코디언 펼침 (fade+slide) */
+  .mo-menu-sub {
+    display: flex;
+    flex-direction: column;
+    gap: calc(4 * var(--u));
+    padding-left: calc(22 * var(--u));
+    margin-top: 0;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(calc(-6 * var(--u)));
+    transition:
+      max-height 0.35s ease,
+      opacity 0.25s ease,
+      transform 0.35s ease,
+      margin-top 0.35s ease;
+  }
+  .mo-menu-group.is-open > .mo-menu-sub {
+    max-height: calc(240 * var(--u));
+    opacity: 1;
+    transform: translateY(0);
+    margin-top: calc(8 * var(--u));
+  }
+  .mo-menu-subitem {
+    text-decoration: none;
+    font-family: 'Geist', sans-serif;
+    font-weight: 600;
+    font-size: calc(24 * var(--u));
+    line-height: 1.15;
+    letter-spacing: calc(-1 * var(--u));
+    text-transform: uppercase;
+    color: #a4a4a4;
+  }
+  .mo-menu-item--disabled { color: #313131; pointer-events: none; }   /* Cosmetics */
+}
+
+/* ============================================================
+   PC 사이드 CTA — 문의하기 / 지원하기 (모든 서브페이지 공통)
+   메인(main.html)의 우측 세로 버튼과 동일. menu.js 가 body 에 주입한다.
+   - 문의하기 → main.html#contact (Business Contact 패널)
+   - 지원하기 → hover 시 ARTIST/CREATOR/RINGCREW 플라이아웃
+   모바일(≤768px)에서는 숨김 — PC 전용.
+   ============================================================ */
+.cta-btns {
+  position: fixed;
+  /* 콘텐츠(스케일·중앙정렬 캔버스) 우측 가장자리에 붙도록 레터박스 여백만큼 안으로.
+     entertainment=--ent-x, mcn/career=--mcn-x (각 페이지가 자기 변수만 설정, 미설정은 0). */
+  right: calc(var(--ent-x, 0px) + var(--mcn-x, 0px));
+  top: 50%;
+  /* 메인(main.html)의 우측 CTA 는 .pc-stage 안에서 콘텐츠와 함께 축소된다.
+     서브페이지의 CTA 는 스테이지 밖(body 고정)이라 그냥 두면 60px 고정 → 메인보다 커 보임.
+     메인과 동일한 chrome 스케일(min(vw/1920, vh/1080))을 곱해 같은 크기로 맞춘다. */
+  transform: translateY(-50%) scale(var(--chrome-scale, 1));
+  transform-origin: right center;
+  display: flex;
+  flex-direction: column;
+  z-index: 90;
+}
+.cta-btn {
+  position: relative;
+  width: 60px;
+  height: 156px;
+  overflow: hidden;
+  text-decoration: none;
+}
+.cta-inquire { background: #f2e7d5; }
+.cta-apply   { background: #d6bea4; cursor: pointer; }
+
+.cta-text-wrap {
+  position: absolute;
+  left: calc(50% - 24px);
+  top: 14px;
+  width: 23px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cta-text {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.3;
+  letter-spacing: -1px;
+  color: #212121;
+  white-space: nowrap;
+  transform: rotate(90deg);
+}
+.cta-arrow {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 18px;
+  height: 18px;
+}
+.cta-arrow img { display: block; width: 100%; height: 100%; }
+
+/* 지원하기 hover/포커스 → 왼쪽으로 ARTIST/CREATOR/RINGCREW 플라이아웃 */
+.cta-apply { overflow: visible; }   /* 플라이아웃이 버튼 밖으로 나올 수 있게 */
+.cta-apply-flyout {
+  position: absolute;
+  right: 100%;            /* 버튼에 딱 붙여 hover 영역 끊김 방지 */
+  top: 0;                 /* 지원하기 버튼과 상단 정렬 */
+  display: flex;
+  flex-direction: column;
+  width: 410px;
+  padding-right: 6px;     /* 시각적 간격은 내부 패딩으로 (hover 영역은 유지) */
+  box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(12px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 2;
+}
+.cta-apply:hover .cta-apply-flyout,
+.cta-apply:focus-within .cta-apply-flyout,
+.cta-apply.is-open .cta-apply-flyout,   /* 모바일 탭 토글 (menu.js) */
+.cta-apply-flyout:hover {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+.cta-apply-item {
+  height: 52px;
+  display: flex;
+  align-items: flex-start;   /* Figma: 텍스트 상단 여백 6px (y=6) */
+  padding: 6px 30px 0;
+  background: #d6bea4;
+  font-family: 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 1.3;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+.cta-apply-item:hover { background: #c9ab8a; }
+
+@media (max-width: 768px) {
+  /* 모바일에서는 우측 '하단'에 고정해 스크롤을 따라다니게 한다 (모바일 피드백).
+     데스크탑 비율(60×156)을 유지하되, 메인(main.css .mo-side-cta)과 '똑같이' 기기 폭에 비례 축소한다.
+     주의: --u 는 길이값(min(100vw,480px)/360 = px)이라 scale() 에 넣으면 무효가 된다.
+     → transform:scale 대신, 메인처럼 --c(=0.58·--u, 길이)로 각 치수를 직접 곱한다.
+     (--u 미설정 페이지 폴백 1px → 360px 기준 0.58 배율과 동일) */
+  .cta-btns {
+    right: 0;
+    top: auto;                       /* 기본 top:50% 해제 */
+    /* main(.mo-side-cta)과 '똑같은' 화면 비례 단위: 가로(vw/360)·세로(dvh/780) 중
+       작은 값. main 의 --u 가 이 식(높이 인지형)이라, 세로로 짧은 화면에서도
+       서브페이지 CTA 가 main 과 정확히 같은 크기가 된다(예전엔 vw/360 만 써서
+       짧은 화면에서 main 보다 더 컸음). */
+    --u-cta: min(100vw / 360, 100dvh / 780);
+    bottom: calc(40 * var(--u-cta));
+    transform: none;                 /* 기본 translateY(-50%) scale(--chrome-scale) 해제 */
+    transform-origin: right bottom;
+    z-index: 80;                     /* 헤더(100)·전체메뉴(90)보다 아래 — main(.mo-side-cta)과 동일: 메뉴 열리면 패널 뒤로 숨김 */
+    --c: calc(0.58 * var(--u-cta)); /* CTA 전용 비례 길이 단위 — 메인(.mo-side-cta)과 동일 */
+  }
+  /* 막대 내부 치수도 --c 로 비례 — 메인 .mo-side-cta .cta-* 규칙과 1:1 동일 */
+  .cta-btns .cta-btn        { width: calc(60 * var(--c)); height: calc(156 * var(--c)); }
+  .cta-btns .cta-text-wrap  { left: calc(50% - 24 * var(--c)); top: calc(14 * var(--c)); width: calc(23 * var(--c)); height: calc(60 * var(--c)); }
+  .cta-btns .cta-text       { font-size: calc(18 * var(--c)); letter-spacing: calc(-1 * var(--c)); }
+  .cta-btns .cta-arrow      { bottom: calc(10 * var(--c)); right: calc(10 * var(--c)); width: calc(18 * var(--c)); height: calc(18 * var(--c)); }
+  .cta-btns .cta-apply-flyout { width: calc(410 * var(--c)); padding-right: calc(6 * var(--c)); }
+  .cta-btns .cta-apply-item   { height: calc(52 * var(--c)); padding: calc(6 * var(--c)) calc(30 * var(--c)) 0; font-size: calc(32 * var(--c)); letter-spacing: calc(-1 * var(--c)); }
+}
+
+/* ============================================================
+   한영(언어) 전환 버튼 임시 숨김 — 추후 다국어 적용 시 해제
+   데스크탑 GNB(.btn-global) / 모바일 헤더(.mo-hbtn--global)
+   ============================================================ */
+.btn-global,
+.mo-hbtn--global { display: none !important; }
+
+/* ============================================================
+   GNB 플로팅 버튼 (한영/햄버거)
+   스케일·스크롤되는 .mcn-container / .career-container 밖(body 직속)에 두어
+   스크롤과 무관하게 뷰포트 우측 상단에 항상 고정한다.
+   right: --mcn-x → 1920 초과 화면의 가로 중앙정렬 여백만큼 우측에서 띄움.
+   (.btn-global 은 위에서 display:none 처리 → 햄버거만 노출)
+   ============================================================ */
+.gnb-float {
+  position: fixed;
+  /* 메인 패널 임베드 시 부모의 세로 클립만큼 아래로 내려 잘림 방지(단독=0). */
+  top: var(--embed-clip-top, 0px);
+  right: var(--mcn-x, 0px);
+  z-index: 1000;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  height: 60px;
+  /* 메인의 햄버거(.kv-menu)는 콘텐츠와 함께 축소된다. 서브페이지의 햄버거도
+     같은 chrome 스케일로 맞춰 60px 고정이 아닌 60×scale 로 렌더되게 한다. */
+  transform: scale(var(--chrome-scale, 1));
+  transform-origin: top right;
+}
+@media (max-width: 768px) {
+  .gnb-float { display: none; }   /* 모바일은 .mo-header 사용 */
+}
+
+/* ============================================================
+   좌상단 로고 바 (mcn / career / entertainment / press_center 공통)
+   스케일·스크롤되는 컨테이너 밖(body 직속)에 두어 스크롤과 무관하게
+   상단에 항상 고정되는 다크 바. 로고 클릭 시 메인(main.html)으로 이동.
+   chrome 스케일(--chrome-scale)에 맞춰 60px 바를 축소하고, 로고는
+   콘텐츠 왼쪽 끝(--mcn-x)에서 30px 안쪽에 정렬한다. (데스크탑 전용)
+   ============================================================ */
+.gnb-logo-float {
+  position: fixed;
+  /* 메인 패널 임베드 시 부모의 세로 클립만큼 아래로 내려 잘림 방지(단독=0). */
+  top: var(--embed-clip-top, 0px);
+  left: 0;
+  width: 100%;
+  height: calc(60px * var(--chrome-scale, 1));
+  /* 최상단(히어로 위)에서는 투명 → 스크롤해 히어로를 벗어나면 다크(#212121).
+     (menu.js 가 .is-scrolled 를 토글) */
+  background: transparent;
+  transition: background-color 0.3s ease;
+  z-index: 999;                 /* 우측 .gnb-float(1000)보다 아래 → 햄버거가 위 */
+  display: flex;
+  align-items: center;
+  pointer-events: none;         /* 바 자체는 클릭 통과, 로고만 클릭되게 */
+}
+.gnb-logo-float.is-scrolled { background: #212121; }
+
+/* 라이트 히어로(career) 위에서는 흰 로고가 안 보이므로, 바가 투명한 동안
+   로고를 다크로 보여주고 스크롤해 바가 다크가 되면 다시 흰색으로 되돌린다.
+   (인라인 fill="white" 는 프레젠테이션 속성이라 CSS fill 이 우선한다) */
+body.page-career .gnb-logo-float:not(.is-scrolled) .gnb-logo-link svg path {
+  fill: #212121;
+}
+/* 라이트 히어로(career)는 좌우 여백(body)이 #212121 이라, 화면이 가로로 길면
+   다크 로고가 같은 색 여백에 묻힌다. 밝은 외곽 헤일로를 더해 베이지 콘텐츠
+   위에서도, 어두운 여백 위에서도 모두 보이게 한다. */
+body.page-career .gnb-logo-float:not(.is-scrolled) .gnb-logo-link svg {
+  filter: drop-shadow(0 0 1.5px rgba(255, 255, 255, 0.85))
+          drop-shadow(0 0 2.5px rgba(255, 255, 255, 0.5));
+}
+.gnb-logo-float .gnb-logo-link {
+  pointer-events: auto;
+  display: block;
+  margin-left: calc(var(--mcn-x, 0px) + 30px * var(--chrome-scale, 1));
+  width: calc(120px * var(--chrome-scale, 1));
+  height: calc(24px * var(--chrome-scale, 1));
+}
+.gnb-logo-float .gnb-logo-link svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+@media (max-width: 768px) {
+  .gnb-logo-float { display: none; }   /* 모바일은 .mo-header 사용 */
+}
+
+/* ============================================================
+   스크롤 최상단 이동 버튼 (mcn / career 공통)
+   스케일·스크롤되는 컨테이너 밖(body 직속)에 두어 뷰포트 우측
+   하단에 고정. 아래로 스크롤하면 페이드인되고, 클릭하면 컨테이너를
+   맨 위로 부드럽게 올린다. (menu.js 가 표시/클릭 제어)
+   ============================================================ */
+.scroll-top-btn {
+  position: fixed;
+  right: 40px;
+  /* 메인 패널 임베드 시 부모의 세로 클립만큼 위로 띄워 잘림 방지(단독=0). */
+  bottom: calc(40px + var(--embed-clip-top, 0px));
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #212121;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  /* gnb 햄버거처럼 chrome 스케일로 축소 → 화면이 작아질수록 함께 작아진다.
+     하단-우측 코너 기준으로 축소해 모서리 여백(40px)을 유지한다. */
+  transform-origin: bottom right;
+  /* 기본은 숨김 — 스크롤하면 .is-visible 로 나타난다 */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px) scale(var(--chrome-scale, 1));
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+}
+.scroll-top-btn.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(var(--chrome-scale, 1));
+}
+.scroll-top-btn:hover { background: #000; }
+.scroll-top-btn svg { display: block; }
+
+/* 이전 페이지로 돌아가기 버튼(.go-back-btn) 의 크기·위치·폰트는 menu.js 가
+   <style> 로 직접 주입한다 — menu.css 미로드 페이지(메인)에서도 동일하게 보이도록. */
+
+@media (max-width: 768px) {
+  /* 버튼 전용 단위: 360px 기준 48px, 작은 화면에서는 줄고 큰 화면에서도 48px을 넘지 않게.
+     페이지별 --u 공식 차이와 무관하게 되돌아가기 버튼(menu.js)과 같은 크기를 쓴다. */
+  .scroll-top-btn {
+    --rc-floating-u: min(1px, 100vw / 360, 100dvh / 780);
+    right: calc(16 * var(--rc-floating-u));
+    bottom: calc(16 * var(--rc-floating-u));
+    width: calc(48 * var(--rc-floating-u));
+    height: calc(48 * var(--rc-floating-u));
+  }
+  .scroll-top-btn svg {
+    width: calc(24 * var(--rc-floating-u));
+    height: calc(24 * var(--rc-floating-u));
+  }
+}
+
+/* ── 모바일 헤더 global(언어) 레이어드 글로브 — main.css 446-515 복사(공통 적용) ── */
+.kv-global-ic {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  width: 32px;
+  height: 32px;
+}
+
+/* 지구본 아이콘 */
+.global-ellipse1 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%);
+}
+.global-ellipse1 img { display: block; width: 100%; height: 100%; max-width: none; }
+
+.global-ellipse2 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 32px;
+  transform: translate(-50%, -50%);
+}
+.global-ellipse2 img { display: block; width: 100%; height: 100%; max-width: none; }
+
+.global-line {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 30px;
+  height: 0;
+  transform: translate(-50%, -50%);
+}
+.global-line-inner {
+  position: absolute;
+  top: -2px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.global-line-inner img { display: block; width: 100%; height: 100%; max-width: none; }
+
+.global-en {
+  position: absolute;
+  background: white;
+  left: 16px;
+  top: 20px;
+  width: 20px;
+  height: 12px;
+}
+.global-en-inner {
+  position: absolute;
+  left: calc(50% + 0.5px);
+  bottom: 0;
+  width: 17px;
+  height: 10px;
+  transform: translateX(-50%);
+}
+.global-en-img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 16.5px;
+  height: 9.898px;
+}
+.global-en-img img { display: block; width: 100%; height: 100%; max-width: none; }
+.mo-header .kv-global-ic { left: 50%; top: 50%; transform: translate(-50%, -50%); }

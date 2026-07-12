@@ -1,0 +1,371 @@
+/* ============================================================
+   Join Us — 채용 공고 상세 (joinus_detail.html)
+   press_center.css 크롬(.pc-container 스케일 / .pc-footer / 모바일 헤더)을
+   그대로 쓰고, 상세 본문(jd-*)만 여기서 정의한다.
+   브랜드 토큰: 다크 #212121 / KV 베이지 #d6bea4 / 액센트 #963e62·#f8e5ed
+               라이트 #f8f8f8 / 라인 #e9e9e9 / 그레이 #a4a4a4·#8d8d8d
+   폰트: Geist(영문 헤딩) + Pretendard(본문)
+   데스크탑: 1920 고정폭(스케일). 모바일(<=768): --u 단위(320u 컬럼).
+   ============================================================ */
+
+:root {
+  --jd-ink: #212121;
+  --jd-beige: #d6bea4;
+  --jd-accent: #963e62;
+  --jd-accent-soft: #f8e5ed;
+  --jd-paper: #f8f8f8;
+  --jd-line: #e9e9e9;
+  --jd-muted: #a4a4a4;
+  --jd-muted-2: #8d8d8d;
+  --jd-body: #333333;
+  --jd-col: 888px;
+}
+
+/* ── 공고 헤더 (다크 KV, press_center KV 패밀리) ───────────── */
+.jd-kv {
+  position: relative;
+  height: auto;
+  padding: 200px 0 92px;
+  text-align: center;
+}
+.jd-head {
+  width: var(--jd-col);
+  margin: 0 auto;
+  color: #ffffff;
+}
+.jd-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 34px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 15px;
+  letter-spacing: -0.2px;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.jd-back:hover { color: #ffffff; }
+.jd-back svg { display: block; }
+
+.jd-tags {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 22px;
+  min-height: 30px;
+}
+.jd-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 15px;
+  border: 1px solid rgba(214, 190, 164, 0.4);
+  border-radius: 100px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 14px;
+  line-height: 1.2;
+  letter-spacing: -0.2px;
+  color: var(--jd-beige);
+  white-space: nowrap;
+}
+.jd-tag:empty { display: none; }
+.jd-state {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 15px;
+  border-radius: 100px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.jd-state:empty { display: none; }
+.jd-state--open   { background: var(--jd-accent-soft); color: var(--jd-accent); }
+.jd-state--closed { background: rgba(255, 255, 255, 0.12); color: rgba(255, 255, 255, 0.55); }
+
+.jd-title {
+  margin: 0;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1.3;
+  letter-spacing: -1.2px;
+  color: #ffffff;
+}
+.jd-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 0;
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.jd-meta li {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 20px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 16px;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.82);
+}
+/* 가운데 점 구분선 (마지막 제외) */
+.jd-meta li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+}
+.jd-meta li .jd-meta-k {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── 상세 내용 ────────────────────────────────────────────── */
+.jd-content-sec { background: #ffffff; }
+.jd-content-inner {
+  width: var(--jd-col);
+  margin: 0 auto;
+  padding: 80px 0 48px;
+}
+.jd-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 26px;
+  font-family: 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--jd-muted);
+}
+.jd-label::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--jd-line);
+}
+.jd-content {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.9;
+  color: var(--jd-body);
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+/* ── APPLY (지원 폼) ──────────────────────────────────────── */
+.jd-apply { background: var(--jd-paper); }
+.jd-apply-inner {
+  width: var(--jd-col);
+  margin: 0 auto;
+  padding: 88px 0 108px;
+}
+.jd-apply-title {
+  margin: 0;
+  font-family: 'Geist', sans-serif;
+  font-weight: 700;
+  font-size: 44px;
+  letter-spacing: -0.5px;
+  color: var(--jd-ink);
+}
+.jd-apply-sub {
+  margin: 14px 0 44px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #666666;
+}
+
+.jd-form {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+.jd-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.jd-flabel {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.2px;
+  color: var(--jd-ink);
+}
+.jd-req { color: var(--jd-accent); }
+
+.jd-input,
+.jd-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--jd-line);
+  border-radius: 12px;
+  padding: 15px 18px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 16px;
+  color: var(--jd-ink);
+  background: #ffffff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.jd-input::placeholder,
+.jd-textarea::placeholder { color: #b8b8b8; }
+.jd-input:focus,
+.jd-textarea:focus {
+  outline: none;
+  border-color: var(--jd-accent);
+  box-shadow: 0 0 0 3px rgba(150, 62, 98, 0.12);
+}
+.jd-textarea { resize: vertical; min-height: 150px; line-height: 1.7; }
+
+.jd-file-input { display: none; }
+.jd-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+}
+.jd-file-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 22px;
+  border: 1px solid var(--jd-ink);
+  border-radius: 100px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--jd-ink);
+  background: #ffffff;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.jd-file:hover .jd-file-btn { background: var(--jd-ink); color: #ffffff; }
+.jd-file-name {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 15px;
+  color: var(--jd-muted-2);
+  word-break: break-all;
+}
+
+.jd-agree {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 15px;
+  color: var(--jd-body);
+  cursor: pointer;
+}
+.jd-agree input { width: 18px; height: 18px; accent-color: var(--jd-accent); flex-shrink: 0; }
+
+.jd-submit {
+  margin-top: 20px;
+  align-self: flex-start;
+  min-width: 220px;
+  padding: 17px 52px;
+  border: none;
+  border-radius: 100px;
+  background: var(--jd-ink);
+  color: #ffffff;
+  font-family: 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.05s ease;
+}
+.jd-submit:hover { background: #000000; }
+.jd-submit:active { transform: translateY(1px); }
+.jd-submit:disabled { background: #bdbdbd; cursor: default; }
+
+.jd-form-msg {
+  margin: 6px 0 0;
+  min-height: 20px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 15px;
+}
+.jd-form-msg.is-error { color: #c0392b; }
+.jd-form-msg.is-ok { color: #2e7d32; }
+
+.jd-closed-notice {
+  text-align: center;
+  padding: 48px 0 24px;
+  border: 1px dashed var(--jd-line);
+  border-radius: 16px;
+  background: #ffffff;
+}
+.jd-closed-notice p {
+  margin: 0 0 18px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 18px;
+  color: #555555;
+}
+.jd-closed-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 13px 30px;
+  border-radius: 100px;
+  background: var(--jd-ink);
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* ══════════════════════════════════════════════════════════
+   모바일 (<=768) — 뷰포트 폭 기준 단일 컬럼(좌우 20px 여백).
+   .pc-container 가 모바일에서 flex column + align-items:flex-start 라
+   직계 섹션을 width:100% 로 펴고, 안쪽 컬럼은 calc(100vw - 40px) 로 중앙 배치.
+   (사이트 --u 단위는 이 요소들에서 해석이 불안정해 고정 px/vw 로 처리)
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .jd-kv,
+  .jd-content-sec,
+  .jd-apply { width: 100%; align-self: stretch; box-sizing: border-box; }
+
+  .jd-head,
+  .jd-content-inner,
+  .jd-apply-inner { width: calc(100vw - 40px); max-width: calc(100vw - 40px); }
+
+  .jd-kv { padding: 46px 0 44px; }
+  .jd-back { font-size: 13px; margin-bottom: 22px; }
+  .jd-tags { gap: 6px; margin-bottom: 16px; }
+  .jd-tag, .jd-state { font-size: 12px; padding: 6px 13px; }
+  .jd-title { font-size: 26px; line-height: 1.32; letter-spacing: -0.6px; }
+  .jd-meta { gap: 8px 0; margin-top: 20px; }
+  .jd-meta li { font-size: 13px; padding: 0 13px; gap: 6px; }
+  .jd-meta li .jd-meta-k { font-size: 12px; }
+
+  .jd-content-inner { padding: 48px 0 28px; }
+  .jd-label { font-size: 12px; margin-bottom: 20px; gap: 12px; }
+  .jd-content { font-size: 15px; line-height: 1.85; }
+
+  .jd-apply-inner { padding: 48px 0 64px; }
+  .jd-apply-title { font-size: 30px; }
+  .jd-apply-sub { font-size: 14px; margin-bottom: 30px; }
+  .jd-form { gap: 22px; }
+  .jd-flabel { font-size: 14px; }
+  .jd-input, .jd-textarea { font-size: 16px; padding: 14px 15px; border-radius: 12px; }
+  .jd-textarea { min-height: 130px; }
+  .jd-file-btn { font-size: 14px; padding: 11px 20px; }
+  .jd-file-name { font-size: 13px; }
+  .jd-agree { font-size: 14px; }
+  .jd-submit { width: 100%; align-self: stretch; min-width: 0; font-size: 16px; padding: 16px 0; }
+  .jd-closed-notice { padding: 36px 0 18px; }
+  .jd-closed-notice p { font-size: 15px; }
+}

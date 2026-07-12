@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RINGCOMS - Career</title>
+  <link rel="icon" type="image/svg+xml" href="https://staticfile-three.vercel.app/frontuser/frontringcoms/favicon.svg">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/career.css">
+  <link rel="stylesheet" href="/css/menu.css">
+  <script>
+    /* 1920×1080 고정 프레임을 뷰포트에 맞춰 축소 (가로·세로 둘 다 고려, entertainment·mcn 과 동일) — 슬라이드는 세로 스크롤 */
+    (function () {
+      function applyScale() {
+        var root = document.documentElement;
+        if (window.innerWidth <= 768) {        /* 모바일은 mo-career.css 사용 */
+          root.style.setProperty('--mcn-scale', '1');
+          root.style.setProperty('--mcn-x', '0px');
+          root.style.setProperty('--chrome-scale', '1');
+          return;
+        }
+        /* 가로폭 맞춤(width-fit): 가로폭을 100% 채우고 세로는 스크롤.
+           좌우 여백(레터박스) 완전 제거 — 1920 초과 화면에서도 확대해 폭을 꽉 채운다. */
+        var scale = window.innerWidth / 1920;
+        root.style.setProperty('--mcn-scale', scale);
+        /* 1920 초과 화면에서만 가로 중앙 정렬 (그 이하에선 폭을 꽉 채우므로 0) */
+        root.style.setProperty('--mcn-x', ((window.innerWidth - 1920 * scale) / 2) + 'px');
+        /* GNB 햄버거 / 우측 CTA(문의·지원) 는 메인과 동일하게 contain 스케일로 축소 */
+        root.style.setProperty('--chrome-scale', Math.min(window.innerWidth / 1920, window.innerHeight / 1080));
+      }
+      applyScale();
+      window.addEventListener('resize', applyScale);
+    })();
+  </script>
+</head>
+<body>
+
+  <div class="career-container" id="careerContainer">
+
+    <!-- Floating left sub-navigation — slides 2~4 동안 계속 떠 있는다 -->
+    <div class="career-float-menu" aria-hidden="true">
+      <span class="career2-menu-item">MVCV</span>
+      <span class="career2-menu-item">Life@RCZ</span>
+      <span class="career2-menu-item active">Join Us</span>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         SLIDE 1  –  career-1  KV
+    ═══════════════════════════════════════════════════════ -->
+    <div class="career-slide career-1">
+      <div class="career">
+
+        <!-- Text frame — career.png 풀블리드 배경 위 중앙 헤딩 -->
+        <div class="career1-text-frame">
+          <p class="career1-heading">지속 가능한 비즈니스 구조를<br>설계할 동료를 찾습니다.</p>
+        </div>
+
+        <!-- GNB 로고는 .gnb-logo-float(컨테이너 밖, 상단 고정)로 분리됨 -->
+        <div class="career-gnb" style="display:none">
+          <div class="career-logo-bar">
+            <a class="career-logo" href="/main" aria-label="RINGCOMS 홈">
+              <svg width="120" height="24" viewBox="0 0 240 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_career_logo)">
+<path d="M29.8818 13.6003C28.2313 7.33959 22.0551 3.25891 15.6579 3.98992C9.22822 4.72094 3.90644 10.1045 3.89669 16.781L3.84471 46.6454L-0.0507812 46.6584L0.00445091 16.6446C0.0239446 7.23563 8.08784 -0.0452734 17.2109 0.00021195C26.4964 0.0456973 34.0567 7.45006 34.3199 16.7031C34.583 25.9138 27.4483 33.8608 17.9744 34.3774C20.0992 42.1131 28.6407 46.1808 35.9833 43.0066C43.3097 39.8389 46.341 30.9465 42.1239 23.932L45.4443 21.8819C50.9318 30.8912 47.0233 42.5712 37.4778 46.6162C27.6823 50.7683 16.6163 45.1639 14.0854 34.9849C11.5057 24.6208 18.7574 14.3086 29.8818 13.5938V13.6003ZM30.4049 17.5218C23.163 17.707 17.5975 23.5779 17.4936 30.4916C24.6218 30.235 30.2359 24.5428 30.4049 17.5218Z" fill="white"/>
+<path d="M213.348 36.0292L213.299 20.9899L206.444 29.9472C206.054 30.0447 205.57 30.0674 205.141 30.0057L198.192 20.9411L198.156 35.9903H194.602V12.2372C194.988 12.143 195.456 12.1365 195.817 12.2372L205.765 25.4832L215.759 12.1852C216.126 12.1592 216.555 12.1787 216.886 12.2372V35.987L213.345 36.0292H213.348Z" fill="white"/>
+<path d="M190.631 24.2915C190.631 31.0655 185.14 36.5595 178.366 36.5595C171.592 36.5595 166.102 31.0688 166.102 24.2915C166.102 17.5142 171.592 12.0234 178.366 12.0234C185.14 12.0234 190.631 17.5142 190.631 24.2915ZM178.084 33.1839C181.316 33.2781 184.156 31.7478 185.748 29.0349C187.454 26.1336 187.476 22.5143 185.797 19.5805C184.104 16.6272 180.907 15.1457 177.551 15.4316C174.224 15.7142 171.43 17.7578 170.315 20.9191C169.49 23.2583 169.539 25.7535 170.488 28.0408C171.768 31.1305 174.633 33.0831 178.084 33.1839Z" fill="white"/>
+<path d="M135.171 29.6212L135.207 26.8921L127.932 26.8758L127.906 23.7601L138.761 23.7471L138.748 30.3132C136.428 34.2802 132.224 36.4537 127.666 36.4245C122.604 36.392 118.078 33.3412 116.304 28.8349C114.381 23.9453 115.674 18.4838 119.612 15.1114C124.758 10.709 133.335 11.1249 137.448 16.947L134.862 19.0686C132.994 16.3817 130.151 15.1893 127.039 15.4135C123.033 15.7027 119.901 18.5585 119.274 22.5547C118.842 25.3001 119.407 28.0747 121.21 30.2157C124.745 34.4134 131.964 34.3516 135.161 29.6147L135.171 29.6212Z" fill="white"/>
+<path d="M111.529 36.2049C111.304 36.4778 110.541 36.5622 110.307 36.2958L95.8134 19.8009L95.7809 35.9904L92.2266 35.9839V12.2471C92.5352 12.1399 93.2695 12.0392 93.4937 12.2861L107.938 28.6868L107.977 12.5558H111.529V36.2016V36.2049Z" fill="white"/>
+<path d="M66.4736 23.8188L70.6648 23.6953C72.9325 23.6304 74.4433 21.7915 74.3783 19.5659C74.3198 17.5093 72.9098 15.7549 70.7362 15.7354L64.1181 15.6704L64.1116 35.9829L60.5508 36.0056V12.5547H70.4601C71.6817 12.5547 72.8481 12.8828 73.9462 13.289C76.5389 14.4033 78.0171 16.8108 78.0431 19.5919C78.0724 22.6199 76.3927 25.2548 73.4101 26.3107L80.3791 35.9016C79.0308 36.0673 77.7702 36.0316 76.3862 35.9894L66.4704 23.8188H66.4736Z" fill="white"/>
+<path d="M154.403 33.1664C157.253 32.9682 159.449 31.4639 161.031 29.1409L163.708 31.1228C160.599 36.1652 154.02 37.6402 148.776 35.4537C144.263 33.5725 141.401 29.3001 141.352 24.4072C141.3 19.3324 144.302 14.8456 149.039 13.0261C154.286 11.0118 160.69 12.542 163.702 17.4642L161.025 19.4428C159.117 16.4603 155.878 14.9755 152.408 15.4921C146.817 16.3238 143.942 21.8535 145.459 27.0356C146.606 30.9539 150.225 33.4588 154.403 33.1664Z" fill="white"/>
+<path d="M234.028 35.2293C229.551 37.835 223.141 36.1195 220.574 31.4378L223.037 29.5469C223.898 30.6028 224.681 31.5417 225.805 32.2468C227.559 33.3449 229.714 33.6178 231.588 32.7991C232.771 32.2825 233.443 31.2298 233.531 30.0797C233.625 28.8126 232.959 27.695 231.773 27.0679C230.399 26.3434 229.015 25.7034 227.589 25.0438C224.678 23.7053 221.841 21.9249 221.89 18.403C221.916 16.5121 222.784 14.7187 224.418 13.5815C228.216 10.9402 234.363 12.035 236.728 16.2457L234.265 18.1301C232.683 15.7713 229.986 14.7414 227.371 15.6544C226.26 16.0443 225.62 17.0774 225.539 18.0976C225.444 19.303 226.049 20.3621 227.173 20.9079L232.189 23.3446C233.684 24.0692 235.165 24.9204 236.13 26.3142C238.197 29.287 237.108 33.4359 234.028 35.2293Z" fill="white"/>
+<path d="M86.8968 12.5312H83.3359V36.0147H86.8968V12.5312Z" fill="white"/>
+<path d="M40.0706 21.0319C41.4774 21.0319 42.6178 19.8914 42.6178 18.4847C42.6178 17.0779 41.4774 15.9375 40.0706 15.9375C38.6638 15.9375 37.5234 17.0779 37.5234 18.4847C37.5234 19.8914 38.6638 21.0319 40.0706 21.0319Z" fill="white"/>
+</g>
+<defs>
+<clipPath id="clip0_career_logo">
+<rect width="240" height="48" fill="white"/>
+</clipPath>
+</defs>
+              </svg>
+            </a>
+          </div>
+          <!-- 햄버거/한영 버튼은 스크롤해도 고정되도록 컨테이너 밖(.gnb-float)으로 분리됨 -->
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         SLIDE 2  –  career-2  JOIN US
+    ═══════════════════════════════════════════════════════ -->
+    <div class="career-slide career-2">
+
+      <!-- Left sub-navigation는 .career-float-menu(플로팅)로 대체됨 -->
+
+      <!-- Centered body text -->
+      <p class="career2-text">더 나은 방식을 고민하고, 빠르게 실행하며,<br>함께 성장할 동료를 기다립니다.<br>링컴즈는 서로의 가능성을 믿고, 몰입과 실행을 통해 함께<br>성장하는 팀을 만들어가고 있어요.<br><span class="career2-text-gray">모든 전형 결과는 합격 여부와 관계없이 안내드리며,<br>재직 중인 지원자분들을 고려해&nbsp;&nbsp;<br>인터뷰 일정 또한 최대한 유연하게 조율하고 있습니다.</span></p>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         SLIDE 3  –  career-3  PROCESS
+    ═══════════════════════════════════════════════════════ -->
+    <div class="career-slide career-3">
+
+      <!-- Left sub-navigation는 .career-float-menu(플로팅)로 대체됨 -->
+
+      <!-- Title -->
+      <p class="c3-title">Process</p>
+
+      <!-- Gradient bar -->
+      <div class="c3-bar"></div>
+
+      <!-- Circles (layered left→right, each higher z-index) -->
+      <div class="c3c c3c-1"></div>
+      <div class="c3c c3c-2"></div>
+      <div class="c3c c3c-3"></div>
+      <div class="c3c c3c-4"></div>
+      <div class="c3c c3c-5"></div>
+      <div class="c3c c3c-6"></div>
+
+      <!-- Step labels on circles (num + name) -->
+      <div class="c3bl c3bl-1">
+        <span class="c3bl-num">01</span>
+        <span class="c3bl-name">지원서 접수</span>
+      </div>
+      <div class="c3bl c3bl-2">
+        <span class="c3bl-num">02</span>
+        <span class="c3bl-name">서류 검토</span>
+      </div>
+      <div class="c3bl c3bl-3">
+        <span class="c3bl-num">03</span>
+        <span class="c3bl-name">직무 역량 인터뷰</span>
+      </div>
+      <div class="c3bl c3bl-4">
+        <span class="c3bl-num">04</span>
+        <span class="c3bl-name">조직 Fit 인터뷰</span>
+      </div>
+      <div class="c3bl c3bl-5">
+        <span class="c3bl-num">05</span>
+        <span class="c3bl-name">처우협의</span>
+      </div>
+      <div class="c3bl c3bl-6 c3bl-white">
+        <span class="c3bl-num">06</span>
+        <span class="c3bl-name">최종 합격</span>
+      </div>
+
+      <!-- Vertical connector lines — odd steps go DOWN, even steps go DOWN from top -->
+      <div class="c3vl c3vl-1"></div>
+      <div class="c3vl c3vl-2"></div>
+      <div class="c3vl c3vl-3"></div>
+      <div class="c3vl c3vl-4"></div>
+      <div class="c3vl c3vl-5"></div>
+      <div class="c3vl c3vl-6"></div>
+
+      <!-- Bottom info: odd steps 01, 03, 05 -->
+      <div class="c3info c3bi-1">
+        <div class="c3info-hd">
+          <span class="c3info-num">01</span>
+          <span class="c3info-dur">약 5~10분 소요</span>
+        </div>
+        <p class="c3info-desc">지원을 희망하시는 포지션의 상세 Job Description을<br>꼼꼼하게 확인한 뒤 필요 경험과 역량에 맞는 내용으로<br>지원서를 작성하여 제출해주세요.<br>이력서, 경력기술서, 포트폴리오 등 모든 자료는 PDF<br>형식으로 첨부해주세요.</p>
+      </div>
+      <div class="c3info c3bi-3">
+        <div class="c3info-hd">
+          <span class="c3info-num">03</span>
+          <span class="c3info-dur">약 30분 ~ 1시간 소요</span>
+        </div>
+        <p class="c3info-desc">해당 직무의 실무 리더 및 동료들과 함께 이야기 나누는<br>인터뷰예요. 지원자분의 실제 경험과 문제 해결 방식,<br>직무 전문성에 대해 깊이 있게 이야기 나누는 자리입니다.<br>자연스러운 대화 속에서 그동안의 경험과 고민을 편하게<br>이야기해주세요. 지원자분께서도 링컴즈와 직무에 대해<br>궁금한 점을 충분히 질문하실 수 있습니다.<br>*진행 방식 : 대면 또는 화상 (사전 안내)</p>
+      </div>
+      <div class="c3info c3bi-5">
+        <div class="c3info-hd">
+          <span class="c3info-num">05</span>
+          <span class="c3info-dur">약 1~3영업일 소요</span>
+        </div>
+        <p class="c3info-desc">링컴즈 HR은 지원자분의 경력과 역량, 시장 수준 등을<br>종합적으로 고려해 처우를 제안드려요. 협의가 필요한<br>부분이 있다면 편하게 말씀해주세요.</p>
+      </div>
+
+      <!-- Top info: even steps 02, 04, 06 -->
+      <div class="c3info c3ti-2">
+        <div class="c3info-hd">
+          <span class="c3info-num">02</span>
+          <span class="c3info-dur">약 5~10영업일 소요</span>
+        </div>
+        <p class="c3info-desc">정성껏 작성해 주신 소중한 지원서는 채용 담당자와<br>해당 부서 리더가 함께 면밀히 검토해요.<br>서류 검토 결과는 합격 여부와 관계없이 모든 지원자분께<br>개별 안내를 드리고 있습니다.</p>
+      </div>
+      <div class="c3info c3ti-4">
+        <div class="c3info-hd">
+          <span class="c3info-num">04</span>
+          <span class="c3info-dur">약 30분 ~ 1시간 소요</span>
+        </div>
+        <p class="c3info-desc">링컴즈의 일하는 방식과 가치관, 협업 문화에 대해 깊이<br>있게 이야기 나누는 시간이에요.<br>대표 또는 경영진이 함께하며, 서로가 오래 함께할 수 있는<br>동료인지 확인하는 양방향 대화로 진행됩니다.<br>* 진행 방식 : 대면</p>
+      </div>
+      <div class="c3info c3ti-6">
+        <div class="c3info-hd">
+          <span class="c3info-num">06</span>
+        </div>
+        <p class="c3info-desc">축하합니다! 링컴즈의 새로운 동료가 되신 것을<br>진심으로 환영해요.<br>입사 관련 안내는 별도로 연락드릴 예정입니다.</p>
+      </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         SLIDE 4  –  career-4  FAQ  (지원 및 서류 관련)
+    ═══════════════════════════════════════════════════════ -->
+    <div class="career-slide career-4">
+
+      <!-- Left sub-navigation는 .career-float-menu(플로팅)로 대체됨 -->
+
+      <!-- Title -->
+      <p class="c4-title">FAQ</p>
+
+      <!-- Header description -->
+      <p class="c4-header-desc">링컴즈 지원 과정에서 자주 문의주시는 내용을 정리했어요. 지원 전 궁금한 점들이 조금 더 편하게 해결되길 바랍니다.<br>아래 내용에서 궁금한 점이 해결되지 않는다면, 담당자(ringcoms@ringcoms.com)에게 편하게 문의해주세요.</p>
+
+      <!-- Tab navigation -->
+      <div class="c4-tabs">
+        <span class="c4-tab c4-tab-active" data-tab="0">지원 및 서류 관련</span>
+        <span class="c4-tab" data-tab="1">전형 진행 관련</span>
+        <span class="c4-tab" data-tab="2">처우 및 입사 관련</span>
+        <span class="c4-tab" data-tab="3">기타</span>
+      </div>
+
+      <!-- FAQ list: panel 0 — 지원 및 서류 관련 -->
+      <div class="c4-list" data-panel="0">
+
+        <!-- Q1 -->
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q1.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">신입도 지원 가능한가요?</span>
+                <div class="c4-a">
+                  <p class="c4-a-text">포지션별로 요구하는 경력 수준이 다르기 때문에 공고 내 자격 요건을 확인해주세요.<br>별도의 경력 요건이 명시되지 않은 포지션은 신입 지원도 가능합니다</p>
+                </div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q2.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">졸업예정자도 지원할 수 있나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q3.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">외국인도 지원할 수 있나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q4.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">동시에 여러 포지션에 지원해도 되나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q5.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">이력서는 어떤 형식으로 작성하면 좋을까요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q6.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">포트폴리오는 꼭 제출해야 하나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q7.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">제출한 지원서를 수정할 수 있나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q8.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">지원한 포지션 외 다른 포지션을 제안받을 수도 있나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <!-- Q9 -->
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q9.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">현재 채용 중인 포지션이 없는데, 미리 지원할 수 있나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+      </div><!-- /.c4-list panel 0 -->
+
+      <!-- FAQ list: panel 1 — 전형 진행 관련 -->
+      <div class="c4-list" data-panel="1" style="display:none">
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q1.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">결과는 언제쯤 알 수 있나요?</span>
+                <div class="c4-a">
+                  <p class="c4-a-text">단계별 평균 소요 기간은 "합류 여정" 안내 페이지에서 확인이 가능합니다.<br>다만, 상황에 따라 검토 기간이 더 필요할 수 있습니다.</p>
+                </div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q2.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">합격 여부는 어떻게 전달되나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q3.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">인터뷰는 어디서 진행되나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q4.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">화상 인터뷰로 진행은 어렵나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q5.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">인터뷰 복장은 어떻게 해야 하나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q6.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">인터뷰에 무엇을 준비해 가야 하나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q7.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">면접 일정 변경이 가능한가요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q8.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">재직 중이라 평일 인터뷰 참석이 어려운데 일정 조율이 가능한가요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q9.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">과제 전형이 있나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q10.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">불합격 사유에 대한 피드백도 받을 수 있나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q11.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">채용 공고가 내려갔는데 아직 검토 중일 수도 있나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+      </div><!-- /.c4-list panel 1 -->
+
+      <!-- FAQ list: panel 2 — 처우 및 입사 관련 -->
+      <div class="c4-list" data-panel="2" style="display:none">
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q1.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">연봉은 어떻게 결정되나요?</span>
+                <div class="c4-a">
+                  <p class="c4-a-text">지원자분의 경력과 역량, 시장 수준, 내부 상황 등을 종합적으로 고려해 처우 협의 단계에서 제안드려요.<br>일방적인 통보가 아닌 충분한 대화를 바탕으로 조율하고 있습니다.</p>
+                </div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q2.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">입사일은 조정 가능한가요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q3.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">수습 기간이 있나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q4.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">근무 형태는 어떻게 되나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q5.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">근무지는 어디인가요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+      </div><!-- /.c4-list panel 2 -->
+
+      <!-- FAQ list: panel 3 — 기타 -->
+      <div class="c4-list" data-panel="3" style="display:none">
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q1.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">채용이 종료된 포지션에 다시 지원할 수 있나요?</span>
+                <div class="c4-a">
+                  <p class="c4-a-text">네, 첫 지원 이후 6개월이 지났다면 재지원이 가능합니다.<br>그 사이 새로운 경험과 성장을 쌓아 오셨다면 더욱 좋습니다.</p>
+                </div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q2.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">지원서에 작성한 개인정보는 어떻게 관리되나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+        <div class="c4-item">
+          <div class="c4-con">
+            <div class="c4-txt">
+              <span class="c4-q-label">Q3.</span>
+              <div class="c4-qa-right">
+                <span class="c4-q-text">채용 과정에서 추가 문의가 있다면 어디로 연락하면 되나요?</span>
+                <div class="c4-a"><p class="c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+
+      </div><!-- /.c4-list panel 3 -->
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         FOOTER  (Figma @Footer 556:8075)
+    ═══════════════════════════════════════════════════════ -->
+    <footer class="career-footer">
+
+      <!-- Logo -->
+      <a class="cf-logo" href="/career" aria-label="RINGCOMS 홈">
+        <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/footer/logo.svg" alt="RINGCOMS">
+      </a>
+
+      <!-- Email / homepage -->
+      <div class="cf-email">
+        <p>E. ringcoms@ringcoms.com</p>
+        <p>H. www.ringcoms.com</p>
+      </div>
+
+      <!-- Head Office -->
+      <div class="cf-contact cf-office">
+        <p class="cf-label">Head Office.</p>
+        <p class="cf-addr">서울특별시 강남구 도산대로165,<br>신사힐빌딩12층</p>
+      </div>
+
+      <!-- R&D Center -->
+      <div class="cf-contact cf-rnd">
+        <p class="cf-label">R&amp;D Center I Studio.</p>
+        <p class="cf-addr">경기도 화성시 동탄첨단산업1로 27,<br>금강펜테리움IX타워 A동 3401~3405호</p>
+      </div>
+
+      <!-- Privacy policy -->
+      <a class="cf-privacy" href="#">개인정보처리방침</a>
+
+      <!-- Copyright -->
+      <p class="cf-copy">Copyright © 2026 RINGCOMS. All Rights Reserved.</p>
+
+    </footer>
+
+  </div>
+
+  <!-- ============================================================
+       좌상단 로고 바 — 스케일 컨테이너 밖에 두어 스크롤과 무관하게
+       상단에 항상 고정. 클릭하면 메인 페이지로 이동. (데스크탑 전용)
+       ============================================================ -->
+  <div class="gnb-logo-float gnb-logo-float--light-kv">
+    <a class="gnb-logo-link" href="/main" aria-label="RINGCOMS 홈">
+      <svg width="120" height="24" viewBox="0 0 240 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_logobar)">
+<path d="M29.8818 13.6003C28.2313 7.33959 22.0551 3.25891 15.6579 3.98992C9.22822 4.72094 3.90644 10.1045 3.89669 16.781L3.84471 46.6454L-0.0507812 46.6584L0.00445091 16.6446C0.0239446 7.23563 8.08784 -0.0452734 17.2109 0.00021195C26.4964 0.0456973 34.0567 7.45006 34.3199 16.7031C34.583 25.9138 27.4483 33.8608 17.9744 34.3774C20.0992 42.1131 28.6407 46.1808 35.9833 43.0066C43.3097 39.8389 46.341 30.9465 42.1239 23.932L45.4443 21.8819C50.9318 30.8912 47.0233 42.5712 37.4778 46.6162C27.6823 50.7683 16.6163 45.1639 14.0854 34.9849C11.5057 24.6208 18.7574 14.3086 29.8818 13.5938V13.6003ZM30.4049 17.5218C23.163 17.707 17.5975 23.5779 17.4936 30.4916C24.6218 30.235 30.2359 24.5428 30.4049 17.5218Z" fill="white"/>
+<path d="M213.348 36.0292L213.299 20.9899L206.444 29.9472C206.054 30.0447 205.57 30.0674 205.141 30.0057L198.192 20.9411L198.156 35.9903H194.602V12.2372C194.988 12.143 195.456 12.1365 195.817 12.2372L205.765 25.4832L215.759 12.1852C216.126 12.1592 216.555 12.1787 216.886 12.2372V35.987L213.345 36.0292H213.348Z" fill="white"/>
+<path d="M190.631 24.2915C190.631 31.0655 185.14 36.5595 178.366 36.5595C171.592 36.5595 166.102 31.0688 166.102 24.2915C166.102 17.5142 171.592 12.0234 178.366 12.0234C185.14 12.0234 190.631 17.5142 190.631 24.2915ZM178.084 33.1839C181.316 33.2781 184.156 31.7478 185.748 29.0349C187.454 26.1336 187.476 22.5143 185.797 19.5805C184.104 16.6272 180.907 15.1457 177.551 15.4316C174.224 15.7142 171.43 17.7578 170.315 20.9191C169.49 23.2583 169.539 25.7535 170.488 28.0408C171.768 31.1305 174.633 33.0831 178.084 33.1839Z" fill="white"/>
+<path d="M135.171 29.6212L135.207 26.8921L127.932 26.8758L127.906 23.7601L138.761 23.7471L138.748 30.3132C136.428 34.2802 132.224 36.4537 127.666 36.4245C122.604 36.392 118.078 33.3412 116.304 28.8349C114.381 23.9453 115.674 18.4838 119.612 15.1114C124.758 10.709 133.335 11.1249 137.448 16.947L134.862 19.0686C132.994 16.3817 130.151 15.1893 127.039 15.4135C123.033 15.7027 119.901 18.5585 119.274 22.5547C118.842 25.3001 119.407 28.0747 121.21 30.2157C124.745 34.4134 131.964 34.3516 135.161 29.6147L135.171 29.6212Z" fill="white"/>
+<path d="M111.529 36.2049C111.304 36.4778 110.541 36.5622 110.307 36.2958L95.8134 19.8009L95.7809 35.9904L92.2266 35.9839V12.2471C92.5352 12.1399 93.2695 12.0392 93.4937 12.2861L107.938 28.6868L107.977 12.5558H111.529V36.2016V36.2049Z" fill="white"/>
+<path d="M66.4736 23.8188L70.6648 23.6953C72.9325 23.6304 74.4433 21.7915 74.3783 19.5659C74.3198 17.5093 72.9098 15.7549 70.7362 15.7354L64.1181 15.6704L64.1116 35.9829L60.5508 36.0056V12.5547H70.4601C71.6817 12.5547 72.8481 12.8828 73.9462 13.289C76.5389 14.4033 78.0171 16.8108 78.0431 19.5919C78.0724 22.6199 76.3927 25.2548 73.4101 26.3107L80.3791 35.9016C79.0308 36.0673 77.7702 36.0316 76.3862 35.9894L66.4704 23.8188H66.4736Z" fill="white"/>
+<path d="M154.403 33.1664C157.253 32.9682 159.449 31.4639 161.031 29.1409L163.708 31.1228C160.599 36.1652 154.02 37.6402 148.776 35.4537C144.263 33.5725 141.401 29.3001 141.352 24.4072C141.3 19.3324 144.302 14.8456 149.039 13.0261C154.286 11.0118 160.69 12.542 163.702 17.4642L161.025 19.4428C159.117 16.4603 155.878 14.9755 152.408 15.4921C146.817 16.3238 143.942 21.8535 145.459 27.0356C146.606 30.9539 150.225 33.4588 154.403 33.1664Z" fill="white"/>
+<path d="M234.028 35.2293C229.551 37.835 223.141 36.1195 220.574 31.4378L223.037 29.5469C223.898 30.6028 224.681 31.5417 225.805 32.2468C227.559 33.3449 229.714 33.6178 231.588 32.7991C232.771 32.2825 233.443 31.2298 233.531 30.0797C233.625 28.8126 232.959 27.695 231.773 27.0679C230.399 26.3434 229.015 25.7034 227.589 25.0438C224.678 23.7053 221.841 21.9249 221.89 18.403C221.916 16.5121 222.784 14.7187 224.418 13.5815C228.216 10.9402 234.363 12.035 236.728 16.2457L234.265 18.1301C232.683 15.7713 229.986 14.7414 227.371 15.6544C226.26 16.0443 225.62 17.0774 225.539 18.0976C225.444 19.303 226.049 20.3621 227.173 20.9079L232.189 23.3446C233.684 24.0692 235.165 24.9204 236.13 26.3142C238.197 29.287 237.108 33.4359 234.028 35.2293Z" fill="white"/>
+<path d="M86.8968 12.5312H83.3359V36.0147H86.8968V12.5312Z" fill="white"/>
+<path d="M40.0706 21.0319C41.4774 21.0319 42.6178 19.8914 42.6178 18.4847C42.6178 17.0779 41.4774 15.9375 40.0706 15.9375C38.6638 15.9375 37.5234 17.0779 37.5234 18.4847C37.5234 19.8914 38.6638 21.0319 40.0706 21.0319Z" fill="white"/>
+</g>
+<defs>
+<clipPath id="clip0_logobar">
+<rect width="240" height="48" fill="white"/>
+</clipPath>
+</defs>
+      </svg>
+    </a>
+  </div>
+
+  <!-- ============================================================
+       GNB 플로팅 버튼 (한영/햄버거) — 스케일 컨테이너 밖에 두어
+       스크롤과 무관하게 뷰포트 우측 상단에 고정. (데스크탑 전용)
+       ============================================================ -->
+  <div class="gnb-float">
+    <button class="btn-global" aria-label="Language">
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="60" height="60" fill="white"/>
+        <circle cx="30" cy="30" r="15" stroke="#212121" stroke-width="2"/>
+        <path d="M30 15C30.6356 15 31.3197 15.2905 32.0293 15.9766C32.7437 16.6672 33.4328 17.7147 34.0332 19.0869C35.2327 21.8286 36 25.6863 36 30C36 34.3137 35.2327 38.1714 34.0332 40.9131C33.4328 42.2853 32.7437 43.3328 32.0293 44.0234C31.3197 44.7095 30.6356 45 30 45C29.3644 45 28.6803 44.7095 27.9707 44.0234C27.2563 43.3328 26.5672 42.2853 25.9668 40.9131C24.7673 38.1714 24 34.3137 24 30C24 25.6863 24.7673 21.8286 25.9668 19.0869C26.5672 17.7147 27.2563 16.6672 27.9707 15.9766C28.6803 15.2905 29.3644 15 30 15Z" stroke="#212121" stroke-width="2"/>
+        <line x1="15" y1="29" x2="45" y2="29" stroke="#212121" stroke-width="2"/>
+        <rect width="20" height="12" transform="translate(30 34)" fill="white"/>
+        <path d="M48.5 36V45.8984H46.7227L42.375 39.6094H42.293V45.8984H40.2422V36H42.0469L46.3672 42.2891H46.4629V36H48.5Z" fill="#212121"/>
+        <path d="M32 45.8984V36H38.6445V37.6953H34.0508V40.1016H38.3027V41.7969H34.0508V44.2031H38.6582V45.8984H32Z" fill="#212121"/>
+      </svg>
+    </button>
+    <button class="btn-hamburger" aria-label="Menu">
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="60" height="60" fill="#212121"/>
+        <line x1="14" y1="21" x2="46" y2="21" stroke="white" stroke-width="2"/>
+        <line x1="14" y1="37" x2="46" y2="37" stroke="white" stroke-width="2"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- 스크롤 최상단 이동 버튼 (우측 하단 고정, menu.js 제어) -->
+  <button class="scroll-top-btn" type="button" aria-label="맨 위로">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <!-- ══════════════════════════════════════════════════════
+       모바일 전용 (≤768px)
+  ═══════════════════════════════════════════════════════ -->
+  <div class="mo-root">
+    <div class="mo-career">
+
+      <div class="slide-1">
+
+        <div class="kv-img">
+          <img class="kv-photo" src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/career/career.png" alt="">
+        </div>
+
+        <header class="mo-header">
+          <a class="mo-logo" href="/main" aria-label="RINGCOMS 홈">
+            <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/kv/logo-small.svg" alt="RINGCOMS">
+          </a>
+          <div class="mo-header-btns">
+            <button class="mo-hbtn mo-hbtn--global" type="button" aria-label="언어 변경">
+              <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="60" height="60" fill="white"/>
+                <circle cx="30" cy="30" r="15" stroke="#212121" stroke-width="2"/>
+                <path d="M30 15C30.6356 15 31.3197 15.2905 32.0293 15.9766C32.7437 16.6672 33.4328 17.7147 34.0332 19.0869C35.2327 21.8286 36 25.6863 36 30C36 34.3137 35.2327 38.1714 34.0332 40.9131C33.4328 42.2853 32.7437 43.3328 32.0293 44.0234C31.3197 44.7095 30.6356 45 30 45C29.3644 45 28.6803 44.7095 27.9707 44.0234C27.2563 43.3328 26.5672 42.2853 25.9668 40.9131C24.7673 38.1714 24 34.3137 24 30C24 25.6863 24.7673 21.8286 25.9668 19.0869C26.5672 17.7147 27.2563 16.6672 27.9707 15.9766C28.6803 15.2905 29.3644 15 30 15Z" stroke="#212121" stroke-width="2"/>
+                <line x1="15" y1="29" x2="45" y2="29" stroke="#212121" stroke-width="2"/>
+                <rect width="20" height="12" transform="translate(30 34)" fill="white"/>
+                <path d="M48.5 36V45.8984H46.7227L42.375 39.6094H42.293V45.8984H40.2422V36H42.0469L46.3672 42.2891H46.4629V36H48.5Z" fill="#212121"/>
+                <path d="M32 45.8984V36H38.6445V37.6953H34.0508V40.1016H38.3027V41.7969H34.0508V44.2031H38.6582V45.8984H32Z" fill="#212121"/>
+              </svg>
+            </button>
+            <button class="mo-hbtn mo-hbtn--menu" type="button" aria-label="메뉴" aria-expanded="false" aria-controls="moMenu">
+              <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="60" height="60" fill="#212121"/>
+                <line x1="14" y1="21" x2="46" y2="21" stroke="white" stroke-width="2"/>
+                <line x1="14" y1="37" x2="46" y2="37" stroke="white" stroke-width="2"/>
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <!-- 모바일 전체화면 메뉴 (Figma MO_Main_GNB 452:3921) -->
+        <nav class="mo-menu" id="moMenu" aria-label="전체 메뉴" aria-hidden="true">
+          <div class="mo-menu-list">
+            <div class="mo-menu-group">
+              <a class="mo-menu-item mo-menu-item--has-sub" href="/main#moAbout">
+                <span class="mo-menu-dash" aria-hidden="true"></span>
+                <span class="mo-menu-text">About</span>
+              </a>
+              <div class="mo-menu-sub">
+                <a class="mo-menu-subitem" href="/main#moAbout">About Company</a>
+                <a class="mo-menu-subitem" href="/main#moHistory">History</a>
+              </div>
+            </div>
+            <a class="mo-menu-item" href="/entertainment"><span class="mo-menu-text">Entertainment</span></a>
+            <a class="mo-menu-item" href="/mcn"><span class="mo-menu-text">MCN</span></a>
+            <span class="mo-menu-item mo-menu-item--disabled"><span class="mo-menu-text">Cosmetics</span></span>
+            <a class="mo-menu-item" href="/career"><span class="mo-menu-text">Career</span></a>
+          </div>
+        </nav>
+
+        <p class="kv-text">지속 가능한 비즈니스 구조를<br>설계할 동료를 찾습니다.</p>
+
+      </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         SLIDE 2 — JOIN US
+    ═══════════════════════════════════════════════════════ -->
+    <div class="mo-slide-2">
+
+      <nav class="mo-menu-tab">
+        <span class="mo-tab-item">MVCV</span>
+        <span class="mo-tab-item">Life@RCZ</span>
+        <span class="mo-tab-item mo-tab-active">Join Us</span>
+      </nav>
+
+      <p class="mo-join-text">더 나은 방식을 고민하고,<br>빠르게 실행하며,<br>함께 성장할 동료를 기다립니다.<br><span class="mo-join-gray">링컴즈는 서로의 가능성을 믿고, 몰입과<br>실행을 통해 함께 성장하는 팀을<br>만들어가고 있어요.<br>모든 전형 결과는 합격 여부와 관계없이<br>안내드리며, 재직 중인 지원자분들을<br>고려해 인터뷰 일정 또한 최대한<br>유연하게 조율하고 있습니다.</span></p>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         SLIDE 3 — PROCESS
+    ═══════════════════════════════════════════════════════ -->
+    <div class="mo-slide-3">
+
+      <p class="mo-s3-title">Process</p>
+
+      <div class="mo-s3-list">
+
+        <div class="mo-s3-con">
+          <div class="mo-s3-header">
+            <div class="mo-s3-tit">
+              <span class="mo-s3-num">01</span>
+              <span class="mo-s3-name">지원서 접수</span>
+            </div>
+            <span class="mo-s3-dur">약 5~10분 소요</span>
+          </div>
+          <div class="mo-s3-desc-wrap">
+            <p class="mo-s3-desc">지원을 희망하시는 포지션의 상세 Job Description을 꼼꼼하게 확인한 뒤 필요 경험과 역량에 맞는 내용으로 지원서를 작성하여 제출해주세요. 이력서, 경력기술서, 포트폴리오 등 모든 자료는 PDF 형식으로 첨부해주세요.</p>
+          </div>
+        </div>
+
+        <div class="mo-s3-con">
+          <div class="mo-s3-header">
+            <div class="mo-s3-tit">
+              <span class="mo-s3-num">02</span>
+              <span class="mo-s3-name">서류 검토</span>
+            </div>
+            <span class="mo-s3-dur">약 5~10영업일 소요</span>
+          </div>
+          <div class="mo-s3-desc-wrap">
+            <p class="mo-s3-desc">정성껏 작성해 주신 소중한 지원서는 채용 담당자와 해당 부서 리더가 함께 면밀히 검토해요. 서류 검토 결과는 합격 여부와 관계없이 모든 지원자분께 개별 안내를 드리고 있습니다.</p>
+          </div>
+        </div>
+
+        <div class="mo-s3-con">
+          <div class="mo-s3-header">
+            <div class="mo-s3-tit">
+              <span class="mo-s3-num">03</span>
+              <span class="mo-s3-name">직무 역량 인터뷰</span>
+            </div>
+            <span class="mo-s3-dur">약 30분 ~ 1시간 소요</span>
+          </div>
+          <div class="mo-s3-desc-wrap">
+            <p class="mo-s3-desc">해당 직무의 실무 리더 및 동료들과 함께 이야기 나누는 인터뷰예요. 지원자분의 실제 경험과 문제 해결 방식, 직무 전문성에 대해 깊이 있게 이야기 나누는 자리입니다. 자연스러운 대화 속에서 그동안의 경험과 고민을 편하게 이야기해주세요. 지원자분께서도 링컴즈와 직무에 대해 궁금한 점을 충분히 질문하실 수 있습니다.<br>*진행 방식 : 대면 또는 화상 (사전 안내)</p>
+          </div>
+        </div>
+
+        <div class="mo-s3-con">
+          <div class="mo-s3-header">
+            <div class="mo-s3-tit">
+              <span class="mo-s3-num">04</span>
+              <span class="mo-s3-name">조직 Fit 인터뷰</span>
+            </div>
+            <span class="mo-s3-dur">약 30분 ~ 1시간 소요</span>
+          </div>
+          <div class="mo-s3-desc-wrap">
+            <p class="mo-s3-desc">링컴즈의 일하는 방식과 가치관, 협업 문화에 대해 깊이 있게 이야기 나누는 시간이에요. 대표 또는 경영진이 함께하며, 서로가 오래 함께할 수 있는 동료인지 확인하는 양방향 대화로 진행됩니다.<br>* 진행 방식 : 대면</p>
+          </div>
+        </div>
+
+        <div class="mo-s3-con">
+          <div class="mo-s3-header">
+            <div class="mo-s3-tit">
+              <span class="mo-s3-num">05</span>
+              <span class="mo-s3-name">처우협의</span>
+            </div>
+            <span class="mo-s3-dur">약 1~3영업일 소요</span>
+          </div>
+          <div class="mo-s3-desc-wrap">
+            <p class="mo-s3-desc">링컴즈 HR은 지원자분의 경력과 역량, 시장 수준 등을 종합적으로 고려해 처우를 제안드려요. 협의가 필요한 부분이 있다면 편하게 말씀해주세요.</p>
+          </div>
+        </div>
+
+        <div class="mo-s3-con mo-s3-con--last">
+          <div class="mo-s3-header">
+            <div class="mo-s3-tit">
+              <span class="mo-s3-num">06</span>
+              <span class="mo-s3-name">최종 합격</span>
+            </div>
+          </div>
+          <div class="mo-s3-desc-wrap">
+            <p class="mo-s3-desc">축하합니다! 링컴즈의 새로운 동료가 되신 것을 진심으로 환영해요. 입사 관련 안내는 별도로 연락드릴 예정입니다.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         SLIDE 4 — FAQ
+    ═══════════════════════════════════════════════════════ -->
+    <div class="mo-slide-4">
+
+      <p class="mo-s4-title">FAQ</p>
+
+      <p class="mo-s4-desc">링컴즈 지원 과정에서 자주 문의주시는 내용을<br>정리했어요. 지원 전 궁금한 점들이 조금 더 편하게<br>해결되길 바랍니다.<br>아래 내용에서 궁금한 점이 해결되지 않는다면,<br>담당자(ringcoms@ringcoms.com)에게<br>편하게 문의해주세요.</p>
+
+      <div class="mo-s4-tabs-wrap" data-lenis-prevent>
+        <div class="mo-s4-tabs">
+          <span class="mo-c4-tab mo-c4-tab-active" data-tab="0">지원 및 서류 관련</span>
+          <span class="mo-c4-tab" data-tab="1">전형 진행 관련</span>
+          <span class="mo-c4-tab" data-tab="2">처우 및 입사 관련</span>
+          <span class="mo-c4-tab" data-tab="3">기타</span>
+        </div>
+      </div>
+
+      <!-- Panel 0 — 지원 및 서류 관련 -->
+      <div class="mo-c4-list" data-panel="0">
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q1.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">신입도 지원 가능한가요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text">포지션별로 요구하는 경력 수준이 다르기 때문에 공고 내 자격 요건을 확인해주세요. 별도의 경력 요건이 명시되지 않은 포지션은 신입 지원도 가능합니다.</p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q2.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">졸업예정자도 지원할 수 있나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q3.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">외국인도 지원할 수 있나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q4.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">동시에 여러 포지션에 지원해도 되나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q5.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">이력서는 어떤 형식으로 작성하면 좋을까요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q6.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">포트폴리오는 꼭 제출해야 하나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q7.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">제출한 지원서를 수정할 수 있나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q8.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">지원한 포지션 외 다른 포지션을 제안받을 수도 있나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q9.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">현재 채용 중인 포지션이 없는데, 미리 지원할 수 있나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 1 — 전형 진행 관련 -->
+      <div class="mo-c4-list" data-panel="1" style="display:none">
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q1.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">결과는 언제쯤 알 수 있나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text">단계별 평균 소요 기간은 "합류 여정" 안내 페이지에서 확인이 가능합니다. 다만, 상황에 따라 검토 기간이 더 필요할 수 있습니다.</p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q2.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">합격 여부는 어떻게 전달되나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q3.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">인터뷰는 어디서 진행되나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q4.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">화상 인터뷰로 진행은 어렵나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q5.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">인터뷰 복장은 어떻게 해야 하나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q6.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">인터뷰에 무엇을 준비해 가야 하나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q7.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">면접 일정 변경이 가능한가요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q8.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">재직 중이라 평일 인터뷰 참석이 어려운데 일정 조율이 가능한가요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q9.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">과제 전형이 있나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q10.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">불합격 사유에 대한 피드백도 받을 수 있나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q11.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">채용 공고가 내려갔는데 아직 검토 중일 수도 있나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 2 — 처우 및 입사 관련 -->
+      <div class="mo-c4-list" data-panel="2" style="display:none">
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q1.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">연봉은 어떻게 결정되나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text">지원자분의 경력과 역량, 시장 수준, 내부 상황 등을 종합적으로 고려해 처우 협의 단계에서 제안드려요. 일방적인 통보가 아닌 충분한 대화를 바탕으로 조율하고 있습니다.</p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q2.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">입사일은 조정 가능한가요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q3.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">수습 기간이 있나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q4.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">근무 형태는 어떻게 되나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q5.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">근무지는 어디인가요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 3 — 기타 -->
+      <div class="mo-c4-list" data-panel="3" style="display:none">
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q1.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">채용이 종료된 포지션에 다시 지원할 수 있나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text">네, 첫 지원 이후 6개월이 지났다면 재지원이 가능합니다. 그 사이 새로운 경험과 성장을 쌓아 오셨다면 더욱 좋습니다.</p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q2.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">지원서에 작성한 개인정보는 어떻게 관리되나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+        <div class="mo-c4-item">
+          <div class="mo-c4-con">
+            <div class="mo-c4-txt">
+              <span class="mo-c4-q-label">Q3.</span>
+              <div class="mo-c4-qa-right">
+                <span class="mo-c4-q-text">채용 과정에서 추가 문의가 있다면 어디로 연락하면 되나요?</span>
+                <div class="mo-c4-a"><p class="mo-c4-a-text"></p></div>
+              </div>
+            </div>
+            <button class="mo-c4-btn" aria-label="Toggle"></button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="mo-footer">
+      <div class="mo-footer-email">
+        <p>E. ringcoms@ringcoms.com</p>
+        <p>H. www.ringcoms.com</p>
+      </div>
+
+      <div class="mo-footer-contact mo-footer-office">
+        <p class="mo-footer-label">Head Office.</p>
+        <p class="mo-footer-addr">서울특별시 강남구 도산대로165,<br>신사힐빌딩12층</p>
+      </div>
+
+      <div class="mo-footer-contact mo-footer-rnd">
+        <p class="mo-footer-label">R&amp;D Center I Studio.</p>
+        <p class="mo-footer-addr">경기도 화성시 동탄첨단산업1로 27,<br>금강펜테리움IX타워 A동 3401~3405호</p>
+      </div>
+
+      <a class="mo-footer-privacy" href="#">개인정보처리방침</a>
+
+      <div class="mo-footer-txt">
+        <div class="mo-footer-logo">
+          <img src="https://staticfile-three.vercel.app/frontuser/frontringcoms/images/main/footer/logo.svg" alt="RINGCOMS">
+        </div>
+        <p class="mo-footer-copy">Copyright © 2026 RINGCOMS.<br>All Rights Reserved.</p>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ============================================================
+       공통 GNB 펼침 메뉴 (Figma menu_open 452:435) — menu.css / menu.js
+       ============================================================ -->
+  <div class="site-menu-backdrop" data-menu-backdrop></div>
+  <nav class="site-menu" data-menu-overlay aria-label="전체 메뉴" aria-hidden="true">
+    <!-- 메뉴 항목은 js/menu.js 의 SITE_MENU 데이터로 렌더됩니다 (추가·수정은 거기서). -->
+    <div class="site-menu-list" data-menu-list></div>
+  </nav>
+
+  <script src="/js/career.js"></script>
+  <script src="/js/menu.js"></script>
+  <script src="/js/privacy.js"></script>
+  <!-- career 모바일 스크롤 = Lenis(공용 js/lenis-scroll.js), mcn 과 동일 엔진. mo-snap 은 opt-out.
+       짧은 섹션(slide-1 · mo-slide-2) = lock 스냅, 긴 섹션(mo-slide-3 · mo-slide-4) = 진입 경계 게이트,
+       푸터 = 자유. PC 는 무영향(career.js/.career-container 데스크탑 엔진 그대로). -->
+  <script>window.MO_SNAP_DISABLE = true;</script>   <!-- mo-snap.js 즉시 return -->
+  <script src="/js/mo-snap.js"></script>            <!-- 게이트로 비활성(공용 파일) -->
+  <script>
+    window.LENIS_SNAP_SEL = ['.slide-1', '.mo-slide-2'];       // 짧은 섹션(스냅)
+    window.LENIS_GATE_SEL = ['.mo-slide-3', '.mo-slide-4'];    // 긴 섹션 진입 경계
+  </script>
+  <script src="/js/vendor/lenis.min.js"></script>
+  <script src="/js/vendor/lenis-snap.min.js"></script>
+  <script src="/js/lenis-scroll.js"></script>
+</body>
+</html>

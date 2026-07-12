@@ -1,0 +1,869 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ══════════════════════════════════════════════════════
+   DESKTOP (기본) — 1920px
+═══════════════════════════════════════════════════════ */
+html {
+  width: 100vw;
+  /* 세로 스크롤바 숨김 (스크롤 기능은 유지) — career·mcn 과 동일 */
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* IE/Edge */
+}
+html::-webkit-scrollbar { display: none; }   /* Chrome·Safari */
+
+body {
+  background: #ffffff;
+  width: 100vw;
+  margin: 0;
+  overflow-x: hidden;
+  position: relative;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+body::-webkit-scrollbar { display: none; }
+
+.pc-container {
+  width: 1920px;
+  /* 1920px 고정 폭을 뷰포트 폭에 맞춰 축소 (JS가 --mcn-scale 설정 + body 높이 보정)
+     + 가로 중앙 정렬 (--mcn-x, entertainment 와 동일) */
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  transform: translateX(var(--mcn-x, 0px)) scale(var(--mcn-scale, 1));
+}
+
+/* ── KV 섹션 ── */
+.pc-kv {
+  position: relative;
+  width: 1920px;
+  height: 531px;
+  background: #212121;
+  overflow: hidden;
+}
+
+/* 다크 박스 (KV 전체를 채움) */
+.pc-kv-dark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #212121;
+  overflow: hidden;
+}
+
+/* GNB */
+.pc-gnb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pc-gnb-logo {
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+  height: 60px;
+  background: #212121;
+  flex: 1;
+}
+
+.pc-gnb-menu {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  /* 컨테이너 축소(scale)를 상쇄 — GNB 버튼을 창 크기와 무관하게 같은 크기로 고정 */
+  transform: scale(calc(1 / var(--mcn-scale, 1)));
+  transform-origin: top right;
+}
+
+.pc-gnb-menu button {
+  display: block;
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* 상단 고정 햄버거(.gnb-float) 버튼 — <button> 기본 크롬(테두리·회색 배경·패딩)과
+   인라인 SVG baseline 여백 제거. mcn/career/entertainment 는 각자 CSS 에서 이미
+   리셋하지만 press_center 에는 없어 버튼이 달라 보였다. (이 페이지에만 적용) */
+.btn-global,
+.btn-hamburger {
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: block;
+  line-height: 0;
+  font-size: 0;
+}
+
+/* KV 타이틀 */
+.pc-kv-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 220px;
+  width: 888px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  text-align: center;
+}
+
+.pc-kv-main {
+  font-family: 'Geist', sans-serif;
+  font-weight: 700;
+  font-size: 72px;
+  line-height: 1.15;
+  letter-spacing: -1.4px;
+  color: #d6bea4;
+}
+
+.pc-kv-sub {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 1.2;
+  letter-spacing: -0.8px;
+  color: #ffffff;
+}
+
+/* ── NEWS 섹션 ──
+   기사 개수에 따라 흰색 영역 높이가 자동으로 늘고 줄도록 flow(세로 흐름) 배치.
+   상·하 여백과 요소 간 간격은 기존 고정 좌표(검색 top140 / 리스트 top246 /
+   페이지네이션 top1582 / 섹션 1814)와 동일해지도록 산출한 값이다. */
+.pc-news {
+  position: relative;
+  width: 1920px;
+  background: #ffffff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 140px 0 200px;
+}
+
+/* 검색 영역 (리스트 폭 888 안에서 우측 정렬) */
+.pc-search {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  width: 888px;
+}
+
+.pc-search-type,
+.pc-search-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8f8f8;
+  border-radius: 24px;
+  padding: 12px 20px 12px 24px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 18px;
+  letter-spacing: -0.36px;
+  color: #212121;
+}
+
+.pc-search-type {
+  width: 166px;
+  height: 50px;
+  font-weight: 500;
+  gap: 8px;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 검색 조건 드롭다운 메뉴 */
+.pc-search-type-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 20;
+  width: 100%;
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  font-weight: 400;
+}
+
+.pc-search-type.is-open .pc-search-type-menu {
+  display: block;
+}
+
+.pc-search-type.is-open > svg {
+  transform: rotate(180deg);
+}
+
+.pc-search-type > svg {
+  transition: transform 0.2s ease;
+}
+
+.pc-search-type-menu li {
+  padding: 10px 24px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.pc-search-type-menu li:hover,
+.pc-search-type-menu li[aria-selected="true"] {
+  background: #f8f8f8;
+}
+
+.pc-search-input {
+  width: 280px;
+  height: 50px;
+  font-weight: 300;
+}
+
+.pc-search-cursor {
+  flex: 1;
+}
+
+/* 뉴스 리스트 */
+.pc-news-list {
+  list-style: none;
+  width: 888px;
+  margin: 56px 0 0;
+  padding: 0;
+}
+
+.pc-news-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  box-shadow: 0 1px 0 0 #e9e9e9;
+  width: 888px;
+}
+
+.pc-news-txt {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  width: 762px;
+}
+
+.pc-news-tag {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  border-radius: 20px;
+  background: #f8f8f8;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.25;
+  letter-spacing: -0.01px;
+  color: #a4a4a4;
+  white-space: nowrap;
+}
+
+.pc-news-title {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.45;
+  color: #212121;
+  width: 680px;
+  padding: 3px 0;
+}
+
+.pc-news-arrow {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  width: 32px;
+  height: 32px;
+  color: #212121;
+  transform: rotate(180deg) scaleY(-1);
+  user-select: none;
+  line-height: 1;
+}
+
+/* 하이라이트 (active) 아이템 */
+.pc-news-item--active .pc-news-tag {
+  background: #f8e5ed;
+  color: #973d63;
+}
+
+.pc-news-item--active .pc-news-title {
+  color: #963e62;
+}
+
+.pc-news-item--active .pc-news-arrow {
+  color: #963e62;
+}
+
+/* 페이지네이션 */
+.pc-pagination {
+  margin-top: 56px;
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  white-space: nowrap;
+}
+
+.pc-pagi-arrows {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pc-pagi-arrows button,
+.pc-pagi-nums button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.pc-pagi-arrows button {
+  background: #f8f8f8;
+  border-radius: 50%;
+  color: #8d8d8d;
+}
+
+.pc-pagi-nums {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.pc-pagi-nums button {
+  background: none;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.54;
+  color: #8d8d8d;
+  text-align: center;
+}
+
+.pc-pagi-nums button.active {
+  color: #212121;
+  text-decoration: underline;
+  text-decoration-style: solid;
+  text-underline-position: from-font;
+}
+
+/* ── FOOTER ── */
+.pc-footer {
+  position: relative;
+  width: 1920px;
+  height: 296px;
+  background: #212121;
+  overflow: hidden;
+}
+
+.pc-footer-logo {
+  position: absolute;
+  left: 3.13%;
+  top: calc(50% - 70px);
+  transform: translateY(-50%);
+  width: 200px;
+  height: 40px;
+}
+
+.pc-footer-logo svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pc-footer-email {
+  position: absolute;
+  left: calc(4.17% + 81.5px);
+  transform: translateX(-50%);
+  top: 192px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: 'Geist', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.35;
+  color: #ffffff;
+}
+
+.pc-footer-office,
+.pc-footer-rnd {
+  position: absolute;
+  top: calc(50% - 64px);
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #ffffff;
+}
+
+.pc-footer-office {
+  left: calc(75% + 6px);
+}
+
+.pc-footer-rnd {
+  left: calc(83.33% + 52px);
+}
+
+.pc-footer-office-name {
+  font-family: 'Geist', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -0.6px;
+}
+
+.pc-footer-office-addr {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.45;
+  white-space: nowrap;
+}
+
+.pc-footer-copy {
+  position: absolute;
+  left: calc(50% - 167px);
+  top: calc(50% + 80px);
+  font-family: 'Geist', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+}
+
+.pc-footer-privacy {
+  position: absolute;
+  left: calc(83.33% + 145px);
+  top: calc(50% + 78px);
+  transform: translateX(-100%);
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #ffffff;
+  text-align: right;
+  text-decoration: underline;
+  text-decoration-style: solid;
+  text-underline-position: from-font;
+  letter-spacing: -0.6px;
+  white-space: nowrap;
+}
+
+/* 모바일 고정 헤더 — 데스크탑에선 숨김 (career/entertainment 와 동일 구조) */
+.mo-header { display: none; }
+
+/* ══════════════════════════════════════════════════════
+   MOBILE — 360px  (max-width: 768px)
+═══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── GNB_MO 헤더 (entertainment.css 와 동일 디자인) ──
+     .mo-header 의 --u 는 menu.css 가 min(vw/360, dvh/780)으로 덮어써
+     메인과 크기가 정확히 일치한다. */
+  .mo-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: calc(60 * var(--u));
+    background: #212121;
+  }
+  .mo-logo {
+    display: block;
+    width: calc(120 * var(--u));
+    height: calc(24 * var(--u));
+    margin-left: calc(20 * var(--u));
+  }
+  .mo-logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .mo-header-btns {
+    display: flex;
+    align-items: center;
+  }
+  .mo-hbtn {
+    width: calc(60 * var(--u));
+    height: calc(60 * var(--u));
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    line-height: 0;
+  }
+  .mo-hbtn svg { display: block; width: 100%; height: 100%; }
+
+  html {
+    width: 100%;
+    /* body 에 fixed 로 붙는 맨 위로/이전 버튼(menu.css)이 상속받도록 전역 정의 —
+       이게 없으면 var(--u) 폴백(1px)으로 떨어져 버튼만 안 커진다. */
+    --u: min(100vw / 360, 100vh / 780);            /* fallback(구형); svh 는 아래 @supports */
+    --mo-content-w: calc(320 * var(--u));
+    --mo-content-x: max(calc(20 * var(--u)), calc((100vw - var(--mo-content-w)) / 2));
+  }
+
+  body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .pc-container {
+    --u: min(100vw / 360, 100vh / 780);            /* fallback(구형); svh 는 아래 @supports */
+    --mo-content-w: calc(320 * var(--u));
+    --mo-content-x: max(calc(20 * var(--u)), calc((100vw - var(--mo-content-w)) / 2));
+    width: 100vw;
+    margin: 0 auto;
+    /* 고정 헤더(60u) 만큼 콘텐츠 밀어내기 — 다른 페이지 .mo-root 와 동일 보정 */
+    padding-top: calc(60 * var(--u));
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* 모바일에서는 데스크탑 축소 로직 해제 */
+    position: static;
+    transform: none;
+  }
+
+  /* ── [주소창 토글 리플로우 방지] dvh → svh ──
+     dvh 는 주소창 접힘/펼침 때 실시간 변동 → 화면 리사이징 + 읽던 위치 밀림.
+     svh 는 값 고정이라 토글 흡수(실제 뷰포트 변화 시에만 재계산). 위 규칙은 vh 폴백. */
+  @supports (height: 100svh) {
+    html,
+    .pc-container { --u: min(100vw / 360, 100svh / 780); }
+    /* 공유 menu.css(뒤 로드)의 dvh chrome 을 body-프리픽스로 svh 덮기 (menu.css·mcn 미변경) */
+    body .mo-header, body .mo-menu { --u: min(100vw / 360, 100svh / 780); }
+    body .mo-root { padding-top: calc(60 * min(100vw / 360, 100svh / 780)); }
+    body .cta-btns { --u-cta: min(100vw / 360, 100svh / 780); }
+    body .scroll-top-btn { --rc-floating-u: min(1px, 100vw / 360, 100svh / 780); }
+  }
+
+  /* ── KV ── */
+  .pc-kv {
+    width: 100%;
+    height: calc(410 * var(--u));
+    background: #212121;
+  }
+
+  .pc-gnb {
+    width: 100%;
+  }
+
+  .pc-gnb-logo {
+    padding-left: var(--mo-content-x);
+  }
+
+  /* KV 타이틀 */
+  .pc-kv-title {
+    top: calc(50% + 23.5 * var(--u));
+    transform: translate(-50%, -50%);
+    width: calc(320 * var(--u));
+    gap: calc(16 * var(--u));
+  }
+
+  .pc-kv-main {
+    font-size: calc(34 * var(--u));
+    letter-spacing: calc(-0.56 * var(--u));
+  }
+
+  .pc-kv-sub {
+    font-weight: 600;
+    font-size: calc(22 * var(--u));
+    letter-spacing: calc(-0.44 * var(--u));
+  }
+
+  /* ── NEWS ── */
+  .pc-news {
+    width: 100%;
+    padding: calc(60 * var(--u)) 0 calc(80 * var(--u));
+  }
+
+  /* 검색 영역 (세로 배치) */
+  .pc-search {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: calc(8 * var(--u));
+    width: calc(320 * var(--u));
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .pc-search-type {
+    width: calc(320 * var(--u));
+    height: calc(48 * var(--u));
+    border-radius: 1000px;
+    padding: 0 calc(20 * var(--u)) 0 calc(24 * var(--u));
+    font-size: calc(16 * var(--u));
+    letter-spacing: calc(-0.32 * var(--u));
+  }
+
+  .pc-search-input {
+    width: calc(320 * var(--u));
+    height: calc(48 * var(--u));
+    border-radius: calc(24 * var(--u));
+    padding: calc(12 * var(--u)) calc(20 * var(--u)) calc(12 * var(--u)) calc(24 * var(--u));
+    justify-content: flex-end;
+  }
+
+  .pc-search-cursor {
+    display: none;
+  }
+
+  /* 뉴스 리스트 */
+  .pc-news-list {
+    width: calc(320 * var(--u));
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: calc(48 * var(--u));
+  }
+
+  .pc-news-item {
+    width: calc(320 * var(--u));
+    gap: calc(16 * var(--u));
+    padding: calc(22 * var(--u)) 0;
+    box-shadow: none;
+    border-bottom: 1px solid #e9e9e9;
+  }
+
+  .pc-news-txt {
+    width: auto;
+    flex: 1;
+    min-width: 0;
+    gap: calc(10 * var(--u));
+  }
+
+  .pc-news-tag {
+    padding: calc(5 * var(--u)) calc(8 * var(--u));
+    font-size: calc(11 * var(--u));
+  }
+
+  .pc-news-title {
+    width: calc(208 * var(--u));
+    font-size: calc(15 * var(--u));
+    padding: 0;
+  }
+
+  .pc-news-arrow {
+    font-size: calc(32 * var(--u));
+  }
+
+  /* 모바일은 active 강조 없음 */
+  .pc-news-item--active .pc-news-tag {
+    background: #f8f8f8;
+    color: #a4a4a4;
+  }
+
+  .pc-news-item--active .pc-news-title,
+  .pc-news-item--active .pc-news-arrow {
+    color: #212121;
+  }
+
+  /* 페이지네이션:  ‹  1  2  3  › */
+  .pc-pagination {
+    margin-top: calc(40 * var(--u));
+    gap: calc(30 * var(--u));
+  }
+
+  .pc-pagi-arrows {
+    gap: 0;
+  }
+
+  .pc-pagi-arrows button {
+    color: #212121;
+  }
+
+  .pc-pagi-arrows .pc-pagi-first,
+  .pc-pagi-arrows .pc-pagi-last {
+    display: none;
+  }
+
+  .pc-pagi-nums {
+    gap: calc(12 * var(--u));
+  }
+
+  .pc-pagi-nums button {
+    font-size: calc(14 * var(--u));
+    line-height: 1.5;
+  }
+
+  .pc-pagi-nums button:nth-child(n + 4) {
+    display: none;
+  }
+
+  /* ── FOOTER — 다른 페이지 mo-footer 와 동일한 중앙정렬 디자인으로 통일 ── */
+  .pc-footer {
+    width: 100%;
+    height: calc(628 * var(--u));
+    text-align: center;
+  }
+
+  .pc-footer-email {
+    left: 50%;
+    top: calc(60 * var(--u));
+    transform: translateX(-50%);
+    width: calc(320 * var(--u));
+    align-items: center;
+    white-space: normal;
+  }
+
+  .pc-footer-office,
+  .pc-footer-rnd {
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(320 * var(--u));
+    align-items: center;
+  }
+
+  .pc-footer-office {
+    top: calc(154 * var(--u));
+  }
+
+  .pc-footer-rnd {
+    top: calc(248 * var(--u));
+  }
+
+  .pc-footer-office-name {
+    width: auto;
+  }
+
+  .pc-footer-office-addr {
+    font-size: calc(14 * var(--u));
+    white-space: normal;
+  }
+
+  .pc-footer-rnd .pc-footer-office-addr {
+    white-space: normal;
+  }
+
+  .pc-footer-privacy {
+    left: 50%;
+    top: calc(398 * var(--u));
+    transform: translateX(-50%);
+    width: calc(320 * var(--u));
+    text-align: center;
+  }
+
+  .pc-footer-logo {
+    left: 50%;
+    top: calc(482 * var(--u));
+    transform: translateX(-50%);
+    width: calc(150 * var(--u));
+    height: calc(30 * var(--u));
+  }
+
+  .pc-footer-copy {
+    left: 50%;
+    top: calc(532 * var(--u));
+    transform: translateX(-50%);
+    width: calc(320 * var(--u));
+    white-space: normal;
+  }
+
+  .pc-footer-copy span {
+    display: block;
+  }
+}
+
+/* ── 폴더폰(펼친 넓은 화면, 600~768px) ──
+   일반폰(360px)에서는 검색조건/검색창이 세로로 쌓이고 콘텐츠가 320u 고정 폭
+   가운데 기둥이라 좌우가 크게 빈다. 넓은 화면에서는 (1) 검색조건(왼쪽) +
+   검색창(오른쪽)을 가로로 나란히, (2) 리스트를 84vw 로 넓혀 좌우 8vw 대칭
+   여백만 남긴다. 글자 크기·터치 타겟(--u)·섹션 높이는 모바일 스펙 그대로.
+   (career/mcn 폴더블과 동일한 8vw/84vw 정렬선) */
+@media (min-width: 600px) and (max-width: 768px) {
+  /* 검색: 조건(좌) + 입력(우) 가로 배치, 84vw 폭 */
+  .pc-search {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 84vw;
+    gap: calc(10 * var(--u));
+  }
+  /* 조건 pill 은 "제목+내용" 이 들어갈 만큼만 차지하고 넓어지지 않음 */
+  .pc-search-type {
+    width: auto;
+    min-width: calc(150 * var(--u));
+    flex-shrink: 0;
+  }
+  /* 검색창이 오른쪽 남은 폭을 모두 채움 */
+  .pc-search-input {
+    width: auto;
+    flex: 1;
+    min-width: 0;
+    justify-content: space-between;
+  }
+  .pc-search-cursor {
+    display: none;
+  }
+
+  /* 리스트: 84vw 로 확장 */
+  .pc-news-list {
+    width: 84vw;
+  }
+  .pc-news-item {
+    width: 100%;
+  }
+  /* 기사 제목이 넓어진 컬럼을 채우도록 고정폭(208u) 해제 */
+  .pc-news-txt {
+    width: auto;
+    flex: 1;
+    min-width: 0;
+  }
+  .pc-news-title {
+    width: auto;
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* 제목 검색 input (디자인 mockup 에 실제 input 이 없어 연동용으로 추가)
+   — .pc-search-input(회색 pill, 18px Pretendard) 안에 투명하게 채워 넣음 */
+.pc-search-text {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 18px;
+  letter-spacing: -0.6px;
+  color: #212121;
+  padding: 0;
+}
+.pc-search-text::placeholder { color: #9e9e9e; }

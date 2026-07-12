@@ -1,0 +1,2171 @@
+/* ============================================================
+   entertainment.css
+   Horizontal PowerPoint-style scroll  ·  Slides 1 – 6
+   Each slide : 1920 × 1080 px  (full size, no scaling)
+   ============================================================ */
+
+/* ── Reset ─────────────────────────────────────────────────── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  background: #212121;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  background: #212121;
+  font-size: 0;
+  line-height: 0;
+}
+
+/* ── Scroll container ───────────────────────────────────────── */
+/* The whole experience is authored on a fixed 1920×1080 canvas.
+   Instead of rewriting every pixel-positioned rule to be fluid, we keep the
+   canvas intact and scale it to fit any viewport (set by js/entertainment.js).
+   --ent-scale / --ent-x / --ent-y are computed so the canvas is centred and
+   fully visible at every zoom level — at the original "75%" look it resolves
+   to scale 1, so that view is unchanged. */
+.entertainment-container {
+  display: flex;
+  flex-direction: row;
+  width: 1920px;
+  height: 1080px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  font-size: initial;
+  line-height: initial;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  transform: translate(var(--ent-x, 0px), var(--ent-y, 0px)) scale(var(--ent-scale, 1));
+  /* 소수 배율 합성 시 좌/우 경계가 슬라이드 이음새와 겹쳐 옆 슬라이드가 1px
+     새어 보이는 서브픽셀 seam 제거 — 경계를 슬라이드 안쪽으로 2px 들임.
+     (풀블리드라 가장자리 2px 손실은 보이지 않음) */
+  clip-path: inset(0 2px);
+}
+.entertainment-container::-webkit-scrollbar { display: none; }
+
+/* ── 고정 푸터 바 (풀폭) ─────────────────────────────────────────
+   컨테이너(레터박스) 밖, 뷰포트 하단 100% 폭. 슬라이드 내부 .footer(캔버스 안, 콘텐츠와
+   함께 축소·레터박스)는 데스크탑에서 숨기고 이걸로 대체한다. 상단 헤더 다크 바와 짝을
+   이루는 #212121 바 + 흰 텍스트라 흰 슬라이드/검정 여백 어디서나 잘 보인다. */
+.ent-footer-fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* 상단 다크 바(.gnb-logo-float)와 동일하게 chrome 스케일로 축소 →
+     화면이 작아질수록 콘텐츠(레터박스)와 같은 비율로 얇아진다. */
+  height: calc(60px * var(--chrome-scale, 1));
+  z-index: 998;
+  background: #212121;
+  display: flex;
+  align-items: center;
+}
+.ent-footer-copy {
+  position: absolute;
+  left: calc(30px * var(--chrome-scale, 1));
+  font-family: 'Geist', sans-serif;
+  font-weight: 500;
+  font-size: calc(14px * var(--chrome-scale, 1));
+  line-height: 145%;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+}
+.ent-footer-privacy {
+  position: absolute;
+  right: calc(30px * var(--chrome-scale, 1));
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: calc(14px * var(--chrome-scale, 1));
+  line-height: 145%;
+  letter-spacing: -0.6px;
+  color: #ffffff;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+/* 데스크탑: 슬라이드 내부 푸터는 위 고정 풀폭 푸터로 대체 (모바일은 컨테이너 자체가 숨김) */
+.entertainment-slide .footer { display: none; }
+
+/* ── Single slide ───────────────────────────────────────────── */
+.entertainment-slide {
+  flex-shrink: 0;
+  width: 1920px;
+  height: 1080px;
+  scroll-snap-align: start;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Section base ───────────────────────────────────────────── */
+.entertainment {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+}
+
+/* ============================================================
+   SHARED  –  elements common to all 6 slides
+   ============================================================ */
+
+/* Tab row */
+.tab {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0;
+  gap: 21px;
+  position: absolute;
+  width: 176px;
+  height: 28px;
+  left: 60px;
+  top: 48px;
+}
+/* 슬라이드 1 탭은 상단 고정 로고 다크 바(60px)에 가려지지 않도록
+   다른 슬라이드(.entertainment-2~6, -artist)와 동일하게 80px 로 내린다. */
+.entertainment-1 .tab { top: 80px; }
+
+.tab-item {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 140%;
+  text-align: center;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tab-item.active  { color: #212121; }
+.tab-item.inactive{ color: #CBCBCB; }
+
+/* Right panel */
+.img1 {
+  position: absolute;
+  width: 1404px;
+  height: 1080px;
+  right: 0;
+  bottom: 0;
+}
+
+/* Quote (inside .img1) */
+.quote {
+  position: absolute;
+  width: 800px;
+  height: 250px;
+  left: calc(50% - 400px);
+  top: calc(50% - 125px - 45px);
+  font-family: 'Geist', sans-serif;
+  font-weight: 700;
+  /* 800px 박스에서 2번째 줄("...기록하기 위해")이 넘쳐 '위해'가 4번째 줄로 줄바꿈되던 문제 →
+     글자 크기를 줄여 3줄(<br> 기준)로 고정. */
+  font-size: 34px;
+  line-height: 125%;
+  text-align: center;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  word-break: keep-all;
+}
+
+/* Email (inside .img1) */
+.email-center {
+  position: absolute;
+  width: 289px;
+  height: 28px;
+  left: calc(50% - 144.5px);
+  top: 676px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 115%;
+  text-align: center;
+  color: #5D5D5D;
+  white-space: nowrap;
+}
+
+/* Logo (inside .img1) */
+.logo {
+  position: absolute;
+  width: 240px;
+  height: 48px;
+  left: calc(50% - 120px);
+  top: 892px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slide-indicator,
+.slide-dot { display: none; }
+
+/* CONTACT label */
+/* -var(--ent-vclip): 가로로 긴 화면에서 하단이 잘릴 때 그만큼 위(안쪽)로 올려 안 잘리게. */
+.contact-title {
+  position: absolute;
+  left: 60px;
+  top: calc(792px - var(--ent-vclip, 0px));
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 140%;
+  text-transform: uppercase;
+  color: #212121;
+}
+
+/* Contact info */
+.project {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0;
+  gap: 14px;
+  position: absolute;
+  width: 304px;
+  height: 90px;
+  left: 60px;
+  /* +var(--ent-vclip): 하단이 잘릴 때 그만큼 위로 올려 CONTACT 정보가 잘리지 않게. */
+  bottom: calc(140px + var(--ent-vclip, 0px));
+}
+
+.project-labels {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 6px;
+  width: 18px;
+  height: 90px;
+}
+
+.project-label {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 125%;
+  text-transform: uppercase;
+  color: #212121;
+}
+
+.project-values {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 238px;
+  height: 90px;
+}
+
+.project-value {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 125%;
+  color: #212121;
+  white-space: nowrap;
+}
+
+/* Menu */
+/* 슬라이드별 GNB 메뉴는 상단 고정 .gnb-float(컨테이너 밖)로 분리됨 → 숨김.
+   (좌상단 로고 .gnb-logo-float 다크 바에 가려지지 않도록 단일 고정 버튼 사용) */
+.entertainment-slide .menu { display: none; }
+
+/* hover 펼침 패널(.site-menu) 위치 보정 — 이 페이지는 캔버스(.entertainment.js →
+   --ent-x/--ent-y)와 상단 고정 chrome(인라인 → --mcn-x) 변수를 동시에 설정한다.
+   menu.css 공통 규칙은 둘 중 하나만 설정된다고 가정해 --ent-x 와 --mcn-x 를 함께
+   더하므로(이중 적용) 패널이 햄버거와 어긋난다. 여기서 .gnb-float 햄버거와 같은
+   기준(뷰포트 top:0 + --mcn-x)으로 맞춘다. 속성 명시도(data 속성)로 menu.css 보다 우선. */
+.site-menu[data-menu-overlay] {
+  top: 0;
+  right: calc(66px * var(--chrome-scale, var(--mcn-scale, 1)) + var(--mcn-x, 0px));
+}
+
+/* 우측 CTA(문의하기/지원하기) 위치 보정 — 위 .site-menu 와 같은 이중-오프셋 문제.
+   menu.css 공통 규칙이 right: calc(--ent-x + --mcn-x) 로 두 변수를 더하는데, 이 페이지는
+   둘 다(--ent-x: entertainment.js, --mcn-x: 인라인) 같은 레터박스 값으로 설정하므로 여백이
+   두 번 더해져 CTA 가 콘텐츠 우측 끝보다 안쪽으로 떠 보인다. 햄버거(.gnb-float)와 같은
+   기준(--mcn-x 한 번)으로 맞춰 콘텐츠 우측 끝에 정렬. (menu.css 보다 나중 → body 로 명시도 ↑) */
+body .cta-btns {
+  right: var(--mcn-x, 0px);
+}
+
+/* 좌상단 로고 바: 공용 .gnb-logo-float 는 기본 투명 → 세로 스크롤 시에만 다크(#212121)다.
+   엔터테인먼트는 가로 슬라이드라 menu.js 의 .is-scrolled 토글이 안 걸려 바가 투명하게
+   남고 흰 로고가 안 보인다. 다른 페이지처럼 상단 다크 바를 항상 깔아 좌상단 로고가 늘
+   보이게 한다. (menu.css 가 이 파일보다 나중에 로드되므로 body 접두어로 명시도를 높여 우선) */
+body .gnb-logo-float { background: #212121; }
+
+.menu {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  /* 한영 버튼(.btn-global) 숨김 시 남은 햄버거를 우측 끝에 고정 */
+  justify-content: flex-end;
+  position: absolute;
+  width: 120px;
+  height: 60px;
+  left: 1800px;
+  top: 0;
+  /* 메인(main.html)의 햄버거는 콘텐츠와 함께 축소된다. 여기서도 역스케일로 고정하지 않고
+     캔버스(--ent-scale)와 함께 자연 축소시켜 메인과 같은 크기(60×scale)로 보이게 한다. */
+  transform-origin: top right;
+}
+
+.btn-global,
+.btn-hamburger {
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: block;
+  line-height: 0;
+  font-size: 0;
+}
+
+/* Footer */
+.footer {
+  position: absolute;
+  width: 1920px;
+  height: 80px;
+  left: 0;
+  bottom: 0;
+}
+
+.footer-copyright {
+  position: absolute;
+  left: 60px;
+  top: calc(50% - 10px);
+  font-family: 'Geist', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 145%;
+  color: rgba(33, 33, 33, 0.4);
+  white-space: nowrap;
+}
+
+.footer-privacy {
+  position: absolute;
+  left: 1767px;
+  top: calc(50% - 10px);
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 145%;
+  text-decoration: underline;
+  letter-spacing: -0.6px;
+  color: #212121;
+  white-space: nowrap;
+}
+
+.footer-addresses {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+  position: absolute;
+  width: 924px;
+  height: 20px;
+  left: calc(50% - 462px + 315px);
+  top: 30px;
+}
+
+.address-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.address-label {
+  font-family: 'Geist', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 125%;
+  letter-spacing: -0.6px;
+  color: #212121;
+  white-space: nowrap;
+}
+
+.address-text {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 145%;
+  letter-spacing: -0.6px;
+  color: #212121;
+}
+
+
+/* ============================================================
+   SLIDE 1  –  .entertainment-1
+   Warm cream → white  |  dark #212121 panel
+   ============================================================ */
+
+.entertainment-1 .entertainment {
+  background: linear-gradient(180deg, #FAF6F0 0%, #FFFFFF 55.34%);
+}
+.entertainment-1 .img1 { background: #212121; }
+
+/* 가로로 긴 화면에서 히어로(인용문·이메일·로고)를 위로 끌어올려 로고 하단이 푸터에 가리지
+   않게 한다(보정값은 entertainment.js 가 계산 → 서로 안 겹치게 연쇄 적용). 16:9 등에선 0. */
+.entertainment-1 .quote        { top: calc(50% - 125px - 45px - var(--ent1-quote-lift, 0px)); }
+.entertainment-1 .email-center { top: calc(676px - var(--ent1-email-lift, 0px)); }
+.entertainment-1 .logo         { top: calc(892px - var(--ent1-logo-lift, 0px)); }
+
+/* Footer: left white | right dark — split aligns with img1 (516px from left) */
+.entertainment-1 .footer {
+  background: linear-gradient(to right,
+    rgba(255, 255, 255, 1) 516px,
+    rgba(33, 33, 33, 1)   516px
+  );
+}
+
+.entertainment-1 .footer-copyright {
+  left: 60px;
+  top: 30px;
+  bottom: 30px;
+  color: rgba(33, 33, 33, 0.4);
+}
+
+
+/* ============================================================
+   SLIDE 2  –  .entertainment-2  (Gong Do yu profile)
+   White background, artist profile layout
+   ============================================================ */
+
+.entertainment-2 .entertainment { background: #FFFFFF; }
+
+/* Tab override: top:80px on this slide */
+.entertainment-2 .tab            { top: 80px; }
+.entertainment-2 .tab-item.active   { color: #212121; }
+.entertainment-2 .tab-item.inactive { color: #CBCBCB; }
+
+/* ── Left panel ─────────────────────────────────────────── */
+
+/* Artist selector: top = calc(50% - 148px/2 - 306px) = 160px */
+.ent2-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  position: absolute;
+  width: 304px;
+  left: 60px;
+  top: 160px;
+}
+.ent2-menu-name {
+  display: block;
+  width: 304px;
+  height: 37px;
+  font-family: 'Geist', sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #CBCBCB;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+}
+.ent2-menu-active { color: #212121; }
+
+/* Big name: left = calc(50% - 241px/2 - 779.5px) = 60px */
+/* 이름·생년·소개는 한 블록으로 --ent2-info-lift 만큼 함께 위로(가로로 긴 화면에서 소개가
+   푸터에 가리지 않게). JS가 배우 리스트와 안 겹치도록 올림 양을 제한한다. 16:9 등에선 0. */
+.ent2-bigname {
+  position: absolute;
+  left: 60px;
+  top: calc(534px - var(--ent2-info-lift, 0px));
+  font-family: 'Geist', sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+  white-space: nowrap;
+}
+
+/* Birth date: left = calc(50% - 81px/2 - 859.5px) = 60px */
+.ent2-date {
+  position: absolute;
+  left: 60px;
+  top: calc(592px - var(--ent2-info-lift, 0px));
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #CBCBCB;
+  white-space: nowrap;
+}
+
+/* Description: left = calc(50% - 400px/2 - 700px) = 60px */
+.ent2-desc {
+  position: absolute;
+  left: 60px;
+  top: calc(698px - var(--ent2-info-lift, 0px));
+  width: 400px;
+  height: 119px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 120%;
+  letter-spacing: -1px;
+  color: #CBCBCB;
+  overflow: hidden;
+}
+
+/* ── Frame 2085665706 ───────────────────────────────────── */
+.ent2-frame {
+  position: absolute;
+  box-sizing: border-box;
+  left: 516px;
+  top: 0;
+  width: 1404px;
+  height: 1080px;
+  border-left: 1px solid #000000;
+}
+
+/* Sub-nav: "Gong Do yu" label
+   calc(50% - 116px/2 - 258px) using frame width 1404: 702-58-258 = 386px */
+/* 이름 폭에 무관하게 프레임 기준 x=444px(= 50% - 258) 가운데정렬 — 모든 아티스트 공용 */
+.ent2-subnav-name {
+  position: absolute;
+  left: 444px;
+  top: 80px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  height: 28px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 140%;
+  text-align: center;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+
+/* Sub-nav: "filmography" label
+   calc(50% - 133px/2 + 276.5px) using frame width 1404: 702-66.5+276.5 = 912px */
+.ent2-subnav-film {
+  position: absolute;
+  left: 912px;
+  top: 80px;
+  width: 133px;
+  height: 28px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 140%;
+  text-align: center;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+
+/* ── img1: main portrait ────────────────────────────────── */
+/* calc(50% - 584/2 - 258) using frame 1404: 702-292-258 = 152px
+   top:160 = bottom:140 from 1080px slide | 584×780px */
+.ent2-img1 {
+  position: absolute;
+  left: 152px;
+  top: 160px;
+  width: 584px;
+  height: 780px;
+  overflow: hidden;
+}
+.ent2-img1 img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* ── Thumbnails (img2–img5) ─────────────────────────────── */
+.ent2-thumb2,
+.ent2-thumb3,
+.ent2-thumb4,
+.ent2-thumb5 {
+  position: absolute;
+  top: 770px;
+  width: 128px;
+  height: 170px;
+  background: #D9D9D9;
+  overflow: hidden;
+}
+/* 클릭 시 큰 사진 자리로 교체되는 썸네일 (데스크탑) — JS가 클래스 부여 */
+.ent2-thumb-clickable { cursor: pointer; }
+.ent2-img1,
+.ent2-thumb-clickable { backface-visibility: hidden; }
+
+/* all left values measured from the dividing line (frame-relative) */
+.ent2-thumb2 { left: 760px; }   /* img2: left:760 from dividing line */
+.ent2-thumb3 { left: 912px; }   /* img3: left:912 from dividing line */
+.ent2-thumb4 { left: 1064px; }  /* img4: left:1064 from dividing line */
+.ent2-thumb5 { left: 1216px; }  /* img5: left:1216 from dividing line */
+
+/* img2 & img3: left-aligned (left:0) */
+.ent2-thumb2 img,
+.ent2-thumb3 img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 128px;
+  height: 170px;
+  object-fit: contain;
+}
+/* img4 & img5: right-aligned (right:0) */
+.ent2-thumb4 img,
+.ent2-thumb5 img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 128px;
+  height: 170px;
+  object-fit: contain;
+}
+
+/* ── Filmography shared text styles ─────────────────────── */
+/* Year label (position:absolute set inline via style="top:…") */
+.ent2-yr {
+  position: absolute;
+  left: 0;
+  width: 33px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+/* Title column (position:absolute set inline via style="top:…") */
+.ent2-txts {
+  position: absolute;
+  left: 73px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ent2-txts span {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #CBCBCB;
+  display: block;
+}
+
+/* ── Section "1": ADVERTISING & FASHION & MAGAZINE ─────── */
+/* left:912 from dividing line | top:160 | 432×186px */
+.ent2-adv {
+  position: absolute;
+  left: 912px;
+  top: 160px;
+  width: 432px;
+  height: 186px;
+}
+.ent2-adv-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 93px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+/* list: left:152 | items placed with inline style top: */
+.ent2-adv-list {
+  position: absolute;
+  left: 152px;
+  top: 0;
+  width: 280px;
+  height: 186px;
+}
+
+/* ── Section "2": MUSIC VIDEO ───────────────────────────── */
+/* left:912 from dividing line | top:386 | 344×38px */
+.ent2-mv {
+  position: absolute;
+  left: 912px;
+  top: 386px;
+  width: 344px;
+  height: 38px;
+}
+/* "MUSIC VIDEO": width:81 */
+.ent2-mv-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 81px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+/* 2025 year: left:152 within section */
+.ent2-mv-year {
+  position: absolute;
+  left: 152px;
+  top: 0;
+  width: 33px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+/* titles: left:225 within section */
+.ent2-mv-txts {
+  position: absolute;
+  left: 225px;
+  top: 0;
+  width: 119px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ent2-mv-txts span {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #CBCBCB;
+  display: block;
+}
+
+/* ── Section "3": MOVIE & OTT DRAMA ────────────────────── */
+/* left:912 from dividing line | top:464 | 343×72px */
+.ent2-drama {
+  position: absolute;
+  left: 912px;
+  top: 464px;
+  width: 343px;
+  height: 72px;
+}
+.ent2-drama-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 75px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+/* list: left:152 | items at top:0/28/56 */
+.ent2-drama-list {
+  position: absolute;
+  left: 152px;
+  top: 0;
+  width: 191px;
+  height: 72px;
+}
+
+/* ── Footer ─────────────────────────────────────────────── */
+.entertainment-2 .footer        { background: transparent; }
+.entertainment-2 .footer-copyright { color: rgba(33,33,33,0.4); }
+.entertainment-2 .footer-privacy   { color: #212121; }
+.entertainment-2 .address-label,
+.entertainment-2 .address-text     { color: #212121; }
+
+
+/* ============================================================
+   아티스트 슬라이드 공통 (DB 동적 생성) — .entertainment-artist
+   기존 .entertainment-2~5 의 동일 스타일을 한 클래스로 합친 것.
+   ============================================================ */
+.entertainment-artist .entertainment { background: #FFFFFF; }
+.entertainment-artist .tab            { top: 80px; }
+.entertainment-artist .tab-item.active   { color: #212121; }
+.entertainment-artist .tab-item.inactive { color: #CBCBCB; }
+.entertainment-artist .footer        { background: transparent; }
+.entertainment-artist .footer-copyright { color: rgba(33,33,33,0.4); }
+.entertainment-artist .footer-privacy   { color: #212121; }
+.entertainment-artist .address-label,
+.entertainment-artist .address-text     { color: #212121; }
+
+/* ── 세로 축소(데스크탑 와이드 cover) 대응 — 아티스트 슬라이드 전용 ──
+   브라우저 높이가 줄면 캔버스가 폭 기준으로 채워지며 하단이 잘린다(js fitCanvas).
+   --ent-vis-h = 캔버스 좌표로 본 "실제 보이는 높이"(세로가 충분하면 1080).
+   · 썸네일: 보이는 영역 하단(바닥에서 140px 위)에 항상 붙인다.
+   · 큰 사진: 바닥을 같은 라인에 맞추도록 높이를 줄인다(object-fit:contain 이라
+     이미지는 비율 유지하며 작아질 뿐 잘리지 않는다).
+   세로가 충분할 땐(vis-h=1080) min()이 기존 값(770 / 780)으로 떨어져 변화 없음. */
+.entertainment-artist .ent2-img1 {
+  height: min(780px, max(160px, var(--ent-vis-h, 1080px) - 300px));
+}
+.entertainment-artist .ent2-thumb2,
+.entertainment-artist .ent2-thumb3,
+.entertainment-artist .ent2-thumb4,
+.entertainment-artist .ent2-thumb5 {
+  top: min(770px, max(150px, var(--ent-vis-h, 1080px) - 310px));
+}
+
+/* ── Filmography (DB 동적 생성, flex) ───────────────────────
+   절대좌표(.ent2-adv/.ent2-mv/.ent2-drama, top:Npx)를 대체.
+   섹션 간격 40px · 연도(엔트리) 간격 12px · 작품 간격 6px,
+   라벨 컬럼 152px · 연도 컬럼 73px 로 기존 픽셀 레이아웃 재현. */
+.ent2-film {
+  position: absolute;
+  left: 912px;            /* 분할선 기준 우측 필모 영역 시작 */
+  top: 160px;
+  width: 432px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.ent2-cat {
+  display: flex;
+  align-items: flex-start;
+}
+.ent2-cat-label {
+  flex: 0 0 152px;
+  width: 152px;
+  padding-right: 12px;
+  box-sizing: border-box;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+.ent2-cat-list {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ent2-entry {
+  display: flex;
+  align-items: flex-start;
+}
+.ent2-entry-year {
+  flex: 0 0 73px;
+  width: 73px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+.ent2-entry-works {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ent2-entry-works span {
+  display: block;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #CBCBCB;
+}
+
+
+/* ============================================================
+   SLIDE 3  –  .entertainment-3  (Choi Seo Eun profile)
+   White background, artist profile layout
+   ============================================================ */
+
+.entertainment-3 .entertainment { background: #FFFFFF; }
+
+.entertainment-3 .tab            { top: 80px; }
+.entertainment-3 .tab-item.active   { color: #212121; }
+.entertainment-3 .tab-item.inactive { color: #CBCBCB; }
+
+/* Sub-nav: "Choi Seo Eun" label
+   calc(50% - 127px/2 - 257.5px) using frame width 1404: 702-63.5-257.5 = 381px */
+.ent3-subnav-name {
+  position: absolute;
+  left: 381px;
+  top: 80px;
+  width: 127px;
+  height: 28px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 140%;
+  text-align: center;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+
+/* ── Section "1": ADVERTISING & OTHERS (top:160) ─────── */
+.ent3-adv {
+  position: absolute;
+  left: 912px;
+  top: 160px;
+  width: 432px;
+  height: 72px;
+}
+.ent3-adv-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 93px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+.ent3-adv-list {
+  position: absolute;
+  left: 152px;
+  top: 0;
+  width: 280px;
+  height: 72px;
+}
+
+/* ── Section "2": PLAY (top:272) ────────────────────────  */
+.ent3-play {
+  position: absolute;
+  left: 912px;
+  top: 272px;
+  width: 298px;
+  height: 20px;
+}
+.ent3-play-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 33px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+.ent3-play-txts {
+  position: absolute;
+  left: 225px;
+  top: 0;
+  width: 73px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ent3-play-txts span {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #CBCBCB;
+  display: block;
+}
+
+/* ── Section "3": MOVIE & DRAMA & SHOW (top:332) ───────── */
+.ent3-drama {
+  position: absolute;
+  left: 912px;
+  top: 332px;
+  width: 352px;
+  height: 128px;
+}
+.ent3-drama-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 99px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+.ent3-drama-list {
+  position: absolute;
+  left: 152px;
+  top: 0;
+  width: 200px;
+  height: 128px;
+}
+
+/* ── Footer ─────────────────────────────────────────────── */
+.entertainment-3 .footer        { background: transparent; }
+.entertainment-3 .footer-copyright { color: rgba(33,33,33,0.4); }
+.entertainment-3 .footer-privacy   { color: #212121; }
+.entertainment-3 .address-label,
+.entertainment-3 .address-text     { color: #212121; }
+
+
+/* ============================================================
+   SLIDE 4  –  .entertainment-4  (Lee Seo i profile)
+   White background, artist profile layout
+   ============================================================ */
+
+.entertainment-4 .entertainment { background: #FFFFFF; }
+
+.entertainment-4 .tab            { top: 80px; }
+.entertainment-4 .tab-item.active   { color: #212121; }
+.entertainment-4 .tab-item.inactive { color: #CBCBCB; }
+
+/* Sub-nav: "Lee Seo i" label
+   calc(50% - 67px/2 - 257.5px) using frame width 1404: 702-33.5-257.5 = 411px */
+.ent4-subnav-name {
+  position: absolute;
+  left: 444px;
+  top: 80px;
+  transform: translateX(-50%);
+  height: 28px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 140%;
+  text-align: center;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #212121;
+}
+
+/* ── Section "1": ADVERTISING (top:160) ─────────────────── */
+.ent4-adv {
+  position: absolute;
+  left: 912px;
+  top: 160px;
+  width: 432px;
+  height: 160px;
+}
+.ent4-adv-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 81px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+.ent4-adv-list {
+  position: absolute;
+  left: 152px;
+  top: 0;
+  width: 280px;
+  height: 184px;
+}
+
+/* ── Section "2": DRAMA (top:360) ──────────────────────── */
+.ent4-drama {
+  position: absolute;
+  left: 912px;
+  top: 360px;
+  width: 402px;
+  height: 20px;
+}
+.ent4-drama-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 48px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+.ent4-drama-list {
+  position: absolute;
+  left: 152px;
+  top: 0;
+  width: 250px;
+  height: 16px;
+}
+
+/* ── Footer ─────────────────────────────────────────────── */
+.entertainment-4 .footer        { background: transparent; }
+.entertainment-4 .footer-copyright { color: rgba(33,33,33,0.4); }
+.entertainment-4 .footer-privacy   { color: #212121; }
+.entertainment-4 .address-label,
+.entertainment-4 .address-text     { color: #212121; }
+
+
+/* ============================================================
+   SLIDE 5  –  .entertainment-5  (Gang Pil seon profile)
+   White background, artist profile layout
+   ============================================================ */
+
+.entertainment-5 .entertainment { background: #FFFFFF; }
+
+.entertainment-5 .tab            { top: 80px; }
+.entertainment-5 .tab-item.active   { color: #212121; }
+.entertainment-5 .tab-item.inactive { color: #CBCBCB; }
+
+/* Sub-nav: "Kang Pil sun" label
+   calc(50% - 125px/2 - 258px) using frame width 1404: 702-62.5-258 = 381.5 ≈ 382px */
+.ent5-subnav-name {
+  position: absolute;
+  left: 382px;
+  top: 80px;
+  width: 125px;
+  height: 28px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 140%;
+  text-align: center;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+
+/* ── Section "1": DRAMA & OTT DRAMA (top:160) ───────────── */
+.ent5-drama {
+  position: absolute;
+  left: 912px;
+  top: 160px;
+  width: 432px;
+  height: 200px;
+}
+.ent5-drama-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 90px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+.ent5-drama-list {
+  position: absolute;
+  left: 152px;
+  top: 0;
+  width: 280px;
+  height: 212px;
+}
+
+/* ── Section "2": MOVIE (top:400) ──────────────────────── */
+.ent5-movie {
+  position: absolute;
+  left: 912px;
+  top: 400px;
+  width: 371px;
+  height: 116px;
+}
+.ent5-movie-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 41px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+.ent5-movie-list {
+  position: absolute;
+  left: 152px;
+  top: 0;
+  width: 219px;
+  height: 128px;
+}
+
+/* ── Footer ─────────────────────────────────────────────── */
+.entertainment-5 .footer        { background: transparent; }
+.entertainment-5 .footer-copyright { color: rgba(33,33,33,0.4); }
+.entertainment-5 .footer-privacy   { color: #212121; }
+.entertainment-5 .address-label,
+.entertainment-5 .address-text     { color: #212121; }
+
+
+/* ============================================================
+   SLIDE 6  –  .entertainment-6  (AUDITION)
+   White left panel  |  dark #212121 right panel  (like slide 1)
+   ============================================================ */
+
+.entertainment-6 .entertainment { background: #FFFFFF; }
+
+.entertainment-6 .tab            { top: 80px; }
+.entertainment-6 .tab-item.active   { color: #212121; }
+.entertainment-6 .tab-item.inactive { color: #CBCBCB; }
+
+.entertainment-6 .img1 { background: #212121; }
+
+.entertainment-6 .footer {
+  background: linear-gradient(to right,
+    rgba(255,255,255,1) 516px,
+    rgba(33,33,33,1)   516px
+  );
+}
+.entertainment-6 .footer-copyright { color: rgba(33,33,33,0.4); }
+.entertainment-6 .footer-privacy   { color: #212121; }
+
+/* ── AUDITION heading inside dark panel ──────────────────── */
+/* centered in panel: (1404 - 89) / 2 = 657.5 ≈ 658px */
+.ent6-panel-heading {
+  position: absolute;
+  left: 658px;
+  top: 80px;
+  width: 89px;
+  height: 28px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 140%;
+  text-align: center;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}
+
+/* ── Main content frame ──────────────────────────────────── */
+/* (1404 - 736) / 2 = 334px from dividing line */
+.ent6-frame {
+  position: absolute;
+  left: 334px;
+  top: 178px;
+  width: 736px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+/* Sections 1 & 2: 오디션 안내 / 오디션 진행절차 (gap:12 inside) */
+.ent6-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  width: 736px;
+}
+
+/* Sections 3 & 4: 제출 서류 / 접수방법 (gap:16 inside) */
+.ent6-section-doc {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  width: 736px;
+}
+
+/* White horizontal divider */
+.ent6-line {
+  width: 736px;
+  height: 0;
+  border-top: 1px solid #FFFFFF;
+}
+
+/* Section title (오디션 안내, 제출 서류, etc.) */
+.ent6-section-title {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}
+
+/* Row layout for sections 1 & 2: labels | values */
+.ent6-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 736px;
+  height: 68px;
+}
+
+/* Left column: gray category labels */
+.ent6-col-labels {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  width: 96px;
+}
+.ent6-col-labels span {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #5D5D5D;
+  display: block;
+}
+
+/* Right column: white content values */
+.ent6-col-values {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  width: 238px;
+}
+.ent6-col-values span {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  display: block;
+}
+
+/* Row layout for sections 3 & 4: title | docs */
+.ent6-doc-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 736px;
+}
+
+/* Numbered document list */
+.ent6-docs {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  width: 236px;
+}
+
+.ent6-doc-item {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.ent6-doc-num {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #5D5D5D;
+  width: 18px;
+  flex-shrink: 0;
+}
+
+.ent6-doc-text {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  color: #FAFAFA;
+}
+
+/* ── Buttons ──────────────────────────────────────────────── */
+/* centered in panel: (1404 - 447) / 2 = 478.5 ≈ 479px */
+.ent6-btns {
+  position: absolute;
+  left: 479px;
+  /* 가로로 긴 화면에서 하단 푸터에 가리지 않도록 필요한 만큼만 위로(JS 계산). */
+  top: calc(750px - var(--ent6-btn-lift, 0px));
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 23px;
+}
+
+.ent6-btn-download,
+.ent6-btn-apply {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  padding: 13px 30px;
+  width: 212px;
+  height: 50px;
+  border-radius: 24px;
+  cursor: pointer;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 140%;
+}
+
+.ent6-btn-download {
+  background: #212121;
+  border: 1px solid #FFFFFF;
+  color: #FFFFFF;
+}
+
+.ent6-btn-apply {
+  background: #FFFFFF;
+  border: none;
+  color: #212121;
+}
+
+
+/* =========================================================
+   모바일 (≤768px) — MO_Sub1.entertainment1 (Figma 452:3971)
+   slide 1(인트로/CONTACT)의 모바일 버전
+   ========================================================= */
+.mo-root { display: none; }
+
+@media (max-width: 768px) {
+  /* 데스크탑 가로 스크롤 UI는 숨기고, 모바일은 일반 세로 스크롤 */
+  html, body {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    overflow-x: hidden;
+    background: #fff;
+    font-size: initial;
+    line-height: normal;
+    /* 폴더블처럼 가로가 넓고 세로가 짧은 모바일에서 100vw 기준만 쓰면
+       콘텐츠가 과확대된다. 메인 모바일과 같은 높이 인지형 단위로 맞춘다. */
+    --u: min(100vw / 360, 100vh / 780);            /* fallback(구형); svh 는 아래 @supports */
+  }
+  .entertainment-container { display: none !important; }
+  .ent-footer-fixed { display: none; }
+
+  .mo-root { display: block; background: #fff; padding-top: calc(60 * var(--u)); --u: min(100vw / 360, 100vh / 780); --mo-content-w: calc(320 * var(--u)); --mo-content-x: max(calc(20 * var(--u)), calc((100vw - var(--mo-content-w)) / 2)); }   /* 고정 헤더(60px) 만큼 콘텐츠 밀어내기 (헤더와 동일 비례) */
+
+  /* ── [주소창 토글 리플로우 방지] dvh → svh (위 규칙들은 vh 폴백) ──
+     dvh 는 주소창 토글 때 실시간 변동 → 화면 리사이징 + 읽던 위치 밀림. svh 는 고정. */
+  @supports (height: 100svh) {
+    html, body,
+    .mo-root { --u: min(100vw / 360, 100svh / 780); }
+    /* 공유 menu.css(뒤 로드)의 dvh chrome 을 body-프리픽스로 svh 덮기 (menu.css·mcn 미변경) */
+    body .mo-header, body .mo-menu { --u: min(100vw / 360, 100svh / 780); }
+    body .mo-root { padding-top: calc(60 * min(100vw / 360, 100svh / 780)); }
+    body .cta-btns { --u-cta: min(100vw / 360, 100svh / 780); }
+    body .scroll-top-btn { --rc-floating-u: min(1px, 100vw / 360, 100svh / 780); }
+  }
+
+  /* ── GNB_MO 헤더 ── */
+  .mo-header {
+    /* fixed: body overflow-x:hidden 이 sticky 를 깨므로 fixed 로 항상 상단 고정.
+       .mo-root 에 padding-top:60px 로 콘텐츠가 헤더 아래에서 시작하게 보정. */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: calc(60 * var(--u));
+    background: #212121;   /* PC GNB 다크 바와 통일 */
+  }
+  .mo-logo {
+    display: block;
+    width: calc(120 * var(--u));
+    height: calc(24 * var(--u));
+    margin-left: calc(20 * var(--u));
+  }
+  .mo-logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    /* 다크 헤더: 로고는 흰색 그대로(PC와 통일) → filter 미적용 */
+  }
+  .mo-header-btns {
+    display: flex;
+    align-items: center;
+  }
+  .mo-hbtn {
+    width: calc(60 * var(--u));
+    height: calc(60 * var(--u));
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    line-height: 0;
+  }
+  .mo-hbtn svg { display: block; width: 100%; height: 100%; }
+
+  /* 뷰 전환 */
+  .mo-ent-view[hidden] { display: none; }
+
+  /* ── 탭: ARTIST(드롭다운) / AUDITION ── */
+  .mo-ent-tab {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    height: calc(48 * var(--u));
+    background: #fff;
+    z-index: 50;
+  }
+  .mo-ent-dropdown { position: relative; flex: 1 1 0; }
+  .mo-ent-tab-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: calc(48 * var(--u));
+    padding: 0;
+    border: none;
+    background: #fff;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(16 * var(--u));
+    line-height: 1.4;
+    letter-spacing: calc(-1 * var(--u));
+    text-transform: uppercase;
+    color: #cbcbcb;
+  }
+  .mo-ent-tab-item--audition { flex: 1 1 0; }
+  .mo-ent-tab-item--dropdown {
+    justify-content: flex-start;
+    padding-left: calc(20 * var(--u));
+  }
+  .mo-ent-tab-label { width: calc(124 * var(--u)); text-align: left; }
+  .mo-ent-tab-arrow {
+    display: block;
+    width: calc(24 * var(--u));
+    height: calc(24 * var(--u));
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+  /* 드롭다운이 열렸거나 아티스트가 선택된 상태 → 라벨 진하게 */
+  .mo-ent-dropdown.is-open .mo-ent-tab-item--dropdown,
+  .mo-ent-dropdown.is-artist .mo-ent-tab-item--dropdown { color: #212121; }
+  .mo-ent-dropdown.is-open .mo-ent-tab-arrow { transform: rotate(180deg); }
+  /* 열렸을 때 ARTIST 셀에 보더 (Figma: border-t/r/b #212121) */
+  .mo-ent-dropdown.is-open .mo-ent-tab-item--dropdown {
+    border-top: 1px solid #212121;
+    border-right: 1px solid #212121;
+    border-bottom: 1px solid #212121;
+  }
+
+  /* 드롭다운 메뉴 (Figma 452:4219) — 1px 보더 박스 */
+  .mo-ent-dropdown-menu {
+    position: absolute;
+    top: calc(50 * var(--u));                 /* 트리거(48) 아래로 2px 간격 (Figma: 108→110) */
+    left: 0;
+    width: calc(180 * var(--u));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: #fff;
+    border-top: 1px solid #212121;
+    border-right: 1px solid #212121;
+    border-bottom: 1px solid #212121;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(calc(-6 * var(--u)));
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+    z-index: 60;
+  }
+  .mo-ent-dropdown.is-open .mo-ent-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .mo-ent-dropdown-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: calc(40 * var(--u));
+    padding: calc(8 * var(--u)) calc(20 * var(--u));
+    border: none;
+    background: #fff;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(16 * var(--u));
+    line-height: 1.4;
+    letter-spacing: calc(-1 * var(--u));
+    text-transform: uppercase;
+    text-align: left;
+    color: #212121;
+  }
+  .mo-ent-dropdown-item.is-active,
+  .mo-ent-dropdown-item:hover { background: #f3f3f3; }
+
+  /* ── 아티스트 상세 뷰 (Figma 452:4272) ── */
+  .mo-art-photo {
+    position: relative;
+    width: 100%;
+    height: calc(480 * var(--u));
+    overflow: hidden;
+    background: #212121;
+  }
+  .mo-art-photo img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;      /* 위아래 잘림 방지: 좌우 여백은 허용 */
+    object-position: center;
+    /* 사진 전환은 페이드가 아니라 가로 슬라이드.
+       각 사진은 현재 인덱스와의 거리만큼 translateX 되어 한 줄로 늘어선다(JS가 설정). */
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(.22,.61,.36,1);
+    will-change: transform;
+  }
+  .mo-art-photo img.is-active { transform: translateX(0); }
+  .mo-art-indicator {
+    display: flex;
+    justify-content: center;
+    gap: calc(6 * var(--u));
+    margin-top: calc(16 * var(--u));
+  }
+  .mo-art-dot {
+    width: calc(8 * var(--u));
+    height: calc(8 * var(--u));
+    border-radius: 50%;
+    background: #cbcbcb;
+  }
+  .mo-art-dot--active { background: #212121; }
+  .mo-art-head { width: 100vw; margin: 0 auto; padding: 0 calc(32 * var(--u)); }
+  .mo-art-name {
+    margin-top: calc(48 * var(--u));
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: calc(24 * var(--u));
+    line-height: 1.15;
+    letter-spacing: calc(-1 * var(--u));
+    text-transform: uppercase;
+    color: #212121;
+  }
+  .mo-art-birth {
+    margin-top: calc(12 * var(--u));
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(14 * var(--u));
+    line-height: 1.15;
+    letter-spacing: calc(-1 * var(--u));
+    text-transform: uppercase;
+    color: #cbcbcb;
+  }
+  .mo-art-desc {
+    margin-top: calc(40 * var(--u));
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(14 * var(--u));
+    line-height: 1.4;
+    letter-spacing: calc(-1 * var(--u));
+    color: #cbcbcb;
+    word-break: keep-all;
+  }
+  .mo-art-film-title {
+    margin-top: calc(56 * var(--u));
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(14 * var(--u));
+    line-height: 1.4;
+    text-transform: uppercase;
+    text-align: center;
+    color: #212121;
+  }
+  .mo-art-film {
+    width: 100vw;
+    margin: calc(40 * var(--u)) auto 0;
+    padding: 0 calc(20 * var(--u)) calc(80 * var(--u));
+    display: flex;
+    flex-direction: column;
+    gap: calc(36 * var(--u));
+  }
+  .mo-art-cat { display: flex; align-items: flex-start; }
+  .mo-art-cat-label {
+    flex-shrink: 0;
+    width: calc(74 * var(--u));
+    margin-right: calc(16 * var(--u));
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(12 * var(--u));
+    line-height: 1.4;
+    letter-spacing: calc(-0.6 * var(--u));
+    text-transform: uppercase;
+    color: #212121;
+  }
+  .mo-art-cat-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: calc(14 * var(--u));
+  }
+  .mo-art-entry { display: flex; align-items: flex-start; }
+  .mo-art-year {
+    flex-shrink: 0;
+    width: calc(74 * var(--u));
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(12 * var(--u));
+    line-height: 1.15;
+    letter-spacing: calc(-0.6 * var(--u));
+    color: #212121;
+  }
+  .mo-art-work {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: calc(6 * var(--u));
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(12 * var(--u));
+    line-height: 1.15;
+    letter-spacing: calc(-0.6 * var(--u));
+    text-transform: uppercase;
+    color: #cbcbcb;
+  }
+
+  /* ── AUDITION 탭 활성 ── */
+  .mo-ent-tab-item--audition.is-active {
+    background: #212121;
+    color: #fff;
+  }
+
+  /* ── AUDITION 뷰 (Figma 452:4064) ── */
+  .moa-panel {
+    position: relative;
+    width: 100vw;
+    margin: 0 auto;
+    height: calc(907 * var(--u));
+    background: #212121;
+    overflow: hidden;
+  }
+  .moa-section {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(320 * var(--u));
+    display: flex;
+    flex-direction: column;
+    gap: calc(12 * var(--u));
+  }
+  .moa-section--doc { gap: calc(16 * var(--u)); }
+  .moa-section:nth-of-type(1) { top: calc(60 * var(--u)); }
+  .moa-section:nth-of-type(2) { top: calc(212 * var(--u)); }
+  .moa-section:nth-of-type(3) { top: calc(366 * var(--u)); }
+  .moa-section:nth-of-type(4) { top: calc(505 * var(--u)); }
+  .moa-line {
+    width: 100%;
+    height: 0;
+    border-top: 1px solid #fff;
+  }
+  .moa-section-title {
+    width: calc(80 * var(--u));
+    flex-shrink: 0;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(14 * var(--u));
+    line-height: 1.4;
+    letter-spacing: calc(-1 * var(--u));
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .moa-row { display: flex; flex-direction: row; width: 100%; }
+  .moa-col-labels {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(10 * var(--u));
+    width: calc(80 * var(--u));
+    flex-shrink: 0;
+  }
+  .moa-col-values {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(10 * var(--u));
+    flex: 1;
+  }
+  .moa-col-labels span,
+  .moa-col-values span {
+    display: block;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(14 * var(--u));
+    line-height: 1.15;
+    letter-spacing: calc(-1 * var(--u));
+    text-transform: uppercase;
+  }
+  .moa-col-labels span { color: #5d5d5d; }
+  .moa-col-values span { color: #fff; }
+  .moa-doc-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+  }
+  .moa-docs {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(10 * var(--u));
+    flex: 1;
+  }
+  .moa-doc-item {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: calc(6 * var(--u));
+  }
+  .moa-doc-num {
+    width: calc(18 * var(--u));
+    flex-shrink: 0;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(14 * var(--u));
+    line-height: 1.15;
+    letter-spacing: calc(-1 * var(--u));
+    text-transform: uppercase;
+    color: #5d5d5d;
+  }
+  .moa-doc-text {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(14 * var(--u));
+    line-height: 1.15;
+    letter-spacing: calc(-1 * var(--u));
+    color: #fafafa;
+  }
+  .moa-btns {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(659 * var(--u));
+    width: calc(320 * var(--u));
+    display: flex;
+    flex-direction: column;
+    gap: calc(12 * var(--u));
+  }
+  .moa-btn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: calc(12 * var(--u)) calc(24 * var(--u));
+    border-radius: calc(24 * var(--u));
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: calc(16 * var(--u));
+    line-height: 1.4;
+  }
+  .moa-btn svg { flex-shrink: 0; }
+  .moa-btn--download {
+    background: #212121;
+    border: 1px solid #fff;
+    color: #fff;
+  }
+  .moa-btn--apply {
+    background: #fff;
+    border: 1px solid #fff;
+    color: #212121;
+  }
+  .moa-panel-logo {
+    position: absolute;
+    top: calc(823 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(120 * var(--u));
+    height: calc(24 * var(--u));
+  }
+  .moa-panel-logo img { display: block; width: 100%; height: 100%; }
+  .moa-contact {
+    position: relative;
+    width: 100vw;
+    margin: 0 auto;
+    height: calc(240 * var(--u));
+    background: #fff;
+  }
+  .moa-contact-title {
+    position: absolute;
+    top: calc(30 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(14 * var(--u));
+    line-height: 1.4;
+    text-align: center;
+    text-transform: uppercase;
+    color: #212121;
+  }
+  .moa-project {
+    position: absolute;
+    bottom: calc(60 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(304 * var(--u));
+    display: flex;
+    gap: calc(14 * var(--u));
+    align-items: center;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(14 * var(--u));
+    line-height: 1.25;
+    color: #212121;
+  }
+  .moa-project-labels {
+    display: flex;
+    flex-direction: column;
+    gap: calc(6 * var(--u));
+    width: calc(18 * var(--u));
+    text-transform: uppercase;
+  }
+  .moa-project-values {
+    display: flex;
+    flex-direction: column;
+    gap: calc(6 * var(--u));
+  }
+  .moa-project-labels span,
+  .moa-project-values span { white-space: nowrap; }
+
+  /* ── 다크 히어로 ── */
+  .mo-ent-hero {
+    position: relative;
+    width: 100vw;
+    margin: 0 auto;
+    height: calc(478 * var(--u));
+    background: #212121;
+    overflow: hidden;
+  }
+  .mo-ent-quote {
+    position: absolute;
+    top: calc(120 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    /* 2번째 줄("...기록하기 위해")이 270u 박스를 넘쳐 4줄로 줄바꿈되던 문제 →
+       글자 크기를 줄이고 박스를 약간 넓혀 <br> 기준 3줄로 고정. */
+    width: calc(320 * var(--u));
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: calc(14 * var(--u));
+    line-height: 1.25;
+    letter-spacing: calc(-0.444 * var(--u));
+    text-align: center;
+    text-transform: uppercase;
+    color: #fff;
+    word-break: keep-all;
+  }
+  .mo-ent-hero-email {
+    position: absolute;
+    top: calc(260 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(14 * var(--u));
+    line-height: 1.15;
+    text-align: center;
+    color: #5d5d5d;
+    white-space: nowrap;
+  }
+  .mo-ent-hero-logo {
+    position: absolute;
+    top: calc(414 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(120 * var(--u));
+    height: calc(24 * var(--u));
+  }
+  .mo-ent-hero-logo img { display: block; width: 100%; height: 100%; }
+
+  /* ── CONTACT ── */
+  .mo-ent-contact {
+    position: relative;
+    width: 100vw;
+    margin: 0 auto;
+    height: calc(240 * var(--u));
+    background: #fff;
+  }
+  .mo-ent-contact-title {
+    position: absolute;
+    top: calc(30 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(14 * var(--u));
+    line-height: 1.4;
+    text-align: center;
+    text-transform: uppercase;
+    color: #212121;
+  }
+  .mo-ent-project {
+    position: absolute;
+    bottom: calc(60 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(304 * var(--u));
+    display: flex;
+    gap: calc(14 * var(--u));
+    align-items: center;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(14 * var(--u));
+    line-height: 1.25;
+    color: #212121;
+  }
+  .mo-ent-project-labels {
+    display: flex;
+    flex-direction: column;
+    gap: calc(6 * var(--u));
+    text-transform: uppercase;
+  }
+  .mo-ent-project-values {
+    display: flex;
+    flex-direction: column;
+    gap: calc(6 * var(--u));
+  }
+  .mo-ent-project-labels span,
+  .mo-ent-project-values span { white-space: nowrap; }
+
+  /* ── 푸터 (Figma 452:4038) ── */
+  .mo-footer {
+    position: relative;
+    width: 100%;
+    height: calc(628 * var(--u));
+    overflow: hidden;
+    text-align: center;
+    background: #212121;
+  }
+  .mo-footer-email {
+    position: absolute;
+    top: calc(60 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(10 * var(--u));
+    font-family: 'Geist', sans-serif;
+    font-weight: 400;
+    font-size: calc(16 * var(--u));
+    line-height: 1.35;
+    color: #fff;
+  }
+  .mo-footer-contact {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(8 * var(--u));
+    color: #fff;
+    word-break: break-word;
+  }
+  .mo-footer-office { top: calc(154 * var(--u)); }
+  .mo-footer-rnd { top: calc(248 * var(--u)); }
+  .mo-footer-label {
+    font-family: 'Geist', sans-serif;
+    font-weight: 500;
+    font-size: calc(16 * var(--u));
+    line-height: 1.35;
+    letter-spacing: calc(-0.6 * var(--u));
+  }
+  .mo-footer-addr {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: calc(14 * var(--u));
+    line-height: 1.45;
+  }
+  .mo-footer-privacy {
+    position: absolute;
+    top: calc(398 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(14 * var(--u));
+    line-height: 1.45;
+    letter-spacing: calc(-0.6 * var(--u));
+    color: #fff;
+    text-decoration: underline;
+  }
+  /* 중앙정렬 푸터: 각 블록에 디자인 콘텐츠 폭(320u)을 줘 의도한 <br> 지점에서만 줄바꿈 */
+  .mo-footer-email,
+  .mo-footer-contact,
+  .mo-footer-privacy { width: calc(320 * var(--u)); }
+  .mo-footer-txt {
+    position: absolute;
+    top: calc(482 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(238 * var(--u));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(20 * var(--u));
+  }
+  .mo-footer-logo {
+    width: calc(150 * var(--u));
+    height: calc(30 * var(--u));
+  }
+  .mo-footer-logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .mo-footer-copy {
+    font-family: 'Geist', sans-serif;
+    font-weight: 500;
+    font-size: calc(14 * var(--u));
+    line-height: 1.3;
+    color: rgba(255, 255, 255, 0.6);
+    word-break: break-word;
+  }
+}

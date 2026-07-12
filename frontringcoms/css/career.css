@@ -1,0 +1,1466 @@
+/* career.css */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ══════════════════════════════════════════════════════
+   PC ONLY (≥769px)
+════════════════════════════════════════════════════════ */
+@media (min-width: 769px) {
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #212121;
+}
+
+/* ── Container ─────────────────────────────────────────────── */
+.career-container {
+  width: 1920px;
+  /* 축소 후에도 세로 스크롤 영역이 화면을 꽉 채우도록 1/scale 만큼 키운다 */
+  height: calc(100vh / var(--mcn-scale, 1));
+  overflow-y: auto;
+  position: relative;
+  /* 메인 패널 임베드 시 부모가 하단을 세로 클립하므로, 그만큼 바텀 스크롤 여백을
+     더해 푸터가 클립 위로 끝까지 올라오게 한다(단독=0). career.js 의 상단 헤더
+     보정(--embed-clip-top)과 짝을 이룬다. */
+  padding-bottom: var(--embed-clip-top, 0px);
+  /* 우측 스크롤바 숨김 (entertainment·mcn 과 동일) */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* 1920px 고정 폭을 뷰포트 폭에 맞춰 축소 (JS가 --mcn-scale 설정)
+     + 가로 중앙 정렬 (--mcn-x, entertainment 와 동일) */
+  transform-origin: top left;
+  transform: translateX(var(--mcn-x, 0px)) scale(var(--mcn-scale, 1));
+}
+.career-container::-webkit-scrollbar { display: none; }
+
+/* ── Slide base ─────────────────────────────────────────────── */
+.career-slide {
+  position: relative;
+  width: 1920px;
+  overflow: hidden;
+}
+
+/* ── SLIDE 1: KV ─────────────────────────────────────────────── */
+/* 풀블리드 KV: career.png 를 화면 비율과 무관하게 cover 로 꽉 채우고
+   중앙에 헤딩을 올린다. 슬라이드 높이는 "현재 보이는 뷰포트 높이"
+   (컨테이너가 scale 만큼 축소되므로 1/scale 로 환산)에 맞춰, 어떤
+   화면 비율에서도 KV 한 장이 정확히 한 화면을 채우게 한다. */
+.career-1 {
+  height: calc(100vh / var(--mcn-scale, 1));
+  background: #E9E0CE;
+}
+.career-1 .career {
+  position: relative;
+  width: 1920px;
+  height: 100%;
+  background: #E9E0CE url('/images/career/career.png') center / cover no-repeat;
+  overflow: hidden;
+}
+
+/* ── Text frame — 화면 정중앙 ─────────────────────────────────── */
+.career1-text-frame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: max-content;
+  max-width: 90%;
+  z-index: 10;
+}
+
+.career1-heading {
+  margin: 0;
+  font-family: 'Pretendard', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 130%;
+  text-align: center;
+  letter-spacing: -1.4px;
+  color: #5A2A37;
+}
+
+/* ── GNB ─────────────────────────────────────────────────────── */
+.career-gnb {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  position: absolute;
+  width: 1920px;
+  height: 60px;
+  left: 0;
+  top: 0;
+  z-index: 10;
+}
+
+.career-logo-bar {
+  width: 1800px;
+  height: 60px;
+  background: #212121;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.career-logo {
+  position: absolute;
+  display: block;
+  width: 120px;
+  height: 24px;
+  left: 30px;
+  top: calc(50% - 12px);
+  cursor: pointer;
+}
+
+.menu {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  /* 한영 버튼(.btn-global) 숨김 시 남은 햄버거를 우측 끝에 고정 */
+  justify-content: flex-end;
+  padding: 0;
+  width: 120px;
+  height: 60px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  /* 컨테이너 축소(scale)를 상쇄 — GNB 버튼을 창 크기와 무관하게 같은 크기로 고정 */
+  transform: scale(calc(1 / var(--mcn-scale, 1)));
+  transform-origin: top right;
+}
+
+.btn-global,
+.btn-hamburger {
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: block;
+  background: transparent;
+  flex: none;
+}
+
+.btn-global  { order: 0; }
+.btn-hamburger { order: 1; }
+
+/* ── SLIDE 2: JOIN US ────────────────────────────────────────── */
+.career-2 {
+  height: 686px;
+  background: #FFFFFF;
+}
+
+/* Left sub-navigation — 슬라이드 2~4 동안 좌측에 떠다니는 플로팅 메뉴.
+   컨테이너(.career-container) 기준 absolute 로 두고, career.js 가 스크롤마다
+   top 을 "현재 뷰포트 세로 중앙"으로 옮겨 떠 있는 것처럼 따라오게 한다.
+   (.career-container 의 transform 때문에 position:fixed 가 불안정해서 이 방식 사용)
+   표시/숨김(slides 2~4 범위)도 career.js 가 .is-visible 로 토글한다. */
+.career-float-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  position: absolute;
+  width: 304px;
+  left: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 15;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.career-float-menu.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.career2-menu-item {
+  width: 304px;
+  height: 37px;
+  font-family: 'Geist', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #CBCBCB;
+  flex: none;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.career2-menu-item.active {
+  color: #212121;
+}
+
+/* Centered body text */
+.career2-text {
+  position: absolute;
+  width: 736px;
+  height: 294px;
+  left: 592px;
+  top: 196px;
+  font-family: 'Pretendard', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 130%;
+  text-align: center;
+  letter-spacing: -0.005em;
+  color: #212121;
+}
+
+.career2-text-gray {
+  color: rgba(201, 201, 201, 1);
+}
+
+/* ── SLIDE 3: PROCESS ─────────────────────────────────────────── */
+.career-3 {
+  /* 1080(원본) + 하단 JOIN US CTA 영역 */
+  height: 1240px;
+  background: #FFFFFF;
+}
+
+/* JOIN US CTA — Process 하단 중앙, joinus 지원 페이지로 이동 */
+.c3-joinus {
+  position: absolute;
+  left: 50%;
+  top: 1088px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 40px;
+  background: #212121;
+  border-radius: 100px;
+  text-decoration: none;
+  z-index: 12;
+  transition: background 0.2s ease;
+}
+.c3-joinus:hover { background: #000000; }
+.c3-joinus-text {
+  font-family: 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0.02em;
+  color: #FFFFFF;
+}
+.c3-joinus-arrow { display: block; color: #FFFFFF; }
+
+/* Title */
+.c3-title {
+  position: absolute;
+  left: 364px;
+  top: 112px;
+  font-family: 'Geist', sans-serif;
+  font-weight: 700;
+  font-size: 56px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  color: #212121;
+  z-index: 10;
+}
+
+/* Gradient bar — transparent; gradient lives only inside the circles */
+.c3-bar {
+  position: absolute;
+  width: 1154px;
+  height: 304px;
+  left: 516px;
+  top: 387px;
+  background: transparent;
+  z-index: 1;
+}
+
+/* ── Circles ─── */
+.c3c {
+  position: absolute;
+  border-radius: 50%;
+}
+
+/* One continuous gradient across all circles.
+   Each circle uses background-size equal to the full bar width (1154px)
+   and a negative background-position equal to (circle.left − bar.left).
+   Bar starts at left:516. No background on the bar itself.              */
+.c3c-1 {
+  width: 128px; height: 128px; left: 516px;  top: 475px; z-index: 2;
+  background: linear-gradient(90deg, #FFEADB 10%, #963E63 100%);
+  background-size: 1154px 100%; background-position: 0px center;
+}
+.c3c-2 {
+  width: 192px; height: 192px; left: 628px;  top: 443px; z-index: 3;
+  border: 6px solid #FFFFFF;
+  background: linear-gradient(90deg, #FFEADB 10%, #963E63 100%);
+  background-size: 1154px 100%; background-position: -112px center;
+}
+.c3c-3 {
+  width: 304px; height: 304px; left: 796px;  top: 387px; z-index: 4;
+  border: 6px solid #FFFFFF;
+  background: linear-gradient(90deg, #FFEADB 10%, #963E63 100%);
+  background-size: 1154px 100%; background-position: -280px center;
+}
+.c3c-4 {
+  width: 240px; height: 240px; left: 1080px; top: 419px; z-index: 5;
+  border: 6px solid #FFFFFF;
+  background: linear-gradient(90deg, #FFEADB 10%, #963E63 100%);
+  background-size: 1154px 100%; background-position: -564px center;
+}
+.c3c-5 {
+  width: 176px; height: 176px; left: 1300px; top: 451px; z-index: 6;
+  border: 6px solid #FFFFFF;
+  background: linear-gradient(90deg, #FFEADB 10%, #963E63 100%);
+  background-size: 1154px 100%; background-position: -784px center;
+}
+.c3c-6 {
+  width: 210px; height: 210px; left: 1460px; top: 434px; z-index: 7;
+  border: 6px solid #FFFFFF;
+  background: linear-gradient(90deg, #FFEADB 10%, #963E63 100%);
+  background-size: 1154px 100%; background-position: -944px center;
+}
+
+/* ── Labels inside circles (num + name) ─── */
+.c3bl {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  position: absolute;
+  top: 520px;
+  z-index: 10;
+}
+
+.c3bl-1 { left: 551px; }
+.c3bl-2 { left: 700px; }
+.c3bl-3 { left: 906px; }
+.c3bl-4 { left: 1163px; }
+.c3bl-5 { left: 1365px; }
+.c3bl-6 { left: 1541px; }
+
+.c3bl-num {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+
+.c3bl-name {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+
+.c3bl-white .c3bl-num,
+.c3bl-white .c3bl-name { color: #FFFFFF; }
+
+/* ── Vertical connector lines ─── */
+.c3vl {
+  position: absolute;
+  width: 0;
+  border-left: 1px solid #000000;
+  z-index: 9;
+}
+
+/* Odd steps: lines start exactly at the circle's bottom outer edge
+   (center y:539 + radius) so they touch the rim instead of crossing it,
+   then descend to the bottom info. End-points unchanged (940 / 978 / 890). */
+.c3vl-1 { left: 580px;  top: 603px; height: 337px; }
+.c3vl-3 { left: 948px;  top: 691px; height: 287px; }
+.c3vl-5 { left: 1388px; top: 627px; height: 263px; }
+
+/* Even steps: lines descend from top info area (y:272) down to the circle's
+   top outer edge (center y:539 − radius; c3vl-2 is offset from center so it
+   meets the rim at y:461) so they touch the rim instead of crossing it. */
+.c3vl-2 { left: 668px;  top: 272px; height: 189px; }
+.c3vl-4 { left: 1200px; top: 272px; height: 147px; }
+.c3vl-6 { left: 1565px; top: 272px; height: 162px; }
+
+/* ── Info areas ─── */
+/* z-index above .c3vl (9) so the vertical connector lines never cover the text */
+.c3info { position: absolute; z-index: 11; }
+
+.c3info-hd {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.c3info-num,
+.c3info-dur {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #212121;
+}
+
+.c3info-white { color: #FFFFFF; }
+
+.c3info-desc {
+  width: 280px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 160%;
+  letter-spacing: -1px;
+  color: #333333;
+}
+
+/* Bottom info: odd steps — header at y:804, description at y:830 (10px gap) */
+.c3bi-1 { left: 592px;  top: 804px; }
+.c3bi-3 { left: 960px;  top: 804px; }
+.c3bi-5 { left: 1400px; top: 804px; }
+
+.c3bi-1 .c3info-desc,
+.c3bi-3 .c3info-desc,
+.c3bi-5 .c3info-desc { margin-top: 10px; }
+
+/* Top info: even steps — header at y:272, description at y:302 (14px gap) */
+.c3ti-2 { left: 678px;  top: 272px; }
+.c3ti-4 { left: 1212px; top: 272px; }
+.c3ti-6 { left: 1577px; top: 272px; }
+
+.c3ti-2 .c3info-desc,
+.c3ti-4 .c3info-desc,
+.c3ti-6 .c3info-desc { margin-top: 14px; }
+
+/* ── SLIDE 4: FAQ ─────────────────────────────────────────────── */
+/* height is set dynamically by career.js (layoutFaq) so the slide length
+   tracks the number of FAQ items in the active tab. 1439px = 지원 및 서류
+   관련 panel (9 items), used as the pre-JS fallback. */
+.career-4 {
+  height: 1439px;
+  background: #FFFFFF;
+}
+
+/* Title */
+.c4-title {
+  position: absolute;
+  left: 364px;
+  top: 120px;
+  font-family: 'Geist', sans-serif;
+  font-weight: 700;
+  font-size: 56px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  color: #212121;
+}
+
+/* Header description (top-right of title) */
+.c4-header-desc {
+  position: absolute;
+  width: 884px;
+  height: 64px;
+  left: 668px;
+  top: 120px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 160%;
+  letter-spacing: -1px;
+  color: #333333;
+}
+
+/* Tab bar */
+.c4-tabs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 40px;
+  position: absolute;
+  width: 611px;
+  height: 29px;
+  left: 668px;
+  top: 264px;
+}
+
+.c4-tab {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 120%;
+  letter-spacing: -0.02em;
+  color: #A0A0A0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.c4-tab-active { color: #212121; }
+
+/* FAQ list container */
+.c4-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: absolute;
+  width: 888px;
+  left: 668px;
+  top: 341px;
+}
+
+/* Individual FAQ item */
+.c4-item {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 36px 30px 36px 24px;
+  gap: 10px;
+  width: 888px;
+  border-top: 1px solid #E4E4E4;
+}
+
+/* First item (expanded): dark border */
+.c4-item-open { border-top-color: #212121; }
+
+/* Row: text block + toggle button */
+.c4-con {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  width: 864px;
+}
+
+/* Text block: grid so label column and Q+A column always align */
+.c4-txt {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  column-gap: 2px;
+  width: 834px;
+  align-items: start;
+}
+
+.c4-q-label {
+  padding-top: 5px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 150%;
+  letter-spacing: -1px;
+  color: #333333;
+}
+
+/* Right column: question text stacked above answer */
+.c4-qa-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.c4-q-text {
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 150%;
+  letter-spacing: -1px;
+  color: #333333;
+}
+
+/* Answer: hidden by default, slides open */
+.c4-a {
+  overflow: hidden;
+  max-height: 0;
+  margin-top: 0;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              margin-top  0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.c4-item-open .c4-a {
+  max-height: 300px;
+  margin-top: 8px;
+}
+
+.c4-a-text {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 160%;
+  letter-spacing: -1px;
+  color: #333333;
+}
+
+/* Toggle button — always shows + shape; rotates 45° → × when open */
+.c4-btn {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-left: auto;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.c4-btn::before,
+.c4-btn::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 1.8px;
+  background: #212121;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.c4-btn::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+/* Rotate entire button 45° so + becomes × */
+.c4-item-open .c4-btn {
+  transform: rotate(45deg);
+}
+
+/* Smooth border colour change */
+.c4-item {
+  transition: border-top-color 0.35s ease;
+}
+
+.c4-list > .c4-item:last-child {
+  border-bottom: 1px solid #E4E4E4;
+}
+
+/* ── FOOTER (Figma @Footer 556:8075 — 1920×296) ───────────────── */
+.career-footer {
+  position: relative;
+  width: 1920px;
+  height: 296px;
+  background: #212121;
+  overflow: hidden;
+}
+
+/* Logo — 200×40 at (60, 58) */
+.cf-logo {
+  position: absolute;
+  left: 60px;
+  top: 58px;
+  width: 200px;
+  height: 40px;
+  display: block;
+}
+.cf-logo img { display: block; width: 100%; height: 100%; }
+
+/* Email / homepage — at (60, 192), 10px gap */
+.cf-email {
+  position: absolute;
+  left: 60px;
+  top: 192px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: 'Geist', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.35;
+  color: #FFFFFF;
+  white-space: nowrap;
+}
+
+/* Contact blocks — top 50px, 8px gap */
+.cf-contact {
+  position: absolute;
+  top: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #FFFFFF;
+  word-break: break-word;
+}
+.cf-office { left: 1446px; }
+.cf-rnd    { left: 1652px; }
+
+.cf-label {
+  font-family: 'Geist', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -0.6px;
+}
+
+.cf-addr {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.45;
+  white-space: nowrap;
+}
+
+/* Privacy policy — at (1652, 226) */
+.cf-privacy {
+  position: absolute;
+  left: 1652px;
+  top: 226px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.45;
+  letter-spacing: -0.6px;
+  color: #FFFFFF;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+/* Copyright — centered area at (793, 228) */
+.cf-copy {
+  position: absolute;
+  left: 793px;
+  top: 228px;
+  font-family: 'Geist', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+}
+
+} /* end @media (min-width: 769px) */
+
+/* ── 헤더/푸터 풀폭 + CTA 우측 끝 (main/엔터와 동일 정책) ─────────────
+   --mcn-x 는 콘텐츠 중앙정렬(컨테이너 translateX)에도 쓰여 0 으로 둘 수 없으므로,
+   chrome(로고/햄버거/CTA)만 --mcn-x 의존을 제거해 화면 가장자리(풀폭/우측 끝)에 고정.
+   (≤1920 은 --mcn-x=0 이라 이미 풀폭, >1920 에서만 끝으로) menu.css 보다 명시도 ↑(body). */
+body .gnb-float { right: 0; }
+body .cta-btns  { right: 0; }
+body .gnb-logo-float .gnb-logo-link { margin-left: calc(30px * var(--chrome-scale, 1)); }
+/* hover 펼침 메뉴(.site-menu)도 햄버거(right:0)와 같은 기준으로 — menu.css 공통 규칙은
+   --mcn-x(>1920 중앙정렬 여백)를 더하지만 여기선 햄버거가 화면 끝이라 그 여백만큼
+   메뉴가 더 왼쪽(멀리)에서 열린다. --mcn-x 를 빼고 66px 레일 간격만 남긴다. */
+body .site-menu { right: calc(66px * var(--chrome-scale, var(--mcn-scale, 1))); }
+
+/* ══════════════════════════════════════════════════════
+   반응형 — 모바일(≤768px)에서 PC 숨기고 모바일 표시
+════════════════════════════════════════════════════════ */
+.mo-root { display: none; }
+
+@media (max-width: 768px) {
+  .career-container { display: none !important; }
+  .mo-root { display: block; padding-top: calc(60 * var(--u)); }   /* 고정 헤더(60px) 만큼 콘텐츠 밀어내기 (헤더와 동일 비례) */
+}
+
+/* ══════════════════════════════════════════════════════
+   모바일 상세 스타일 — 구 mo-career.css 병합 (≤768px 전용)
+════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: #fff;
+    scroll-behavior: smooth;
+    /* 폭은 100vw로 채우되, 폴더블 펼침에서 콘텐츠가 과확대되지 않도록
+       메인/엔터테인먼트와 같은 높이 인지형 기준을 사용한다. */
+    --u: min(100vw / 360, 100vh / 780);            /* fallback(구형); svh 는 아래 @supports */
+    --mo-content-w: calc(320 * var(--u));
+    --mo-content-x: max(calc(20 * var(--u)), calc((100vw - var(--mo-content-w)) / 2));
+    /* 모바일 단락 페이징은 JS(mo-snap.js)가 담당. 앵커 점프 헤더(60px) 보정만. */
+    scroll-padding-top: calc(60 * var(--u));
+  }
+
+  .mo-career {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background: #fff;
+    --u: min(100vw / 360, 100vh / 780);            /* fallback(구형); svh 는 아래 @supports */
+    --mo-content-w: calc(320 * var(--u));
+    --mo-content-x: max(calc(20 * var(--u)), calc((100vw - var(--mo-content-w)) / 2));
+  }
+
+  /* ── [주소창 토글 리플로우 방지] dvh → svh ──
+     dvh 는 주소창 접힘/펼침 때 실시간 변동 → 화면 리사이징 + 읽던 위치 밀림.
+     svh 는 값 고정(작은 뷰포트 기준)이라 토글을 흡수(회전/폴딩 등 실제 변화 시에만
+     재계산). 위 규칙은 vh 폴백(구형), 아래가 modern 값으로 덮는다. 섹션 height 는
+     100vh(고정) − 60*--u(→svh) 라 자동 안정. mo-snap 은 resize 리스너 없어 JS 재스냅 없음. */
+  @supports (height: 100svh) {
+    html, body,
+    .mo-career { --u: min(100vw / 360, 100svh / 780); }
+    /* 공유 menu.css(뒤 로드)가 dvh 로 주입하는 헤더·본문오프셋·CTA·플로팅버튼을
+       body-프리픽스(특이도 0,1,1 > menu.css 0,1,0)로 svh 덮기 (menu.css·mcn 미변경) */
+    body .mo-header, body .mo-menu { --u: min(100vw / 360, 100svh / 780); }
+    body .mo-root { padding-top: calc(60 * min(100vw / 360, 100svh / 780)); }
+    body .cta-btns { --u-cta: min(100vw / 360, 100svh / 780); }
+    body .scroll-top-btn { --rc-floating-u: min(1px, 100vw / 360, 100svh / 780); }
+  }
+
+  /* ── SLIDE 1 — KV ──
+     .mo-root 가 이미 padding-top:60px 로 헤더 높이를 비워주므로
+     슬라이드/이미지는 그 아래(보이는 영역)만 채운다. (이전엔 kv-img
+     에 top:60px 가 중복 적용돼 헤더와 이미지 사이 60px 흰 띠가 생겼음) */
+  .slide-1 {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 60 * var(--u));
+    background: #fff;
+    overflow: hidden;
+    /* KV 타이포 전용 너비 비례 단위 — --u 는 높이 인지형(min)이라 폴더블·짧은
+       폰에서 화면 폭 대비 텍스트가 작아진다. 전면 히어로 문구는 화면 "너비"를
+       따라 커지고 작아지는 게 자연스러워(PC 느낌) 폭/360 기준을 따로 쓴다.
+       360폭 폰에서는 기존과 동일(24px). (mcn .mo-sec-1 --uw 와 동일 규칙) */
+    --uw: calc(100vw / 360);
+  }
+
+  .kv-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+  }
+
+  .kv-photo {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  /* ── GNB ── */
+  .mo-header {
+    /* fixed: body overflow-x:hidden 이 sticky 를 깨므로 fixed 로 항상 상단 고정.
+       .mo-root 에 padding-top:60px 로 콘텐츠가 헤더 아래에서 시작하게 보정. */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: calc(60 * var(--u));
+    background: #212121;   /* PC GNB 다크 바와 통일 */
+  }
+  .mo-logo {
+    display: block;
+    width: calc(120 * var(--u));
+    height: calc(24 * var(--u));
+    margin-left: calc(20 * var(--u));
+  }
+  .mo-logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    /* 다크 헤더: 로고는 흰색 그대로(PC와 통일) → filter 미적용 */
+  }
+  .mo-header-btns {
+    display: flex;
+    align-items: center;
+  }
+  .mo-hbtn {
+    width: calc(60 * var(--u));
+    height: calc(60 * var(--u));
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    line-height: 0;
+  }
+  .mo-hbtn svg { display: block; width: 100%; height: 100%; }
+
+  /* ── Menu panel override: full-width on mobile ── */
+  .site-menu {
+    right: 0;
+    width: 100%;
+    padding: 60px 30px;
+    font-size: 28px;
+  }
+
+  /* ── KV heading text — career.png 위 화면 중앙 ── */
+  .kv-text {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: max-content;
+    max-width: calc(100% - calc(40 * var(--uw)));
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(24 * var(--uw));
+    line-height: 140%;
+    text-align: center;
+    letter-spacing: calc(-1.4 * var(--uw));
+    color: #5A2A37;
+    z-index: 5;
+  }
+
+  /* ── SLIDE 2 — JOIN US ── */
+  .mo-slide-2 {
+    position: relative;
+    width: 100vw;
+    margin: 0 auto;
+    height: calc(520 * var(--u));
+    background: #fff;
+  }
+
+  .mo-menu-tab {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: calc(18 * var(--u)) 0;
+    gap: calc(24 * var(--u));
+    position: absolute;
+    width: 100%;
+    height: calc(60 * var(--u));
+    left: 0;
+    top: 0;
+  }
+
+  .mo-tab-item {
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: calc(20 * var(--u));
+    line-height: 120%;
+    letter-spacing: calc(-0.6 * var(--u));
+    text-transform: uppercase;
+    color: #CBCBCB;
+  }
+
+  .mo-tab-item.mo-tab-active {
+    color: #212121;
+  }
+
+  .mo-join-text {
+    position: absolute;
+    width: calc(308 * var(--u));
+    height: calc(260 * var(--u));
+    left: 50%;
+    top: calc(160 * var(--u));
+    transform: translateX(-50%);
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: calc(20 * var(--u));
+    line-height: 130%;
+    text-align: center;
+    letter-spacing: -0.005em;
+    color: #212121;
+  }
+
+  .mo-join-gray {
+    color: rgba(201, 201, 201, 1);
+  }
+
+  /* ── SLIDE 3 — PROCESS ──
+     한 화면 스냅: 제목(.mo-s3-title, absolute)은 고정, 리스트(.mo-s3-list)만 내부 스크롤. */
+  .mo-slide-3 {
+    position: relative;
+    width: 100vw;
+    margin: 0 auto;
+    height: calc(100vh - 60 * var(--u));   /* 한 화면(slide-1 과 동일 규격) */
+    overflow: hidden;
+    background: #fff;
+    /* 제목·리스트가 공유하는 콘텐츠 폭/왼쪽선.
+       기본은 320u 컬럼이되, 넓은/폴더블(높이 기준으로 --u 가 작아져 컬럼이 좁아지는)
+       화면에서는 84vw 까지 넓혀 좌우 8vw 대칭 여백으로 중앙 정렬한다. FAQ 와 동일 규격. */
+    --col-w: max(calc(320 * var(--u)), 84vw);
+    --col-x: max(calc(20 * var(--u)), calc((100vw - var(--col-w)) / 2));
+  }
+
+  .mo-s3-title {
+    position: absolute;
+    width: var(--col-w);
+    height: calc(43 * var(--u));
+    left: var(--col-x);
+    top: calc(60 * var(--u));
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: calc(36 * var(--u));
+    line-height: 120%;
+    letter-spacing: -0.01em;
+    color: #212121;
+  }
+
+  /* 제목(top 60~103) 아래 143u 지점부터 화면 하단(32u 여백)까지 리스트를 두고 내부 스크롤.
+     mo-snap EXEMPT(.mo-s3-list) → 리스트 위 터치는 페이징 대신 네이티브 스크롤. */
+  .mo-s3-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(32 * var(--u));
+    position: absolute;
+    width: var(--col-w);
+    left: var(--col-x);
+    top: calc(143 * var(--u));
+    bottom: calc(32 * var(--u));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .mo-s3-con {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 0 calc(32 * var(--u));
+    gap: calc(12 * var(--u));
+    width: 100%;
+    border-bottom: 1px solid #C9C9C9;
+    align-self: stretch;
+  }
+
+  .mo-s3-con--last {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  /* JOIN US CTA — 모바일 Process 리스트 하단, joinus 지원 페이지로 이동 */
+  .mo-s3-joinus {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: calc(8 * var(--u));
+    width: 100%;
+    padding: calc(16 * var(--u)) 0;
+    background: #212121;
+    border-radius: calc(100 * var(--u));
+    text-decoration: none;
+    flex: none;
+    align-self: stretch;
+  }
+  .mo-s3-joinus-text {
+    font-family: 'Geist', sans-serif;
+    font-weight: 600;
+    font-size: calc(16 * var(--u));
+    line-height: 100%;
+    letter-spacing: 0.02em;
+    color: #FFFFFF;
+  }
+  .mo-s3-joinus-arrow { display: block; color: #FFFFFF; }
+
+  .mo-s3-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: calc(8 * var(--u));
+    width: 100%;
+    height: calc(16 * var(--u));
+  }
+
+  .mo-s3-tit {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: calc(12 * var(--u));
+    width: calc(156 * var(--u));
+    height: calc(16 * var(--u));
+  }
+
+  .mo-s3-num,
+  .mo-s3-name {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: calc(14 * var(--u));
+    line-height: 115%;
+    letter-spacing: calc(-1 * var(--u));
+    text-transform: uppercase;
+    color: #212121;
+  }
+
+  .mo-s3-num  { width: calc(18 * var(--u)); flex-shrink: 0; }
+  .mo-s3-name { width: calc(126 * var(--u)); }
+
+  .mo-s3-dur {
+    margin-left: auto;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: calc(14 * var(--u));
+    line-height: 115%;
+    text-align: right;
+    letter-spacing: calc(-1 * var(--u));
+    text-transform: uppercase;
+    color: #212121;
+    white-space: nowrap;
+  }
+
+  .mo-s3-desc-wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0 0 0 calc(30 * var(--u));
+    width: 100%;
+  }
+
+  .mo-s3-desc {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: calc(14 * var(--u));
+    line-height: 160%;
+    letter-spacing: calc(-1 * var(--u));
+    color: #333333;
+  }
+
+  /* ── SLIDE 4 — FAQ ──
+     한 화면 스냅: 제목·설명·탭은 고정, 패널(.mo-s4-scroll = 4개 mo-c4-list)만 내부 스크롤. */
+  .mo-slide-4 {
+    width: 100vw;
+    margin: 0 auto;
+    height: calc(100vh - 60 * var(--u));   /* 한 화면 */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    padding-top: calc(60 * var(--u));
+    padding-bottom: calc(60 * var(--u));
+    /* 제목·설명·탭·Q목록이 공유하는 왼쪽 정렬선 + 컬럼 폭.
+       기본 320u 컬럼이되, 넓은/폴더블(높이 기준으로 --u 가 작아져 컬럼이 좁아지는)
+       화면에서는 84vw 까지 넓혀 좌우 8vw 대칭 여백으로 중앙 정렬한다. PROCESS 와 동일 규격. */
+    --s4-w: max(calc(320 * var(--u)), 84vw);
+    --s4-x: max(calc(20 * var(--u)), calc((100vw - var(--s4-w)) / 2));
+  }
+  /* FAQ 목록 내부 스크롤 영역 (mo-snap EXEMPT). 활성 탭 패널만 보이고 그 패널이 스크롤됨. */
+  .mo-s4-scroll {
+    flex: 1 1 0;
+    min-height: 0;
+    width: 100%;
+    /* 탭 행과 첫 질문(Q5) 사이 간격 */
+    margin-top: calc(20 * var(--u));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .mo-s4-title {
+    display: block;
+    width: var(--s4-w);
+    margin: 0 0 0 var(--s4-x);
+    text-align: left;
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: calc(32 * var(--u));
+    line-height: 115%;
+    letter-spacing: calc(-1 * var(--u));
+    color: #212121;
+  }
+
+  .mo-s4-desc {
+    display: block;
+    width: var(--s4-w);
+    margin: calc(24 * var(--u)) 0 0 var(--s4-x);
+    text-align: left;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: calc(16 * var(--u));
+    line-height: 160%;
+    letter-spacing: calc(-1 * var(--u));
+    color: #333333;
+  }
+
+  .mo-s4-tabs-wrap {
+    width: 100vw;
+    margin-top: calc(46 * var(--u));
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .mo-s4-tabs-wrap::-webkit-scrollbar { display: none; }
+
+  .mo-s4-tabs {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: calc(24 * var(--u));
+    padding: 0 var(--s4-x);
+    width: max-content;
+    /* 제목·설명·Q목록과 같은 왼쪽선(--s4-x)에서 시작, 넘치면 좌측부터 스크롤 */
+    margin: 0;
+  }
+
+  .mo-c4-tab {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: calc(18 * var(--u));
+    line-height: 120%;
+    letter-spacing: -0.02em;
+    color: #A0A0A0;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .mo-c4-tab-active { color: #212121; }
+
+  .mo-c4-list {
+    display: flex;
+    flex-direction: column;
+    width: var(--s4-w);
+    /* 타이틀·설명·탭과 같은 왼쪽선(--s4-x)에 정렬 */
+    margin: calc(32 * var(--u)) 0 0 var(--s4-x);
+  }
+
+  .mo-c4-item {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: calc(30 * var(--u)) 0;
+    width: 100%;
+    border-top: 1px solid #E4E4E4;
+    transition: border-top-color 0.35s ease;
+  }
+
+  .mo-c4-item-open { border-top-color: #212121; }
+
+  .mo-c4-con {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: calc(18 * var(--u));
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .mo-c4-txt {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: calc(2 * var(--u));
+    flex: 1;
+    min-width: 0;
+  }
+
+  .mo-c4-q-label {
+    width: calc(32 * var(--u));
+    flex-shrink: 0;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: calc(16 * var(--u));
+    line-height: 150%;
+    letter-spacing: calc(-1 * var(--u));
+    color: #333333;
+  }
+
+  .mo-c4-qa-right {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mo-c4-q-text {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: calc(16 * var(--u));
+    line-height: 150%;
+    letter-spacing: calc(-1 * var(--u));
+    color: #333333;
+  }
+
+  .mo-c4-a {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                margin-top  0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .mo-c4-item-open .mo-c4-a {
+    max-height: calc(400 * var(--u));
+    margin-top: calc(16 * var(--u));
+  }
+
+  .mo-c4-a-text {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: calc(14 * var(--u));
+    line-height: 160%;
+    letter-spacing: calc(-1 * var(--u));
+    color: #333333;
+  }
+
+  .mo-c4-btn {
+    position: relative;
+    width: calc(24 * var(--u));
+    height: calc(24 * var(--u));
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .mo-c4-btn::before,
+  .mo-c4-btn::after {
+    content: '';
+    position: absolute;
+    width: calc(14.4 * var(--u));
+    height: calc(1.44 * var(--u));
+    background: #212121;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .mo-c4-btn::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .mo-c4-item-open .mo-c4-btn {
+    transform: rotate(45deg);
+  }
+
+  /* ── PROCESS(slide-3) / FAQ(slide-4) 전체 내부 스크롤(full-scroll) 모드 ──────────
+     기본(제목·탭 고정 + 본문만 내부 스크롤) 대신, 섹션 전체를 하나의 내부 스크롤
+     영역 안에서 함께 스크롤한다. career.js 가 런타임에 제목/설명/탭을 스크롤
+     컨테이너 맨 앞으로 옮기고 섹션에 .is-fullscroll 를 붙인다(CREATOR 와 동일 패턴).
+     ▶ 되돌리려면: career.js 의 MO_CAREER_FULLSCROLL = false → 원래 동작 복귀. */
+  .mo-slide-3.is-fullscroll .mo-s3-list {
+    top: calc(60 * var(--u));           /* 제목 자리(원래 60u)부터 스크롤 시작 → 제목도 함께 스크롤 */
+  }
+  .mo-slide-3.is-fullscroll .mo-s3-title {
+    position: static;
+    left: auto;
+    top: auto;
+    width: 100%;
+    height: auto;
+    margin-bottom: calc(8 * var(--u));   /* 리스트 gap 32u 와 합쳐 제목↔첫 항목 40u(원래 리듬) */
+  }
+  .mo-slide-4.is-fullscroll .mo-s4-scroll {
+    margin-top: 0;                        /* 제목이 맨 위로 오므로 상단 간격 제거(slide-4 padding-top 60u 가 담당) */
+  }
+
+  /* ── FOOTER ── */
+  /* 한 화면 스냅(자유 꼬리 아님) — main·mcn 푸터와 동일 규격 */
+  .mo-footer {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 60 * var(--u));   /* 한 화면 스냅 */
+    min-height: calc(628 * var(--u));       /* 디자인 원본 높이 하한(짧은 뷰포트 보호) */
+    overflow: hidden;
+    text-align: center;
+    background: #212121;
+    scroll-snap-align: start;
+  }
+
+  .mo-footer-email {
+    position: absolute;
+    top: calc(60 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(10 * var(--u));
+    font-family: 'Geist', sans-serif;
+    font-weight: 400;
+    font-size: calc(16 * var(--u));
+    line-height: 1.35;
+    color: #fff;
+  }
+
+  .mo-footer-contact {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(8 * var(--u));
+    color: #fff;
+    word-break: break-word;
+  }
+
+  .mo-footer-office { top: calc(154 * var(--u)); }
+  .mo-footer-rnd    { top: calc(248 * var(--u)); }
+
+  .mo-footer-label {
+    font-family: 'Geist', sans-serif;
+    font-weight: 500;
+    font-size: calc(16 * var(--u));
+    line-height: 1.35;
+    letter-spacing: calc(-0.6 * var(--u));
+  }
+
+  .mo-footer-addr {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: calc(14 * var(--u));
+    line-height: 1.45;
+  }
+
+  .mo-footer-privacy {
+    position: absolute;
+    top: calc(398 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(14 * var(--u));
+    line-height: 1.45;
+    letter-spacing: calc(-0.6 * var(--u));
+    color: #fff;
+    text-decoration: underline;
+  }
+
+  /* 중앙정렬 푸터: 각 블록에 디자인 콘텐츠 폭(320u)을 줘 의도한 <br> 지점에서만 줄바꿈 */
+  .mo-footer-email,
+  .mo-footer-contact,
+  .mo-footer-privacy { width: calc(320 * var(--u)); }
+
+  .mo-footer-txt {
+    position: absolute;
+    top: calc(482 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(238 * var(--u));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(20 * var(--u));
+  }
+
+  .mo-footer-logo {
+    width: calc(150 * var(--u));
+    height: calc(30 * var(--u));
+  }
+
+  .mo-footer-logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .mo-footer-copy {
+    font-family: 'Geist', sans-serif;
+    font-weight: 500;
+    font-size: calc(14 * var(--u));
+    line-height: 1.3;
+    color: rgba(255, 255, 255, 0.6);
+    word-break: break-word;
+  }
+}
+
+/* 폴더폰(600~768px) Process·FAQ 넓히기/정렬은 위 --col-w/--col-x, --s4-w/--s4-x
+   (max(320u, 84vw) + 중앙정렬)로 통합 처리됨 — 별도 브레이크포인트 불필요. */

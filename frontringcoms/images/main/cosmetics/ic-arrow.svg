@@ -1,0 +1,16 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="ic_arrow">
+<g clip-path="url(#clip0_0_9)">
+<mask id="path-1-inside-1_0_9" fill="white">
+<path d="M0 0H18V18H0V0Z"/>
+</mask>
+<line id="Line 31" x1="1.14645" y1="17.1464" x2="18.117" y2="0.175884" stroke="var(--stroke-0, black)"/>
+</g>
+<path d="M18 0H19V-1H18V0ZM0 0V1H18V0V-1H0V0ZM18 0H17V18H18H19V0H18Z" fill="var(--stroke-0, black)" mask="url(#path-1-inside-1_0_9)"/>
+</g>
+<defs>
+<clipPath id="clip0_0_9">
+<path d="M0 0H18V18H0V0Z" fill="white"/>
+</clipPath>
+</defs>
+</svg>

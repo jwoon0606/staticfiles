@@ -1,0 +1,3499 @@
+/* ============================================================
+   mcn.css
+   Horizontal scroll  ·  1920 × 1080 px per slide
+   ============================================================ */
+
+/* ── Reset ─────────────────────────────────────────────────── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #212121;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #212121;
+  font-size: 0;
+  line-height: 0;
+}
+
+/* ── Scroll container  (vertical) ──────────────────────────── */
+.mcn-container {
+  display: flex;
+  flex-direction: column;
+  width: 1920px;
+  /* 가로폭 맞춤(width-fit) — 축소(scale) 후에도 스크롤 뷰포트가 화면 높이를 꽉 채우도록
+     1/scale 만큼 키운다(career 와 동일). 세로는 이 컨테이너 내부에서 스크롤. */
+  height: calc(100vh / var(--mcn-scale, 1));
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  font-size: initial;
+  line-height: initial;
+  /* 1920 고정 폭을 뷰포트 폭에 맞춰 스케일 (JS가 --mcn-scale 설정)
+     + 1920 초과 화면에서만 가로 중앙 정렬 (--mcn-x) */
+  transform-origin: top left;
+  transform: translateX(var(--mcn-x, 0px)) scale(var(--mcn-scale, 1));
+}
+.mcn-container::-webkit-scrollbar { display: none; }
+
+/* ── Single slide ───────────────────────────────────────────── */
+.mcn-slide {
+  flex-shrink: 0;
+  width: 1920px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Section base ───────────────────────────────────────────── */
+.mcn {
+  position: relative;
+  width: 1920px;
+  overflow: hidden;
+}
+
+/* ── Shared: menu buttons ───────────────────────────────────── */
+.menu {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  width: 120px;
+  height: 60px;
+  flex-shrink: 0;
+  /* 컨테이너 축소(scale)를 상쇄 — GNB 버튼을 창 크기와 무관하게 같은 크기로 고정 */
+  transform: scale(calc(1 / var(--mcn-scale, 1)));
+  transform-origin: top right;
+}
+
+.btn-global,
+.btn-hamburger {
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: block;
+  line-height: 0;
+  font-size: 0;
+}
+
+
+/* ============================================================
+   SLIDE 1  –  mcn-1  OUR VISION
+   ============================================================ */
+
+.mcn-1 { height: 1080px; }
+.mcn-1 .mcn { height: 1080px; background: #212121; }
+
+/* ── GNB ────────────────────────────────────────────────────── */
+/* pc_gnb_df: 1920×60px flex row, justify-content: space-between */
+.mcn-gnb {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  position: absolute;
+  width: 1920px;
+  height: 60px;
+  left: 0;
+  top: 0;
+  z-index: 10;
+}
+
+/* Logo area: 1800×60px with #212121 background */
+.mcn-logo-bar {
+  width: 1800px;
+  height: 60px;
+  background: #212121;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Ringcoms logo SVG: 120×24px at left:30, vertically centered */
+.mcn-logo {
+  position: absolute;
+  display: block;
+  width: 120px;
+  height: 24px;
+  left: 30px;
+  top: calc(50% - 12px);
+  cursor: pointer;
+}
+
+/* ── Hero image ─────────────────────────────────────────────── */
+/* mcn.png 를 슬라이드 전체(1920×1080)에 꽉 채워 배경으로 사용.
+   하단 왼쪽 텍스트 가독성을 위해 ::after 로 어두운 그라데이션 스크림 적용. */
+.mcn1-bottom-img {
+  position: absolute;
+  width: 1920px;
+  height: 1080px;
+  left: 0;
+  top: 0;
+  background: url('/images/mcn/mcn_hero.png') center / cover no-repeat;
+  z-index: 1;
+}
+
+.mcn1-bottom-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top right,
+    rgba(0, 0, 0, 0.65) 0%,
+    rgba(0, 0, 0, 0.25) 35%,
+    rgba(0, 0, 0, 0) 60%);
+}
+
+/* ── Text frame ─────────────────────────────────────────────── */
+/* 좌측 하단 정렬 (left:60px, 하단 120px), 흰색 텍스트 좌측 정렬 */
+.mcn1-text-frame {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 24px;
+  position: absolute;
+  left: 60px;
+  /* 세로가 짧으면 1080 프레임 하단이 폴드 아래로 잘리므로, 잘리는 양(--mcn-vclip)만큼
+     위로 올려 첫 화면에서 헤딩/자막이 잘리지 않게 한다(화면 크기 따라 연속 변화). */
+  bottom: calc(120px + var(--mcn-vclip, 0px));
+  z-index: 5;
+}
+
+/* "It's Not Easy, But We Go Together" */
+.mcn1-heading {
+  font-family: 'Geist', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 72px;
+  line-height: 115%;
+  text-align: left;
+  letter-spacing: -1.4px;
+  color: #FFFFFF;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* "쉽지 않아도, 같이가요" */
+.mcn1-subheading {
+  font-family: 'Pretendard', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 120%;
+  text-align: left;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+
+/* ============================================================
+   SLIDE 2  –  mcn-2  OUR VISION DESCRIPTION
+   White section, 572px tall
+   ============================================================ */
+
+.mcn-2 { height: 572px; }
+.mcn-2 .mcn {
+  height: 572px;
+  background: #FFFFFF;
+}
+
+/* Description text block: 736×252px, left:592px, top:160px */
+.mcn2-text {
+  position: absolute;
+  width: 736px;
+  height: 252px;
+  left: 592px;
+  top: 160px;
+  font-family: 'Pretendard', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 130%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  letter-spacing: -0.005em;
+  color: #c9c9c9;                  /* 본문(윗부분): 음영(보조) */
+}
+
+.mcn2-text span {
+  font-family: 'Pretendard', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 130%;
+  text-align: center;
+  letter-spacing: -0.005em;
+  color: #212121;                  /* 하단 2줄: 강조(검정) — 핵심 문구 */
+}
+
+
+/* ============================================================
+   SLIDE 3  –  mcn-3  AD BUSINESS
+   White section, 858px tall
+   ============================================================ */
+
+.mcn-3 { height: 858px; }
+.mcn-3 .mcn { height: 858px; background: #FFFFFF; }
+
+/* ── Left title block: 700×168px at (60, 160) ────────────── */
+.mcn3-tit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 30px;
+  position: absolute;
+  width: 700px;
+  height: 168px;
+  left: 60px;
+  top: 160px;
+}
+
+.mcn3-label {
+  width: 700px;
+  height: 14px;
+  font-family: 'Geist', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 100%;
+  display: flex;
+  align-items: center;
+  color: #212121;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.mcn3-title-frame {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 24px;
+  width: 700px;
+  height: 124px;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.mcn3-main-title {
+  width: 700px;
+  height: 64px;
+  font-family: 'Geist', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 56px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  color: #212121;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.mcn3-sub-title {
+  width: 700px;
+  height: 36px;
+  font-family: 'Pretendard', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 120%;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.02em;
+  color: #212121;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* ── Right list: 736×298px at (1124, 400) ───────────────── */
+.mcn3-list {
+  position: absolute;
+  width: 736px;
+  left: 1124px;
+  top: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Each chapter item (accordion — hover reveals description) */
+.mcn3-item {
+  display: flex;
+  flex-direction: column;
+  padding: 24px 0;
+}
+.mcn3-item:first-child { padding-top: 0; }
+.mcn3-item:last-child  { padding-bottom: 0; }
+
+/* Title row: number + title, gap 44px */
+.mcn3-item-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 44px;
+}
+
+/* Number labels (01/02/03) */
+.mcn3-num {
+  font-family: 'Geist', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 150%;
+  letter-spacing: -1px;
+  color: #212121;
+  flex: none;
+}
+
+/* Title — 30px default, grows to 48px when active/hovered */
+.mcn3-title {
+  font-family: 'Geist', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 100%;
+  letter-spacing: -0.01em;
+  color: #212121;
+  transition: font-size 0.3s ease;
+}
+.mcn3-item.is-active .mcn3-title { font-size: 48px; }
+
+/* Description wrapper — collapsed by default, expands when active */
+.mcn3-desc-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin-top: 0;
+  padding-left: 62px;
+  opacity: 0;
+  transition: grid-template-rows 0.35s ease, opacity 0.3s ease, margin-top 0.35s ease;
+}
+.mcn3-item.is-active .mcn3-desc-wrap {
+  grid-template-rows: 1fr;
+  margin-top: 22px;
+  opacity: 1;
+}
+.mcn3-desc {
+  overflow: hidden;
+  font-family: 'Pretendard', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 150%;
+  letter-spacing: -1px;
+  color: #828282;
+}
+
+/* Divider lines */
+.mcn3-divider {
+  width: 736px;
+  height: 0;
+  border-top: 1px solid rgba(33, 33, 33, 0.4);
+}
+
+
+/* ============================================================
+   SLIDE 4  –  mcn-4  CONTENTS PRODUCTION
+   3가지 항목(Growth Hack / 1:1 Exclusive PD / Multi-Channel)을
+   한 화면에 가로 3단 카드로 나열. (기존 가로 캐러셀 폐기)
+   ============================================================ */
+
+/* 세로가 짧을 때 콘텐츠(타이틀+카드)를 위로 올려 한 화면에 맞춘다(잘림 방지, 깔끔 스냅).
+   콘텐츠 실제 하단 ≈ 939(프레임 px). 1080-939=141 중 ~40px 는 하단 여백으로 남겨(딱 붙음 방지)
+   101 만큼만 빼고 올린다. 배경(.prod-stage 흰색)은 그대로, 콘텐츠만 이동(상단 보호 150px 상한). */
+.mcn-4 {
+  height: 1080px;
+  overflow: hidden;
+  --prod-lift: min(150px, max(0px, var(--mcn-vclip, 0px) - 101px));
+}
+.mcn4-tit,
+.prod-cards { transform: translateY(calc(-1 * var(--prod-lift, 0px))); }
+
+.prod-stage {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  background: #FFFFFF;
+}
+
+/* ── Title block (same pattern as mcn-3) ─────────────────── */
+.mcn4-tit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 30px;
+  position: absolute;
+  width: 700px;
+  height: 168px;
+  left: 60px;
+  top: 160px;
+  z-index: 10;
+}
+
+.mcn4-label {
+  width: 700px;
+  height: 14px;
+  font-family: 'Geist', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 100%;
+  display: flex;
+  align-items: center;
+  color: #212121;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.mcn4-title-frame {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 24px;
+  width: 700px;
+  height: 124px;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.mcn4-main-title {
+  width: 700px;
+  height: 64px;
+  font-family: 'Geist', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 56px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  color: #212121;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.mcn4-sub-title {
+  width: 700px;
+  height: 36px;
+  font-family: 'Pretendard', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 120%;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.02em;
+  color: #212121;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* ── 3단 카드: 제목 아래, 한 화면에 가로로 나열 ─────────────────
+   좌우 60px 여백, 카드 사이 40px 간격. 이미지는 화면을 차지하던
+   886×840 → 카드 폭에 맞춘 작은 박스로 축소.                      */
+.prod-cards {
+  position: absolute;
+  left: 60px;
+  right: 60px;
+  top: 430px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 40px;
+  z-index: 10;
+}
+
+.prod-card {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+/* 이미지 박스 — 색상 배경 위에 사진 (대폭 축소) */
+.prod-card-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  border-radius: 30px;
+  overflow: hidden;
+}
+.prod-bg-1 { background: #FFA5EA; }   /* pink   */
+.prod-bg-2 { background: #3B9FFF; }   /* blue   */
+.prod-bg-3 { background: #FF9B3D; }   /* orange */
+
+.prod-card-img {
+  position: absolute;
+  left: 0; top: 0; right: 0; bottom: 0;
+}
+.prod-card-img-1 {
+  background: url('/images/mcn/3_contents_production_1.jpeg') center / cover no-repeat;
+}
+.prod-card-img-2 {
+  background: url('/images/mcn/3_contents_production_2.jpeg') center / cover no-repeat;
+}
+.prod-card-img-3 {
+  background: url('/images/mcn/3_contents_production_3.jpeg') center / cover no-repeat;
+}
+
+/* 카드 제목 — 기존 탭 글자 스타일 계승 */
+.prod-card-title {
+  margin-top: 28px;
+  font-family: 'Geist', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 130%;
+  letter-spacing: -1px;
+  color: #212121;
+}
+
+/* 카드 설명 — 기존 desc 스타일 계승 */
+.prod-card-desc {
+  margin-top: 12px;
+  font-family: 'Pretendard', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 150%;
+  letter-spacing: -1px;
+  color: #828282;
+}
+
+
+/* ============================================================
+   SLIDE 5  –  mcn-5  STUDIO / CREATIVE PLAYGROUND
+   Dark section, 1265px tall
+   ============================================================ */
+
+.mcn-5 { height: 1080px; }
+.mcn-5 .mcn { height: 1080px; background: #212121; }
+
+/* 세로가 짧을 때 콘텐츠(타이틀+카드)를 위로 올려 한 화면에 맞춘다(prod 와 동일 패턴).
+   콘텐츠 실제 하단 ≈ 1033(프레임 px). 여백이 47px 뿐이라 ~7px 만 남기고 올린다(150px 상한). */
+.mcn-5 { --studio-lift: min(150px, max(0px, var(--mcn-vclip, 0px) - 7px)); }
+.mcn5-tit,
+.mcn5-cards { transform: translateY(calc(-1 * var(--studio-lift, 0px))); }
+
+/* ── Title block ─────────────────────────────────────────── */
+.mcn5-tit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 30px;
+  position: absolute;
+  width: 700px;
+  height: 168px;
+  left: 60px;
+  top: 160px;
+}
+
+.mcn5-label {
+  width: 700px;
+  height: 14px;
+  font-family: 'Geist', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 100%;
+  display: flex;
+  align-items: center;
+  color: #FFFFFF;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.mcn5-title-frame {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 24px;
+  width: 700px;
+  height: 124px;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.mcn5-main-title {
+  width: 700px;
+  height: 64px;
+  font-family: 'Geist', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 56px;
+  line-height: 115%;
+  letter-spacing: -1px;
+  color: #FFFFFF;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.mcn5-sub-title {
+  width: 700px;
+  height: 36px;
+  font-family: 'Pretendard', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 120%;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* ── 3단 카드: 한 화면에 가로로 나열 ──────────────────────────
+   60px 좌우 여백, 카드 사이 40px 간격.                        */
+.mcn5-cards {
+  position: absolute;
+  left: 60px;
+  right: 60px;
+  top: 380px;
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+}
+
+.mcn5-con {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  min-width: 0;
+}
+
+/* Image box */
+.mcn5-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-height: 460px;
+  border-radius: 30px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
+.mcn5-img-1 { background-image: url('/images/mcn/4_creative_playground_1.jpeg'); }
+.mcn5-img-2 { background-image: url('/images/mcn/4_creative_playground_2.jpeg'); }
+.mcn5-img-3 { background-image: url('/images/mcn/4_creative_playground_3.jpeg'); }
+
+/* Text block */
+.mcn5-txt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.mcn5-card-title {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 130%;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.mcn5-card-desc {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  text-align: center;
+  letter-spacing: -0.5px;
+  color: #AAAAAA;
+}
+
+.mcn5-card-desc-tall { height: auto; }
+
+
+/* ============================================================
+   SLIDE 6  –  mcn-6  CREATOR
+   2762px tall  ·  gradient background
+   Snap A (page 5, scrollTop 4855): header + row 1
+   Snap B (page 6, scrollTop 6101): row 2
+   ============================================================ */
+
+.mcn-6 { height: 2234px; }
+.mcn-6 .mcn {
+  height: 2234px;
+  background: linear-gradient(90deg, #FFFFFF 0%, #FFFFFF 100%), linear-gradient(180deg, #F2E7D5 0%, #FFFFFF 55.34%);
+}
+
+/* ── Title block ─────────────────────────────────────────── */
+.mcn6-tit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  gap: 30px;
+  position: absolute;
+  width: 887px;
+  height: 178px;
+  left: calc(50% - 887px / 2 + 0.5px);
+  top: 160px;
+}
+
+.mcn6-label {
+  width: 887px;
+  height: 14px;
+  font-family: 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #212121;
+}
+
+.mcn6-heading {
+  width: 887px;
+  height: 134px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 48px;
+  line-height: 140%;
+  text-align: center;
+  letter-spacing: -1px;
+  color: #212121;
+}
+
+/* ── CTA button ──────────────────────────────────────────── */
+.mcn6-btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 14px 30px;
+  gap: 10px;
+  position: absolute;
+  width: 220px;
+  height: 50px;
+  left: calc(50% - 110px);
+  top: 398px;
+  background: #212121;
+  border-radius: 24px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 140%;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+/* ── Creator list: filter bar + grid + view-all button ──────── */
+.mcn6-list {
+  position: absolute;
+  left: calc(50% - 672px);
+  top: 568px;
+  width: 1344px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+}
+
+/* ── Filter bar ──────────────────────────────────────────── */
+.mcn6-filter {
+  width: 1344px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+/* 구분 탭 (전체 / 스트리머 / 크리에이터) — 좌측 */
+.mcn6-cat {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 28px;
+}
+.mcn6-cat-item {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 140%;
+  letter-spacing: -1px;
+  color: #BDBDBD;
+  transition: color 0.2s ease;
+}
+.mcn6-cat-item.is-active { color: #212121; }
+
+/* 활동 플랫폼 필터 — 우측 */
+.mcn6-platform {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+.mcn6-plat-item {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 140%;
+  letter-spacing: -0.5px;
+  color: #BDBDBD;
+  transition: color 0.2s ease;
+}
+.mcn6-plat-item.is-active { color: #212121; font-weight: 600; }
+
+/* 필터로 걸러진 카드는 숨김 */
+.mcn6-card.is-hidden { display: none; }
+
+/* ── Creator grid (wraps 3 per row, up to 16) ───────────────── */
+.mcn6-grid {
+  width: 1344px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+  padding: 0;
+  gap: 60px 24px;
+}
+
+/* ── View-all button (전체보기) ─────────────────────────────── */
+.mcn6-more {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  margin-top: 100px;
+  padding: 6px 6px 6px 24px;
+  width: 212px;
+  height: 50px;
+  background: #FFFFFF;
+  border: 1px solid #212121;
+  border-radius: 25px;
+  cursor: pointer;
+}
+.mcn6-more-txt {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: -1px;
+  color: #212121;
+}
+.mcn6-more-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #212121;
+  flex-shrink: 0;
+}
+
+/* ── Creator card ────────────────────────────────────────── */
+.mcn6-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 30px;
+  width: 432px;
+  height: 638px;
+  flex-shrink: 0;
+}
+
+/* Image box */
+.mcn6-img {
+  width: 432px;
+  height: 538px;
+  background: #343434;
+  border-radius: 30px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background-size: cover;
+  background-position: center top;
+}
+
+.mcn6-img-1 { background-image: url('/images/mcn/5_creator_1.jpeg'); }
+.mcn6-img-2 { background-image: url('/images/mcn/5_creator_2.jpeg'); }
+.mcn6-img-3 { background-image: url('/images/mcn/5_creator_3.jpeg'); }
+.mcn6-img-4 { background-image: url('/images/mcn/5_creator_4.jpeg'); }
+.mcn6-img-5 { background-image: url('/images/mcn/5_creator_5.jpeg'); }
+.mcn6-img-6 { background-image: url('/images/mcn/5_creator_6.jpeg'); }
+
+/* Text block */
+.mcn6-txt {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 16px;
+  width: 384px;
+  height: 70px;
+  flex-shrink: 0;
+}
+
+.mcn6-name {
+  width: 384px;
+  height: 34px;
+  font-family: 'Geist', sans-serif;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 120%;
+  letter-spacing: -1px;
+  color: #212121;
+}
+
+/* SNS row */
+.mcn6-sns {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0;
+  gap: 6px;
+  height: 20px;
+}
+
+.mcn6-sns-link {
+  font-family: 'Geist', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 125%;
+  letter-spacing: -0.6px;
+  color: #212121;
+}
+
+.mcn6-sns-sep {
+  font-family: 'Geist', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 125%;
+  letter-spacing: -0.6px;
+  color: #212121;
+  width: 5px;
+}
+
+.mcn6-sns-underline {
+  border-bottom: 1px solid #000000;
+}
+
+
+/* ============================================================
+   SLIDE 7  –  mcn-7  APPLY (Creator Application)
+   1080px tall  ·  background image + white form panel
+   ============================================================ */
+
+.mcn-7 { height: 1080px; }
+.mcn-7 .mcn { height: 1080px; background: #212121; }
+
+/* ── Background image ─────────────────────────────────────── */
+.mcn7-bg {
+  position: absolute;
+  width: 1920px;
+  height: 1081px;
+  left: 0;
+  top: 0;
+  background: url('/images/mcn/6_voyage.jpeg') center / cover no-repeat;
+}
+
+/* ── Left text block: 700×245px at (60, 715) ─────────────── */
+.mcn7-tit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 30px;
+  position: absolute;
+  width: 700px;
+  height: 245px;
+  left: 60px;
+  top: 715px;
+}
+
+.mcn7-apply-label {
+  width: 700px;
+  height: 14px;
+  font-family: 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 100%;
+  display: flex;
+  align-items: center;
+  color: #212121;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.mcn7-heading {
+  width: 700px;
+  height: 201px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 48px;
+  line-height: 140%;
+  letter-spacing: -1px;
+  color: #212121;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* ── White form container: 886×960px at (974, 60) ─────────── */
+.mcn7-container {
+  position: absolute;
+  height: 960px;
+  left: 974px;
+  right: 60px;
+  top: calc(50% - 480px);
+  border-radius: 30px;
+  background: #FFFFFF;
+  overflow-y: auto;   /* 플랫폼 행이 많아져 폼이 길어지면 내부 스크롤 */
+  overflow-x: hidden;
+}
+
+/* ── Form field base ─────────────────────────────────────── */
+.mcn7-field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 16px;
+  position: absolute;
+}
+
+.mcn7-f-name     { width: 370px; height: 100px; left:  60px; top:  60px; }
+.mcn7-f-birth    { width: 176px; height: 100px; left: 454px; top:  60px; }
+.mcn7-f-gender   { width: 176px; height: 100px; left: 648px; top:  60px; }
+.mcn7-f-contact  { width: 370px; height: 100px; left:  60px; top: 192px; }
+.mcn7-f-email    { width: 370px; height: 100px; left: 454px; top: 192px; }
+/* 높이는 행 수에 따라 가변 (시작 1행 → 추가 시 늘어남). 아래 필드는 JS가 재배치 */
+.mcn7-f-platform { width: 764px; left:  60px; top: 324px; }
+.mcn7-f-bio      { width: 764px; height: 220px; left:  60px; top: 620px; }
+
+/* ── Field labels ─────────────────────────────────────────── */
+.mcn7-flabel {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0;
+  gap: 4px;
+  height: 24px;
+  flex: none;
+  order: 0;
+}
+
+.mcn7-flabel-txt {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 120%;
+  letter-spacing: -1px;
+  color: #000000;
+  height: 24px;
+  display: flex;
+  align-items: center;
+}
+
+/* Pink required dot (6×6px, bottom-anchored in a 6×10px wrapper) */
+.mcn7-dot-wrap {
+  width: 6px;
+  height: 10px;
+  position: relative;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.mcn7-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  left: 0;
+  top: 0;
+  background: #B5537C;
+  border-radius: 50%;
+}
+
+/* ── Text inputs ──────────────────────────────────────────── */
+.mcn7-input {
+  box-sizing: border-box;
+  padding: 20px;
+  width: 370px;
+  height: 60px;
+  border: 1px solid #D9D9D9;
+  border-radius: 10px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 125%;
+  letter-spacing: -0.6px;
+  color: #212121;
+  outline: none;
+  background: transparent;
+  flex: none;
+  order: 1;
+}
+
+.mcn7-input::placeholder { color: #D9D9D9; }
+
+.mcn7-input-birth { width: 176px; }
+
+/* ── Gender toggle ────────────────────────────────────────── */
+.mcn7-gender {
+  display: flex;
+  flex-direction: row;
+  width: 176px;
+  height: 60px;
+  flex: none;
+  order: 1;
+}
+
+.mcn7-gender-btn {
+  width: 88px;
+  height: 60px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 125%;
+  letter-spacing: -0.6px;
+  color: #D9D9D9;
+  background: none;
+  cursor: pointer;
+  border: 1px solid #D9D9D9;
+  box-sizing: border-box;
+}
+
+.mcn7-gender-left  { border-right-width: 0; border-radius: 10px 0 0 10px; }
+.mcn7-gender-right { border-radius: 0 10px 10px 0; }
+
+/* 선택된 성별 — 다크 채움 */
+.mcn7-gender-btn.active {
+  background: #212121;
+  border-color: #212121;
+  color: #FFFFFF;
+}
+
+/* ── Platform rows ─────────────────────────────────────────── */
+.mcn7-prow {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 24px;
+  width: 764px;
+  height: 64px;
+  flex: none;
+}
+
+/* Dropdown select box: 218×64px */
+.mcn7-pselect {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 20px;
+  width: 218px;
+  height: 64px;
+  border: 1px solid #D9D9D9;
+  border-radius: 10px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.mcn7-pname {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 125%;
+  letter-spacing: -0.6px;
+  color: #D9D9D9;
+}
+
+.mcn7-arrow {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.2s ease;
+}
+
+/* 플랫폼 select 드롭다운 */
+.mcn7-pselect { cursor: pointer; }
+.mcn7-pselect.is-open { border-color: #212121; }
+.mcn7-pselect.is-open .mcn7-arrow { transform: translateY(-50%) rotate(180deg); }
+.mcn7-pname.is-selected { color: #212121; }
+
+.mcn7-pmenu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 218px;
+  max-height: 168px;
+  overflow-y: auto;
+  padding: 6px 0;
+  background: #FFFFFF;
+  border: 1px solid #D9D9D9;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  z-index: 30;
+  display: none;
+}
+.mcn7-pselect.is-open .mcn7-pmenu { display: block; }
+.mcn7-pmenu-item {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: -0.6px;
+  color: #212121;
+}
+.mcn7-pmenu-item:hover { background: #F3F3F3; }
+
+/* URL + add-button wrapper: 522×64px */
+.mcn7-purl-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  width: 522px;
+  height: 64px;
+  flex-shrink: 0;
+}
+
+/* URL input: 448×64px */
+.mcn7-purl {
+  box-sizing: border-box;
+  padding: 20px;
+  width: 448px;
+  height: 64px;
+  border: 1px solid #D9D9D9;
+  border-radius: 10px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 125%;
+  letter-spacing: -0.6px;
+  color: #212121;
+  outline: none;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+.mcn7-purl::placeholder { color: #D9D9D9; }
+
+/* Circular add/minus button: 64×64px */
+.mcn7-padd {
+  box-sizing: border-box;
+  width: 64px;
+  height: 64px;
+  border: 1px solid #D9D9D9;
+  border-radius: 32px;
+  background: none;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Plus icon container */
+.mcn7-plus {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: calc(50% - 10px);
+  top: calc(50% - 10px);
+}
+
+.mcn7-plus-h {
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  left: 0;
+  top: calc(50% - 1px);
+  background: #212121;
+}
+
+.mcn7-plus-v {
+  position: absolute;
+  width: 2px;
+  height: 20px;
+  left: calc(50% - 1px);
+  top: 0;
+  background: #212121;
+}
+
+/* ── Bio textarea ─────────────────────────────────────────── */
+.mcn7-textarea {
+  box-sizing: border-box;
+  padding: 20px;
+  width: 764px;
+  height: 180px;
+  border: 1px solid #D9D9D9;
+  border-radius: 10px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 125%;
+  letter-spacing: -0.6px;
+  color: #212121;
+  outline: none;
+  resize: none;
+  background: transparent;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+}
+
+.mcn7-textarea::placeholder { color: #D9D9D9; }
+
+/* ── Terms agreement: 337×44px at (60, 856) ─────────────── */
+.mcn7-terms {
+  position: absolute;
+  width: 337px;
+  height: 44px;
+  left: 60px;
+  top: 856px;
+}
+
+/* Checkbox: 24×24px */
+.mcn7-chkbox {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+}
+
+.mcn7-chk-inner {
+  position: absolute;
+  width: 17.6px;
+  height: 17.6px;
+  left: calc(50% - 8.8px);
+  top: calc(50% - 8.8px);
+  border: 1.12px solid #D9D9D9;
+  box-sizing: border-box;
+}
+
+/* 체크박스 클릭 가능 표시 + 체크 상태 */
+.mcn7-chkbox { cursor: pointer; }
+.mcn7-chkbox.checked .mcn7-chk-inner {
+  background: #212121;
+  border-color: #212121;
+}
+.mcn7-chkbox.checked .mcn7-chk-inner::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 6px;
+  height: 3px;
+  border-left: 1.4px solid #FFFFFF;
+  border-bottom: 1.4px solid #FFFFFF;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* Text block: 309×44px at left:28 */
+.mcn7-terms-body {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 309px;
+  height: 44px;
+  left: 28px;
+  top: 0;
+}
+
+.mcn7-terms-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  padding: 0;
+  width: auto;
+  height: 22px;
+  flex: none;
+  order: 0;
+}
+
+/* 자세히보기 링크 */
+.mcn7-terms-detail {
+  margin-left: 10px;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 135%;
+  letter-spacing: -0.6px;
+  color: #767676;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* 자세히보기 동의서 전문 박스 (terms 기준 절대배치) */
+.mcn7-terms-detail-box {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 52px;
+  width: 764px;
+  max-height: 220px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  box-sizing: border-box;
+  padding: 20px 24px;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  background: #FAFAFA;
+  font-family: 'Pretendard', sans-serif;
+}
+.mcn7-terms-detail-box.open { display: block; }
+.mcn7-terms-detail-title {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 150%;
+  letter-spacing: -0.4px;
+  color: #212121;
+  margin: 0 0 10px;
+}
+.mcn7-terms-detail-p {
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 160%;
+  letter-spacing: -0.4px;
+  color: #555555;
+  margin: 0 0 14px;
+}
+.mcn7-terms-detail-h {
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 160%;
+  letter-spacing: -0.4px;
+  color: #333333;
+  margin: 10px 0 4px;
+}
+.mcn7-terms-detail-li {
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 160%;
+  letter-spacing: -0.4px;
+  color: #555555;
+  margin: 0;
+  padding-left: 10px;
+}
+
+.mcn7-terms-main {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 135%;
+  letter-spacing: -0.6px;
+  color: #000000;
+}
+
+/* Small pink dot for 필수 marker (4×4px in 4×10px wrapper) */
+.mcn7-dot-sm-wrap {
+  width: 4px;
+  height: 10px;
+  position: relative;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.mcn7-dot-sm {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  left: 0;
+  top: 0;
+  background: #B5537C;
+  border-radius: 50%;
+}
+
+.mcn7-terms-sub {
+  width: 309px;
+  height: 18px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 125%;
+  letter-spacing: -0.6px;
+  color: #B5537C;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+}
+
+/* ============================================================
+   Footer (Figma 452:2482)  ·  1920 × 296
+   ============================================================ */
+.mcn-footer {
+  position: relative;
+  flex-shrink: 0;
+  width: 1920px;
+  height: 296px;
+  background: #212121;
+  overflow: hidden;
+}
+
+/* RINGCOMS 로고 */
+.mcn-footer-logo {
+  position: absolute;
+  left: 60px;
+  top: 58px;
+  width: 200px;
+  height: 40px;
+}
+.mcn-footer-logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* 이메일 · 홈페이지 */
+.mcn-footer-email {
+  position: absolute;
+  left: 60px;
+  top: 192px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: 'Geist', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.35;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+/* 주소 (Head Office / R&D Center) */
+.mcn-footer-contact {
+  position: absolute;
+  top: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #ffffff;
+}
+.mcn-footer-office { left: 1446px; }
+.mcn-footer-rnd    { left: 1652px; }
+.mcn-footer-label {
+  font-family: 'Geist', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -0.6px;
+}
+.mcn-footer-addr {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.45;
+  white-space: nowrap;
+}
+
+/* 개인정보처리방침 */
+.mcn-footer-privacy {
+  position: absolute;
+  left: 1652px;
+  top: 226px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.45;
+  letter-spacing: -0.6px;
+  color: #ffffff;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+/* 저작권 */
+.mcn-footer-copy {
+  position: absolute;
+  left: 793px;
+  top: 228px;
+  font-family: 'Geist', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+}
+
+
+/* ── 헤더/푸터 풀폭 + CTA 우측 끝 (main/엔터와 동일 정책) ─────────────
+   이 페이지는 --mcn-x 를 콘텐츠 중앙정렬(컨테이너 translateX)에도 쓰므로 0 으로 둘 수 없다.
+   대신 chrome(로고/햄버거/CTA)만 --mcn-x 의존을 제거해 화면 가장자리(풀폭/우측 끝)에 고정한다.
+   (≤1920 화면은 --mcn-x=0 이라 이미 풀폭 → 변화 없음, >1920 화면에서만 끝으로 정렬)
+   menu.css 가 이 파일보다 나중 로드 → body 접두로 명시도를 높여 우선 적용. */
+body .gnb-float { right: 0; }
+body .cta-btns  { right: 0; }
+body .gnb-logo-float .gnb-logo-link { margin-left: calc(30px * var(--chrome-scale, 1)); }
+/* hover 펼침 메뉴(.site-menu)도 햄버거(right:0)와 같은 기준으로 — menu.css 공통 규칙은
+   --mcn-x(>1920 중앙정렬 여백)를 더하지만 여기선 햄버거가 화면 끝이라 그 여백만큼
+   메뉴가 더 왼쪽(멀리)에서 열린다. --mcn-x 를 빼고 66px 레일 간격만 남긴다. */
+body .site-menu { right: calc(66px * var(--chrome-scale, var(--mcn-scale, 1))); }
+
+
+/* ============================================================
+   MOBILE  (≤768px) — mo-mcn 1~5 통합
+   데스크탑 가로/세로 스크롤 UI는 숨기고 모바일 세로 스크롤로 전환.
+   원본: mo-mcn.css ~ mo-mcn5.css (각 섹션을 .mo-sec-N 로 스코프하여
+   .frame-wrap / .tit / .con 등 제너릭 클래스 충돌 방지).
+   --u = 1 디자인px, min(뷰포트 폭/360, 뷰포트 높이/780).
+   섹션 1~5는 메인과 동일한 "한 화면 = 한 단락" 규격:
+   height = 100dvh - 60u(헤더) + 1px. --u 가 높이 인지형이라 헤더 아래
+   가시 높이는 항상 ≥720u — 각 섹션 콘텐츠를 720u 이내로 배치했다.
+   크리에이터(mo-sec-6)/APPLY(mo-sec-7)/푸터(mo-sec-8)는 예외(자연 높이).
+   ============================================================ */
+.mo-root { display: none; }
+
+@media (max-width: 768px) {
+
+  html, body {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    overflow-x: hidden;
+    background: #fff;
+    font-size: initial;
+    line-height: normal;
+    scroll-behavior: smooth;
+    /* 모바일 비례 단위: 폭은 100vw로 채우되, 폴더블 펼침에서 콘텐츠가 과확대되지 않도록
+       메인/엔터테인먼트와 같은 높이 인지형 기준을 사용한다. */
+    --u: min(100vw / 360, 100vh / 780);            /* fallback(구형); svh 는 아래 @supports */
+    --mo-content-w: calc(320 * var(--u));
+    --mo-content-x: max(calc(20 * var(--u)), calc((100vw - var(--mo-content-w)) / 2));
+    --sec-x: max(calc(20 * var(--u)), min(calc(40 * var(--u)), calc((100vw - var(--mo-content-w)) / 2)));   /* 섹션 제목/콘텐츠 왼쪽: 센터링하되 40u 상한(짧은 폰 SE 부풀림 방지), 20u 하한 */
+    /* 모바일 단락 페이징은 JS(mo-snap.js)가 담당. 앵커 점프 헤더(60px) 보정만. */
+    scroll-padding-top: calc(60 * var(--u));
+  }
+  .mcn-container { display: none !important; }
+
+  .mo-root {
+    display: block;
+    background: #fff;
+    /* 다른 페이지와 동일하게 100vw 폭을 꽉 채움 (좌우 여백 없음) */
+    padding-top: calc(60 * var(--u));   /* 고정 헤더(60px) 만큼 콘텐츠 밀어내기 (헤더와 동일 비례) */
+    --u: min(100vw / 360, 100vh / 780);            /* fallback(구형); svh 는 아래 @supports */
+    --mo-content-w: calc(320 * var(--u));
+    --mo-content-x: max(calc(20 * var(--u)), calc((100vw - var(--mo-content-w)) / 2));
+    --sec-x: max(calc(20 * var(--u)), min(calc(40 * var(--u)), calc((100vw - var(--mo-content-w)) / 2)));   /* 섹션 제목/콘텐츠 왼쪽: 센터링하되 40u 상한(짧은 폰 SE 부풀림 방지), 20u 하한 */
+  }
+  .mo-sec { position: relative; }
+
+  /* ════════════════ Lenis (모바일 스크롤 엔진) 최소 CSS ════════════════
+     Lenis 활성 시 <html> 에 .lenis / .lenis-smooth 클래스가 붙는다(모바일 전용,
+     데스크탑 진입 시 destroy 로 제거). 위 html/body 의 scroll-behavior:smooth 가
+     Lenis 의 rAF 구동 스크롤과 싸우지 않게 auto 로 덮고, data-lenis-prevent 영역
+     (가로 캐러셀)의 오버스크롤이 페이지로 새지 않게 contain 한다. */
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+  .lenis.lenis-stopped { overflow: hidden; }
+
+  /* ════════════════ GNB_MO 헤더 (공용, 상단 고정 60px 흰 배경) ════════════════ */
+  .mo-header {
+    /* fixed: body overflow-x:hidden 이 sticky 를 깨므로 fixed 로 항상 상단 고정.
+       .mo-root 에 padding-top:60px 로 콘텐츠가 헤더 아래에서 시작하게 보정. */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: calc(60 * var(--u));
+    background: #212121;   /* PC GNB 다크 바와 통일 */
+  }
+  .mo-logo {
+    display: block;
+    width: calc(120 * var(--u));
+    height: calc(24 * var(--u));
+    margin-left: calc(20 * var(--u));
+  }
+  .mo-logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    /* 다크 헤더: 로고는 흰색 그대로(PC와 통일) → filter 미적용 */
+  }
+  .mo-header-btns {
+    display: flex;
+    align-items: center;
+  }
+  .mo-hbtn {
+    width: calc(60 * var(--u));
+    height: calc(60 * var(--u));
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    line-height: 0;
+  }
+  .mo-hbtn svg { display: block; width: 100%; height: 100%; }
+
+  /* ════════════════ MO 1 : OUR VISION (다크) ════════════════ */
+  .mo-sec-1 .frame-wrap {
+    position: relative;
+    width: 100%;
+    /* 메인 KV 와 동일한 단락 스냅 규격: 헤더 아래 한 화면을 가득 채운다.
+       +1px: 헤더 높이(60u)가 소수인 화면에서 스냅 목적지 ceil 보정으로
+       단락 하단이 뷰포트 밑선보다 1px 떠서 다음 단락이 띠로 비치는 것 방지. */
+    height: calc(100vh  - 60 * var(--u) + 1px);   /* fallback(구형) */
+    height: calc(100svh - 60 * var(--u) + 1px);   /* modern: 주소창 토글 흡수(svh 고정) */
+    min-height: calc(540 * var(--u));
+    margin: 0 auto;
+    overflow: hidden;
+    background: #212121;
+  }
+  .mo-sec-1 .frame { position: absolute; inset: 0; }
+
+  .mo-sec-1 .hero {
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+    height: 100%;
+    background: #212121;
+    overflow: hidden;
+  }
+  .mo-sec-1 .hero img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  .mo-sec-1 .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  /* KV 타이포 전용 너비 비례 단위 — --u 는 높이 인지형(min)이라 폴더블·짧은
+     폰에서 화면 폭 대비 텍스트가 작아진다. 전면 히어로 문구는 화면 "너비"를
+     따라 커지는 게 자연스러워(PC 느낌) 폭/360 기준을 따로 쓴다.
+     360폭 폰에서는 기존과 동일(28px). */
+  .mo-sec-1 { --uw: calc(100vw / 360); }
+  .mo-sec-1 .vision-txt {
+    position: absolute;
+    left: 50%;
+    top: 50%;                              /* 가변 높이(한 화면) 중앙 정렬 */
+    width: calc(320 * var(--uw));
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .mo-sec-1 .vision-heading {
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: calc(28 * var(--uw));
+    line-height: 1.15;
+    letter-spacing: calc(-0.56 * var(--uw));
+    color: #d6bea4;
+  }
+  .mo-sec-1 .vision-sub {
+    margin-top: calc(20 * var(--uw));
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: calc(18 * var(--uw));
+    line-height: 1.2;
+    letter-spacing: calc(-0.36 * var(--uw));
+    color: #fff;
+  }
+
+  /* ════════════════ MO 2 : OUR VISION 설명 (흰 배경) ════════════════ */
+  .mo-sec-2 .frame-wrap {
+    position: relative;
+    width: 100%;
+    height: calc(100vh  - 60 * var(--u) + 1px);   /* fallback(구형) — 한 화면 = 한 단락 */
+    height: calc(100svh - 60 * var(--u) + 1px);   /* modern: 주소창 토글 흡수(svh 고정) */
+    min-height: calc(474 * var(--u));
+    margin: 0 auto;
+    overflow: hidden;
+    background: #fff;
+  }
+  .mo-sec-2 .frame { position: absolute; inset: 0; }
+  .mo-sec-2 .vision-txt {
+    position: absolute;
+    left: 50%;
+    top: 50%;                              /* 원본(474u 중 120u 시작)도 정중앙 — 가변 높이에서도 유지 */
+    width: calc(308 * var(--u));
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .mo-sec-2 .vision-txt p {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: calc(20 * var(--u));
+    line-height: 1.3;
+    letter-spacing: calc(-0.1 * var(--u));
+    color: #c9c9c9;                  /* 본문(윗부분): 음영(보조) */
+  }
+  .mo-sec-2 .vision-txt .muted { color: #212121; }   /* 하단 핵심 문구: 강조(검정) */
+
+  /* ════════════════ MO 3 : AD BUSINESS (흰 배경) ════════════════ */
+  .mo-sec-3 .frame-wrap {
+    position: relative;
+    width: 100%;
+    /* 자연 높이(흐름, 총 ≈809u) → 한 화면 고정: 폰트는 그대로 두고 상하
+       패딩·목록 간격만 압축(80/80→48/36, 아이템 간 30→20, 아이템 내 18→14)해
+       콘텐츠 총합 ≈713u ≤ 최소 가시높이 720u 로 맞췄다. 제목은 상단 고정,
+       아이템 리스트는 남은 공간 중앙(.con margin auto). */
+    height: calc(100vh  - 60 * var(--u) + 1px);   /* fallback(구형) */
+    height: calc(100svh - 60 * var(--u) + 1px);   /* modern: 주소창 토글 흡수(svh 고정) */
+    min-height: calc(715 * var(--u));
+    margin: 0 auto;
+    /* 좌우 패딩 0 — 제목/콘텐츠는 --mo-content-x(=20u) 로만 들여, 다른 섹션(4·5·6·7)과
+       같은 왼쪽 x 에 정렬. (예전 20u 패딩 + margin content-x 이중이라 sec3 만 40 으로 튀었음) */
+    padding: calc(48 * var(--u)) 0 calc(36 * var(--u));
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #fff;
+  }
+  .mo-sec-3 .ad-head {
+    width: calc(284 * var(--u));
+    margin-left: var(--sec-x);
+    display: flex;
+    flex-direction: column;
+    gap: calc(14 * var(--u));   /* 18→14: 한 화면 규격 압축 */
+  }
+  .mo-sec-3 .ad-head-top {
+    width: calc(260 * var(--u));
+    display: flex;
+    flex-direction: column;
+    gap: calc(10 * var(--u));   /* 14→10: 한 화면 규격 압축 */
+  }
+  .mo-sec-3 .ad-label {
+    font-family: 'Geist', sans-serif;
+    font-weight: 600;
+    font-size: calc(16 * var(--u));
+    line-height: 1.1;
+    color: #212121;
+  }
+  .mo-sec-3 .ad-title {
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: calc(36 * var(--u));
+    line-height: 1.2;
+    letter-spacing: calc(-0.36 * var(--u));
+    color: #212121;
+  }
+  .mo-sec-3 .ad-sub {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: calc(18 * var(--u));
+    line-height: 1.52;
+    letter-spacing: calc(-0.36 * var(--u));
+    color: #212121;
+  }
+  .mo-sec-3 .con {
+    /* 상/하 auto — 제목 아래 남은 세로 공간의 중앙에 배치(한 화면 규격) */
+    margin: auto 0 auto var(--sec-x);
+    width: calc(320 * var(--u));
+    display: flex;
+    flex-direction: column;
+    gap: calc(20 * var(--u));   /* 30→20: 한 화면 규격 압축 */
+  }
+  .mo-sec-3 .item {
+    display: flex;
+    flex-direction: column;
+    gap: calc(14 * var(--u));   /* 18→14: 한 화면 규격 압축 */
+  }
+  .mo-sec-3 .item-tit {
+    display: flex;
+    align-items: flex-start;
+    gap: calc(16 * var(--u));
+    color: #212121;
+  }
+  .mo-sec-3 .item-tit .num {
+    flex: 0 0 calc(24 * var(--u));
+    width: calc(24 * var(--u));
+    font-family: 'Geist', sans-serif;
+    font-weight: 600;
+    font-size: calc(18 * var(--u));
+    line-height: 1.5;
+    letter-spacing: calc(-1 * var(--u));
+  }
+  .mo-sec-3 .item-tit .name {
+    width: calc(256 * var(--u));
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: calc(28 * var(--u));
+    line-height: 1.3;
+    letter-spacing: calc(-0.28 * var(--u));
+  }
+  .mo-sec-3 .item-desc {
+    padding-left: calc(40 * var(--u));
+  }
+  .mo-sec-3 .item-desc p {
+    width: calc(256 * var(--u));
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: calc(14 * var(--u));
+    line-height: 1.5;
+    letter-spacing: calc(-1 * var(--u));
+    color: #828282;
+  }
+  .mo-sec-3 .divider {
+    width: 100%;
+    height: 1px;
+    border: 0;
+    background: #d9d9d9;
+  }
+
+  /* ════════════════ MO 4 : CONTENTS PRODUCTION (슬라이더, mo-sec-5 패턴 동일) ════════════════ */
+  .mo-sec-4 { --u: min(100vw / 360, 100vh / 780); }            /* fallback(구형); svh 는 아래 @supports */
+
+  /* ── [주소창 토글 리플로우 방지] dvh → svh ──
+     위 --u(html·body / .mo-root / .mo-sec-4)와 섹션 높이 dvh 를 svh 로 (구형은 vh 폴백).
+     주소창 접힘/펼침에 값이 고정 → 화면 리사이징·읽던 위치 밀림 제거. 공유 menu.css
+     (뒤 로드)의 dvh chrome 은 body-프리픽스(특이도 0,1,1 > menu.css 0,1,0)로 svh 덮음
+     (menu.css 미변경). ※ 스크롤 엔진(mcn-lenis.js)은 미변경. */
+  @supports (height: 100svh) {
+    html, body,
+    .mo-root,
+    .mo-sec-4 { --u: min(100vw / 360, 100svh / 780); }
+    body .mo-header, body .mo-menu { --u: min(100vw / 360, 100svh / 780); }
+    body .mo-root { padding-top: calc(60 * min(100vw / 360, 100svh / 780)); }
+    body .cta-btns { --u-cta: min(100vw / 360, 100svh / 780); }
+    body .scroll-top-btn { --rc-floating-u: min(1px, 100vw / 360, 100svh / 780); }
+  }
+  .mo-sec-4 .frame-wrap {
+    position: relative;
+    width: 100%;
+    /* 810u 고정(뷰포트 초과) → 한 화면 고정: 제목 상단 / 슬라이더 중앙 /
+       도트 하단(space-between). 콘텐츠 총합 ≈677u ≤ 최소 가시높이 720u. */
+    height: calc(100vh  - 60 * var(--u) + 1px);   /* fallback(구형) */
+    height: calc(100svh - 60 * var(--u) + 1px);   /* modern: 주소창 토글 흡수(svh 고정) */
+    min-height: calc(680 * var(--u));
+    margin: 0 auto;
+    padding: calc(48 * var(--u)) 0 calc(32 * var(--u));
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    background: #fff;
+  }
+  .mo-sec-4 .tit {
+    margin-left: var(--sec-x);
+    width: calc(284 * var(--u));
+    display: flex;
+    flex-direction: column;
+    gap: calc(18 * var(--u));
+    word-break: break-word;
+  }
+  .mo-sec-4 .tit-inner {
+    width: calc(260 * var(--u));
+    display: flex;
+    flex-direction: column;
+    gap: calc(14 * var(--u));
+  }
+  .mo-sec-4 .label {
+    font-family: 'Geist', sans-serif;
+    font-weight: 600;
+    font-size: calc(16 * var(--u));
+    line-height: 1.1;
+    color: #212121;
+  }
+  .mo-sec-4 .main-title {
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: calc(36 * var(--u));
+    line-height: 1.2;
+    letter-spacing: calc(-0.36 * var(--u));
+    color: #212121;
+  }
+  .mo-sec-4 .section-desc {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: calc(20 * var(--u));
+    line-height: 1.52;
+    letter-spacing: calc(-0.4 * var(--u));
+    color: #212121;
+  }
+  /* 슬라이더 — mo-sec-5 .con-row 와 동일 패턴 */
+  .mo-sec-4 .prod-slider {
+    width: 100%;
+    height: calc(420 * var(--u));
+    margin: calc(24 * var(--u)) 0;   /* 제목/도트와의 최소 간격(남는 공간은 space-between이 분배) */
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .mo-sec-4 .prod-slider::-webkit-scrollbar { display: none; }
+  /* flex: 0 0 100% — mo-sec-5 .con 과 동일, 100%=prod-slider 폭=100vw */
+  .mo-sec-4 .prod-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 calc(20 * var(--u));
+    display: flex;
+    flex-direction: column;
+    gap: calc(16 * var(--u));
+    scroll-snap-align: start;
+  }
+  .mo-sec-4 .prod-slide-img {
+    width: 100%;
+    height: calc(260 * var(--u));
+    border-radius: calc(16 * var(--u));
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #eee;
+    flex-shrink: 0;
+  }
+  .mo-sec-4 .prod-slide-img-1 { background-image: url('/images/mcn/3_contents_production_1.jpeg'); }
+  .mo-sec-4 .prod-slide-img-2 { background-image: url('/images/mcn/3_contents_production_2.jpeg'); }
+  .mo-sec-4 .prod-slide-img-3 { background-image: url('/images/mcn/3_contents_production_3.jpeg'); }
+  .mo-sec-4 .prod-slide-title {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(20 * var(--u));
+    line-height: 1.3;
+    color: #212121;
+  }
+  .mo-sec-4 .prod-slide-desc {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: calc(14 * var(--u));
+    line-height: 1.5;
+    letter-spacing: calc(-1 * var(--u));
+    color: #828282;
+  }
+  /* 도트 — mo-sec-5 .mo5-dots 와 동일 패턴 */
+  .mo-sec-4 .mo-prod-dots {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: calc(8 * var(--u));
+  }
+  .mo-sec-4 .mo-prod-dot {
+    width: calc(8 * var(--u));
+    height: calc(8 * var(--u));
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(33, 33, 33, 0.25);
+    cursor: pointer;
+    transition: width 0.25s ease, background 0.25s ease;
+  }
+  .mo-sec-4 .mo-prod-dot.is-active {
+    width: calc(20 * var(--u));
+    border-radius: calc(4 * var(--u));
+    background: #212121;
+  }
+
+  /* ════════════════ MO 5 : STUDIO / Creative Playground (다크) ════════════════ */
+  .mo-sec-5 .frame-wrap {
+    position: relative;
+    width: 100%;
+    /* 853u 고정(뷰포트 초과) → 한 화면 고정: mo-sec-4 와 동일 규격.
+       콘텐츠 총합 ≈712u ≤ 최소 가시높이 720u. */
+    height: calc(100vh  - 60 * var(--u) + 1px);   /* fallback(구형) */
+    height: calc(100svh - 60 * var(--u) + 1px);   /* modern: 주소창 토글 흡수(svh 고정) */
+    min-height: calc(715 * var(--u));
+    margin: 0 auto;
+    padding: calc(48 * var(--u)) 0 calc(32 * var(--u));
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    background: #212121;
+  }
+  .mo-sec-5 .tit {
+    margin-left: var(--sec-x);
+    width: calc(284 * var(--u));
+    display: flex;
+    flex-direction: column;
+    gap: calc(18 * var(--u));
+    word-break: break-word;
+  }
+  .mo-sec-5 .tit-inner {
+    width: calc(260 * var(--u));
+    display: flex;
+    flex-direction: column;
+    gap: calc(14 * var(--u));
+  }
+  .mo-sec-5 .label {
+    font-family: 'Geist', sans-serif;
+    font-weight: 600;
+    font-size: calc(16 * var(--u));
+    line-height: 1.1;
+    color: #fff;
+  }
+  .mo-sec-5 .main-title {
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: calc(36 * var(--u));
+    line-height: 1.2;
+    letter-spacing: calc(-0.36 * var(--u));
+    color: #fff;
+  }
+  .mo-sec-5 .section-desc {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: calc(20 * var(--u));
+    line-height: 1.52;
+    letter-spacing: calc(-0.4 * var(--u));
+    color: #fff;
+  }
+  .mo-sec-5 .con-row {
+    width: 100%;
+    margin: calc(24 * var(--u)) 0;   /* 제목/도트와의 최소 간격(남는 공간은 space-between이 분배) */
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .mo-sec-5 .con-row::-webkit-scrollbar { display: none; }
+  .mo-sec-5 .con {
+    flex: 0 0 100%;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 calc(20 * var(--u));
+    display: flex;
+    flex-direction: column;
+    gap: calc(30 * var(--u));
+    scroll-snap-align: center;
+  }
+  .mo-sec-5 .img {
+    width: 100%;
+    height: calc(238 * var(--u));
+    border-radius: calc(16 * var(--u));
+    background-color: #fff;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .mo-sec-5 .img-1 { background-image: url('/images/mcn/4_creative_playground_1.jpeg'); }
+  .mo-sec-5 .img-2 { background-image: url('/images/mcn/4_creative_playground_2.jpeg'); }
+  .mo-sec-5 .img-3 { background-image: url('/images/mcn/4_creative_playground_3.jpeg'); }
+  .mo-sec-5 .txt {
+    display: flex;
+    flex-direction: column;
+    gap: calc(16 * var(--u));
+  }
+  .mo-sec-5 .card-title {
+    padding-left: calc(16 * var(--u));
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(24 * var(--u));
+    line-height: 1.3;
+    color: #fff;
+  }
+  .mo-sec-5 .card-desc {
+    padding-left: calc(16 * var(--u));
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: calc(14 * var(--u));
+    line-height: 1.5;
+    letter-spacing: calc(-0.8 * var(--u));
+    color: #aaa;
+  }
+  /* 스와이프 힌트 — 페이지 도트 */
+  .mo-sec-5 .mo5-dots {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: calc(8 * var(--u));
+  }
+  .mo-sec-5 .mo5-dot {
+    width: calc(8 * var(--u));
+    height: calc(8 * var(--u));
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: width 0.25s ease, background 0.25s ease;
+  }
+  .mo-sec-5 .mo5-dot.is-active {
+    width: calc(20 * var(--u));
+    border-radius: calc(4 * var(--u));
+    background: #fff;
+  }
+
+  /* ════════════════ MO 6 : CREATOR (흰 배경, 카드 6개 세로) ════════════════ */
+  /* 한 화면 스냅: 제목(.tit, absolute)·필터는 고정, .mo-sec6-scroll(그리드+전체보기)만 내부 스크롤 */
+  .mo-sec-6 .frame-wrap {
+    position: relative;
+    width: 100%;
+    height: calc(100vh  - 60 * var(--u) + 1px);   /* fallback(구형) */
+    height: calc(100svh - 60 * var(--u) + 1px);   /* modern: 주소창 토글 흡수(svh 고정) — 한 화면 */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    overflow: hidden;
+  }
+  /* 그리드+전체보기 내부 스크롤 영역 (mo-snap EXEMPT). 폼 본문 스크롤과 동일 감각. */
+  .mo-sec-6 .mo-sec6-scroll {
+    flex: 1 1 0;
+    min-height: 0;
+    /* 필터 행과 그리드 첫 줄 사이 간격(위) / 스크롤 영역과 화면 하단 사이 항상 있는 여백(아래).
+       margin-bottom 은 flex:1 높이를 줄여 스크롤 뷰포트를 화면 바닥에서 띄운다(위 간격의 대칭). */
+    margin-top: calc(20 * var(--u));
+    margin-bottom: calc(20 * var(--u));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  .mo-sec-6 .tit {
+    position: absolute;
+    left: var(--sec-x);
+    top: calc(30 * var(--u));   /* 제목·CTA 블록 위치 — 값↓ = 위로(필터와 겹침 방지), 값↑ = 아래로 */
+    width: calc(284 * var(--u));
+    display: flex;
+    flex-direction: column;
+    gap: calc(14 * var(--u));
+    word-break: keep-all;   /* break-word 는 "브랜드/를" 처럼 글자 단위로 갈라짐 → 어절 단위 */
+  }
+  .mo-sec-6 .label {
+    font-family: 'Geist', sans-serif;
+    font-weight: 600;
+    font-size: calc(16 * var(--u));
+    line-height: 1.1;
+    color: #212121;
+  }
+  .mo-sec-6 .heading {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: calc(28 * var(--u));
+    line-height: 1.2;
+    letter-spacing: calc(-0.28 * var(--u));
+    color: #212121;
+  }
+  .mo-sec-6 .cta {
+    /* .tit(플렉스 컬럼) 내부 흐름 배치 — 헤딩 바로 아래(+10u, tit gap 14u와 합쳐 24u). */
+    margin-top: calc(10 * var(--u));
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: calc(13 * var(--u)) calc(30 * var(--u));
+    border: none;
+    border-radius: calc(24 * var(--u));
+    background: #212121;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: calc(16 * var(--u));
+    line-height: 1.4;
+    color: #fff;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  /* ── 필터 드롭다운 (모바일) — 구분 / 활동 플랫폼 ── */
+  .mo-sec-6 .mo-mcn6-filter {
+    position: relative;
+    z-index: 30;
+    flex: 0 0 auto;                        /* 고정 헤더: 스크롤 래퍼 위에서 안 줄어듦 */
+    margin-top: calc(310 * var(--u));      /* absolute .tit(히어로) 공간 확보 — 값↓ = 그리드 뷰포트 위로 확장 */
+    padding: 0 calc(20 * var(--u));
+    display: flex;
+    gap: calc(12 * var(--u));
+  }
+  .mo-sec-6 .mo-mcn6-dd {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .mo-sec-6 .mo-mcn6-dd-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: calc(44 * var(--u));
+    padding: 0 calc(16 * var(--u));
+    background: #fff;
+    border: 1px solid #212121;
+    border-radius: calc(8 * var(--u));
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: calc(15 * var(--u));
+    line-height: 1.4;
+    letter-spacing: calc(-0.5 * var(--u));
+    color: #212121;
+  }
+  .mo-sec-6 .mo-mcn6-dd-arrow {
+    width: calc(20 * var(--u));
+    height: calc(20 * var(--u));
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+  .mo-sec-6 .mo-mcn6-dd.is-open .mo-mcn6-dd-arrow { transform: rotate(180deg); }
+  .mo-sec-6 .mo-mcn6-dd-menu {
+    position: absolute;
+    top: calc(48 * var(--u));
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: #fff;
+    border: 1px solid #212121;
+    border-radius: calc(8 * var(--u));
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(calc(-6 * var(--u)));
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+    z-index: 40;
+  }
+  .mo-sec-6 .mo-mcn6-dd.is-open .mo-mcn6-dd-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .mo-sec-6 .mo-mcn6-dd-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: calc(40 * var(--u));
+    padding: calc(8 * var(--u)) calc(16 * var(--u));
+    background: #fff;
+    border: none;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: calc(15 * var(--u));
+    line-height: 1.4;
+    letter-spacing: calc(-0.5 * var(--u));
+    text-align: left;
+    color: #212121;
+  }
+  .mo-sec-6 .mo-mcn6-dd-item.is-active,
+  .mo-sec-6 .mo-mcn6-dd-item:hover { background: #f3f3f3; }
+
+  .mo-sec-6 .con-list {
+    position: relative;
+    margin-top: calc(40 * var(--u));
+    padding: 0 calc(20 * var(--u)) calc(40 * var(--u));
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: calc(20 * var(--u));
+    row-gap: calc(40 * var(--u));
+  }
+
+  /* ── 전체보기 버튼 (모바일) ── */
+  .mo-sec-6 .mo-mcn6-more {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    /* 스크롤 끝에 붙게 둔다(뷰포트 하단 여백은 .mo-sec6-scroll margin-bottom 이 담당) */
+    margin: 0 auto;
+    padding: calc(6 * var(--u)) calc(6 * var(--u)) calc(6 * var(--u)) calc(24 * var(--u));
+    width: calc(204 * var(--u));
+    height: calc(48 * var(--u));
+    background: #fff;
+    border: 1px solid #212121;
+    border-radius: calc(24 * var(--u));
+    cursor: pointer;
+  }
+  .mo-sec-6 .mo-mcn6-more-txt {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: calc(16 * var(--u));
+    line-height: 1.4;
+    letter-spacing: calc(-1 * var(--u));
+    color: #212121;
+  }
+  .mo-sec-6 .mo-mcn6-more-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(36 * var(--u));
+    height: calc(36 * var(--u));
+    border-radius: 50%;
+    background: #212121;
+    flex-shrink: 0;
+  }
+  .mo-sec-6 .con {
+    display: flex;
+    flex-direction: column;
+    gap: calc(22 * var(--u));
+    min-width: 0;   /* 그리드 아이템이 1fr 트랙 폭으로 줄어들게(긴 SNS 줄이 열 폭을 밀어 좌우 불균등해지는 것 방지) */
+  }
+  .mo-sec-6 .con.is-hidden { display: none; }
+  .mo-sec-6 .con-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 320 / 398;
+    border-radius: calc(16 * var(--u));
+    background-color: #343434;
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+  }
+  .mo-sec-6 .con-img-1 { background-image: url('/images/mcn/5_creator_1.jpeg'); }
+  .mo-sec-6 .con-img-2 { background-image: url('/images/mcn/5_creator_2.jpeg'); }
+  .mo-sec-6 .con-img-3 { background-image: url('/images/mcn/5_creator_3.jpeg'); }
+  .mo-sec-6 .con-img-4 { background-image: url('/images/mcn/5_creator_4.jpeg'); }
+  .mo-sec-6 .con-img-5 { background-image: url('/images/mcn/5_creator_5.jpeg'); }
+  .mo-sec-6 .con-img-6 { background-image: url('/images/mcn/5_creator_6.jpeg'); }
+  .mo-sec-6 .con-txt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;   /* 이름·채널 가운데 정렬 */
+    text-align: center;
+    gap: calc(12 * var(--u));
+    min-width: 0;
+  }
+  .mo-sec-6 .name {
+    font-family: 'Geist', sans-serif;
+    font-weight: 500;
+    font-size: calc(20 * var(--u));
+    line-height: 1.2;
+    letter-spacing: calc(-0.7407 * var(--u));
+    color: #212121;
+  }
+  .mo-sec-6 .sns {
+    display: flex;
+    align-items: center;
+    justify-content: center;   /* 채널 가운데 정렬 */
+    flex-wrap: wrap;   /* 플랫폼이 여러 개라 폭을 넘기면 다음 줄로 — 한 줄 고정으로 열 폭을 밀지 않게 */
+    gap: calc(8 * var(--u));
+    min-width: 0;
+  }
+  .mo-sec-6 .sns-item {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: calc(4 * var(--u));
+    font-family: 'Geist', sans-serif;
+    font-weight: 400;
+    font-size: calc(14 * var(--u));
+    line-height: 1.25;
+    letter-spacing: calc(-0.6 * var(--u));
+    color: #212121;
+  }
+  .mo-sec-6 .sns-item.underline { border-bottom: 1px solid #000; }
+  .mo-sec-6 .arrow {
+    font-size: calc(11 * var(--u));
+    line-height: 1;
+  }
+  .mo-sec-6 .sns-sep {
+    font-family: 'Geist', sans-serif;
+    font-weight: 400;
+    font-size: calc(14 * var(--u));
+    line-height: 1.25;
+    letter-spacing: calc(-0.6 * var(--u));
+    color: #212121;
+  }
+
+  /* ── CREATOR 전체 내부 스크롤(full-scroll) 모드 ──────────────────────────────
+     기본(헤더 고정: 제목·필터는 화면에 고정, 그리드만 내부 스크롤) 대신, CREATOR
+     섹션 전체(제목·CTA·필터·그리드·전체보기)를 .mo-sec6-scroll 안에서 함께 내부
+     스크롤한다. 제목·필터는 mcn.js 가 런타임에 .mo-sec6-scroll 안으로 옮기고
+     섹션에 .is-fullscroll 를 붙인다.
+     ▶ 되돌리려면: mcn.js 의 MO_MCN6_FULLSCROLL = false. 그러면 .is-fullscroll 가
+       안 붙어 아래 규칙이 전부 무효 → 원래 헤더 고정 동작으로 그대로 복귀. */
+  .mo-sec-6.is-fullscroll .mo-sec6-scroll {
+    margin-top: 0;                          /* 제목이 맨 위로 오므로 상단 간격 제거 */
+    padding-top: calc(30 * var(--u));       /* 원래 .tit top:30u 대체 */
+  }
+  .mo-sec-6.is-fullscroll .tit {
+    position: static;                       /* absolute → 흐름 배치(콘텐츠와 함께 스크롤) */
+    top: auto;
+    left: auto;
+    margin-left: var(--sec-x);              /* 원래 제목 왼쪽 정렬선(--sec-x) 유지 */
+  }
+  .mo-sec-6.is-fullscroll .mo-mcn6-filter {
+    margin-top: calc(24 * var(--u));        /* 310u(고정 제목 자리 확보) → CTA 아래 24u */
+  }
+
+  /* ════════════════ MO 7 : APPLY / 지원 폼 (voyage 배경 + 흰 폼 카드) ════════════════ */
+  .mo-sec-7 {
+    --charcoal: #212121;
+    --gray01: #d9d9d9;
+    --req: #ff334b;
+  }
+  /* 한 화면 스냅: 히어로(.tit, absolute)·배경(.bg)은 고정, 폼(.con)만 내부 스크롤(main Contact 동일). */
+  .mo-sec-7 .frame-wrap {
+    position: relative;
+    width: 100%;
+    height: calc(100vh  - 60 * var(--u) + 1px);   /* fallback(구형) */
+    height: calc(100svh - 60 * var(--u) + 1px);   /* modern: 주소창 토글 흡수(svh 고정) — 한 화면 */
+    margin: 0 auto;
+    overflow: hidden;
+  }
+  .mo-sec-7 .bg {
+    position: absolute;
+    inset: 0;
+    background-color: #fff;
+    background-image:
+      url('/images/mcn/6_voyage.jpeg'),
+      url('/images/mcn/6_voyage.jpeg');
+    background-size:
+      calc(1637.742 * var(--u)) calc(921.503 * var(--u)),
+      calc(2562.796 * var(--u)) calc(1442 * var(--u));
+    background-position:
+      calc(-156.61 * var(--u)) 0,
+      calc(-174 * var(--u)) 0;
+    background-repeat: no-repeat, no-repeat;
+  }
+  .mo-sec-7 .tit {
+    position: absolute;
+    left: var(--sec-x);
+    top: calc(52 * var(--u));
+    width: calc(284 * var(--u));
+    display: flex;
+    flex-direction: column;
+    gap: calc(14 * var(--u));
+    word-break: break-word;
+  }
+  .mo-sec-7 .label {
+    font-family: 'Geist', sans-serif;
+    font-weight: 600;
+    font-size: calc(16 * var(--u));
+    line-height: 1.1;
+    color: var(--charcoal);
+  }
+  .mo-sec-7 .desc {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: calc(28 * var(--u));
+    line-height: 1.2;
+    letter-spacing: calc(-0.28 * var(--u));
+    color: var(--charcoal);
+    /* 배경(6_voyage) 오른쪽 검은 태블릿과 겹쳐도 읽히도록 흰 헤일로 */
+    text-shadow: 0 0 6px #fff, 0 0 12px #fff;
+  }
+  .mo-sec-7 .con {
+    /* 히어로(.tit, top 80) 아래 308u 지점부터 화면 하단(32u 여백)까지 폼 카드를 두고
+       그 안에서만 내부 스크롤(JS가 추가하는 '신청하기' 버튼도 카드 안에서 스크롤).
+       mo-snap EXEMPT(.mo-sec-7 .con) → 폼 위 터치는 페이징 대신 네이티브 스크롤. */
+    position: absolute;
+    top: calc(268 * var(--u));
+    bottom: calc(32 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(320 * var(--u));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: calc(32 * var(--u)) calc(16 * var(--u));
+    background: #fff;
+    border-radius: calc(16 * var(--u));
+    display: flex;
+    flex-direction: column;
+    gap: calc(32 * var(--u));
+  }
+
+  /* ── APPLY 전체 내부 스크롤(full-scroll) 모드 ─────────────────────────────────
+     기본(히어로·배경 고정 + 폼 카드만 내부 스크롤) 대신, 히어로(.tit)와 폼 카드(.con)를
+     하나의 스크롤 래퍼(.mo-sec7-scroll) 안에서 함께 내부 스크롤한다(배경 .bg 는 그대로 고정).
+     .tit·.con 을 이 래퍼로 옮기고 섹션에 .is-fullscroll 를 붙이는 것은 mcn.js 가 런타임에 처리
+     (CREATOR 와 동일 패턴). ▶ 되돌리려면: mcn.js 의 MO_MCN7_FULLSCROLL = false → 원래 동작 복귀. */
+  .mo-sec-7.is-fullscroll .mo-sec7-scroll {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  .mo-sec-7.is-fullscroll .tit {
+    position: static;
+    top: auto;
+    left: auto;
+    margin: calc(52 * var(--u)) 0 0 var(--sec-x);   /* 원래 top 52u / left sec-x 재현 */
+  }
+  .mo-sec-7.is-fullscroll .con {
+    position: static;
+    top: auto;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    overflow: visible;                               /* 내부 스크롤은 래퍼가 담당 → 카드는 자연 높이 */
+    margin: calc(48 * var(--u)) auto calc(32 * var(--u));  /* 히어로 아래 간격 + 하단 여백, 중앙 정렬 */
+  }
+
+  .mo-sec-7 .field {
+    display: flex;
+    flex-direction: column;
+    gap: calc(8 * var(--u));
+    width: calc(288 * var(--u));
+  }
+  .mo-sec-7 .flabel {
+    display: inline-flex;
+    align-items: flex-start;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: calc(14 * var(--u));
+    line-height: 1.25;
+    letter-spacing: calc(-0.4 * var(--u));
+    color: #000;
+  }
+  .mo-sec-7 .req {
+    font-style: normal;
+    color: var(--req);
+    margin-left: calc(3 * var(--u));
+    line-height: 1;
+  }
+  .mo-sec-7 .input {
+    width: calc(288 * var(--u));
+    display: flex;
+    align-items: center;
+    padding: calc(16 * var(--u));
+    background: #fff;
+    border: 1px solid var(--gray01);
+    border-radius: calc(8 * var(--u));
+  }
+  .mo-sec-7 .input input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: calc(14 * var(--u));
+    line-height: 1.25;
+    letter-spacing: calc(-0.4 * var(--u));
+    color: #212121;
+  }
+  .mo-sec-7 .input input::placeholder { color: var(--gray01); }
+  .mo-sec-7 .segmented {
+    display: flex;
+    width: calc(288 * var(--u));
+  }
+  .mo-sec-7 .seg {
+    width: calc(144 * var(--u));
+    padding: calc(16 * var(--u));
+    background: #fff;
+    border: 1px solid var(--gray01);
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: calc(14 * var(--u));
+    line-height: 1.25;
+    letter-spacing: calc(-0.4 * var(--u));
+    color: var(--gray01);
+    cursor: pointer;
+  }
+  .mo-sec-7 .seg-l { border-radius: calc(8 * var(--u)) 0 0 calc(8 * var(--u)); }
+  .mo-sec-7 .seg-r { border-left: none; border-radius: 0 calc(8 * var(--u)) calc(8 * var(--u)) 0; }
+  .mo-sec-7 .seg.active { color: #212121; border-color: #212121; }
+  .mo-sec-7 .platform {
+    position: relative;
+    width: calc(288 * var(--u));
+    display: flex;
+    flex-direction: column;
+    gap: calc(12 * var(--u));
+    /* 자식을 전부 flow 로 둔다 + flex-shrink 금지: 예전엔 자식이 모두 absolute 라
+       .platform 의 min-content 높이가 0 이 되어 .con(flex column) 안에서 높이가
+       0 으로 붕괴 → 아래 자기소개 textarea 박스가 위로 겹쳐 '바깥 네모박스'처럼
+       보였다. flow + flex-shrink:0 으로 실제 높이를 유지해 겹침을 없앤다. */
+    flex-shrink: 0;
+  }
+  .mo-sec-7 .platform .flabel {
+    position: static;
+  }
+  .mo-sec-7 .plat-rows {
+    display: flex;
+    flex-direction: column;
+    gap: calc(20 * var(--u));
+  }
+  .mo-sec-7 .prow {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: calc(12 * var(--u));
+  }
+  /* 추가된 행 삭제(−) — 행 우측 상단 작은 원형 */
+  .mo-sec-7 .prow-remove {
+    position: absolute;
+    right: calc(6 * var(--u));
+    top: calc(-11 * var(--u));
+    width: calc(22 * var(--u));
+    height: calc(22 * var(--u));
+    border: none;
+    border-radius: 50%;
+    background: #212121;
+    color: #fff;
+    font-size: calc(16 * var(--u));
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 4;
+  }
+  .mo-sec-7 .input-select {
+    position: relative;             /* 드롭다운 메뉴 기준 */
+    width: 100%;
+    padding: calc(13 * var(--u)) calc(16 * var(--u));
+    justify-content: space-between;
+    gap: calc(12 * var(--u));
+    cursor: pointer;
+  }
+  .mo-sec-7 .input-select > input { pointer-events: none; cursor: pointer; }
+  /* 플랫폼 선택 드롭다운 메뉴 */
+  .mo-sec-7 .pmenu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 4 * var(--u));
+    background: #fff;
+    border: 1px solid var(--gray01);
+    border-radius: calc(8 * var(--u));
+    overflow: hidden;
+    z-index: 6;
+    display: none;
+    box-shadow: 0 calc(6 * var(--u)) calc(20 * var(--u)) rgba(0, 0, 0, .12);
+  }
+  .mo-sec-7 .input-select.is-open .pmenu { display: block; }
+  .mo-sec-7 .pmenu-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: calc(12 * var(--u)) calc(16 * var(--u));
+    background: #fff;
+    border: none;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: calc(14 * var(--u));
+    color: #212121;
+    cursor: pointer;
+  }
+  .mo-sec-7 .pmenu-item:active { background: #f5f5f5; }
+  .mo-sec-7 .chevron {
+    width: calc(24 * var(--u));
+    height: calc(24 * var(--u));
+    position: relative;
+    flex-shrink: 0;
+  }
+  .mo-sec-7 .chevron::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    width: calc(8 * var(--u));
+    height: calc(8 * var(--u));
+    border-right: calc(1.6 * var(--u)) solid #212121;
+    border-bottom: calc(1.6 * var(--u)) solid #212121;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  .mo-sec-7 .input-url {
+    width: 100%;
+    padding: calc(13 * var(--u)) calc(16 * var(--u));
+  }
+  .mo-sec-7 .add-btn {
+    align-self: center;
+    margin-top: calc(4 * var(--u));
+    flex-shrink: 0;
+    width: calc(49 * var(--u));
+    height: calc(49 * var(--u));
+    background: #212121;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .mo-sec-7 .plus {
+    position: relative;
+    width: calc(15 * var(--u));
+    height: calc(15 * var(--u));
+  }
+  .mo-sec-7 .plus::before,
+  .mo-sec-7 .plus::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background: #fff;
+  }
+  .mo-sec-7 .plus::before {
+    width: calc(15 * var(--u));
+    height: calc(1.5 * var(--u));
+    transform: translate(-50%, -50%);
+  }
+  .mo-sec-7 .plus::after {
+    width: calc(1.5 * var(--u));
+    height: calc(15 * var(--u));
+    transform: translate(-50%, -50%);
+  }
+  .mo-sec-7 .intro {
+    display: flex;
+    flex-direction: column;
+    gap: calc(16 * var(--u));
+    width: calc(288 * var(--u));
+  }
+  .mo-sec-7 .input-area {
+    height: calc(156 * var(--u));
+    align-items: flex-start;
+    padding: calc(16 * var(--u));
+  }
+  .mo-sec-7 .input-area textarea {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+    background: transparent;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: calc(14 * var(--u));
+    line-height: 1.25;
+    letter-spacing: calc(-0.4 * var(--u));
+    color: #212121;
+  }
+  .mo-sec-7 .agree {
+    display: flex;
+    gap: calc(4 * var(--u));
+    align-items: flex-start;
+  }
+  .mo-sec-7 .checkbox {
+    flex-shrink: 0;
+    width: calc(24 * var(--u));
+    height: calc(24 * var(--u));
+    position: relative;
+    cursor: pointer;
+  }
+  .mo-sec-7 .checkbox::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(17.6 * var(--u));
+    height: calc(17.6 * var(--u));
+    border: 1px solid var(--gray01);
+    border-radius: calc(3 * var(--u));
+  }
+  .mo-sec-7 .checkbox.checked::before {
+    background: #212121;
+    border-color: #212121;
+  }
+  .mo-sec-7 .checkbox.checked::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    width: calc(7 * var(--u));
+    height: calc(4 * var(--u));
+    border-left: calc(1.5 * var(--u)) solid #fff;
+    border-bottom: calc(1.5 * var(--u)) solid #fff;
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+  .mo-sec-7 .agree-txt {
+    display: flex;
+    flex-direction: column;
+    gap: calc(4 * var(--u));
+  }
+  .mo-sec-7 .agree-main {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: calc(16 * var(--u));
+    line-height: 1.35;
+    letter-spacing: calc(-0.6 * var(--u));
+    color: #000;
+  }
+  .mo-sec-7 .agree-note {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: calc(12 * var(--u));
+    line-height: 1.25;
+    letter-spacing: calc(-0.6 * var(--u));
+    color: #b5537c;
+  }
+
+  /* 자세히보기 링크 (모바일) */
+  .mo-sec-7 .agree-detail {
+    margin-left: calc(8 * var(--u));
+    padding: 0;
+    border: none;
+    background: none;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: calc(13 * var(--u));
+    line-height: 1.35;
+    letter-spacing: calc(-0.4 * var(--u));
+    color: #767676;
+    text-decoration: underline;
+    text-underline-offset: calc(2 * var(--u));
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* 자세히보기 동의서 전문 박스 (모바일) */
+  .mo-sec-7 .agree-detail-box {
+    display: none;
+    margin-top: calc(12 * var(--u));
+    max-height: calc(260 * var(--u));
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: calc(16 * var(--u)) calc(16 * var(--u));
+    border: 1px solid #e0e0e0;
+    border-radius: calc(8 * var(--u));
+    background: #fafafa;
+    font-family: 'Pretendard', sans-serif;
+  }
+  .mo-sec-7 .agree-detail-box.open { display: block; }
+  .mo-sec-7 .agree-detail-title {
+    font-weight: 600;
+    font-size: calc(13 * var(--u));
+    line-height: 1.5;
+    letter-spacing: calc(-0.4 * var(--u));
+    color: #212121;
+    margin: 0 0 calc(8 * var(--u));
+  }
+  .mo-sec-7 .agree-detail-p {
+    font-weight: 400;
+    font-size: calc(12 * var(--u));
+    line-height: 1.6;
+    letter-spacing: calc(-0.4 * var(--u));
+    color: #555;
+    margin: 0 0 calc(10 * var(--u));
+  }
+  .mo-sec-7 .agree-detail-h {
+    font-weight: 600;
+    font-size: calc(12 * var(--u));
+    line-height: 1.6;
+    letter-spacing: calc(-0.4 * var(--u));
+    color: #333;
+    margin: calc(8 * var(--u)) 0 calc(2 * var(--u));
+  }
+  .mo-sec-7 .agree-detail-li {
+    font-weight: 400;
+    font-size: calc(12 * var(--u));
+    line-height: 1.6;
+    letter-spacing: calc(-0.4 * var(--u));
+    color: #555;
+    margin: 0;
+    padding-left: calc(8 * var(--u));
+  }
+
+  /* ════════════════ MO 8 : FOOTER (다크) ════════════════ */
+  /* 한 화면 스냅(자유 꼬리 아님) — main 푸터와 동일 규격 */
+  .mo-sec-8 .frame-wrap {
+    position: relative;
+    width: 100%;
+    height: calc(100vh  - 60 * var(--u) + 1px);   /* fallback(구형) */
+    height: calc(100svh - 60 * var(--u) + 1px);   /* modern: 한 화면 스냅 */
+    min-height: calc(628 * var(--u));             /* 디자인 원본 높이 하한(짧은 뷰포트 보호) */
+    margin: 0 auto;
+    overflow: hidden;
+    background: #212121;
+  }
+  .mo-sec-8 .mo-footer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    text-align: center;
+    background: #212121;
+  }
+  .mo-sec-8 .mo-footer-email {
+    position: absolute;
+    top: calc(60 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(10 * var(--u));
+    font-family: 'Geist', sans-serif;
+    font-weight: 400;
+    font-size: calc(16 * var(--u));
+    line-height: 1.35;
+    color: #fff;
+  }
+  .mo-sec-8 .mo-footer-contact {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(8 * var(--u));
+    color: #fff;
+    word-break: break-word;
+  }
+  .mo-sec-8 .mo-footer-office { top: calc(154 * var(--u)); }
+  .mo-sec-8 .mo-footer-rnd { top: calc(248 * var(--u)); }
+  .mo-sec-8 .mo-footer-label {
+    font-family: 'Geist', sans-serif;
+    font-weight: 500;
+    font-size: calc(16 * var(--u));
+    line-height: 1.35;
+    letter-spacing: calc(-0.6 * var(--u));
+  }
+  .mo-sec-8 .mo-footer-addr {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: calc(14 * var(--u));
+    line-height: 1.45;
+  }
+  .mo-sec-8 .mo-footer-privacy {
+    position: absolute;
+    top: calc(398 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: calc(14 * var(--u));
+    line-height: 1.45;
+    letter-spacing: calc(-0.6 * var(--u));
+    color: #fff;
+    text-decoration: underline;
+  }
+  /* 중앙정렬 푸터: 각 블록에 디자인 콘텐츠 폭(320u)을 줘 의도한 <br> 지점에서만 줄바꿈 */
+  .mo-sec-8 .mo-footer-email,
+  .mo-sec-8 .mo-footer-contact,
+  .mo-sec-8 .mo-footer-privacy { width: calc(320 * var(--u)); }
+  .mo-sec-8 .mo-footer-txt {
+    position: absolute;
+    top: calc(482 * var(--u));
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(238 * var(--u));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(20 * var(--u));
+  }
+  .mo-sec-8 .mo-footer-logo {
+    width: calc(150 * var(--u));
+    height: calc(30 * var(--u));
+  }
+  .mo-sec-8 .mo-footer-logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .mo-sec-8 .mo-footer-copy {
+    font-family: 'Geist', sans-serif;
+    font-weight: 500;
+    font-size: calc(14 * var(--u));
+    line-height: 1.3;
+    color: rgba(255, 255, 255, 0.6);
+    word-break: break-word;
+  }
+
+}
+
+/* ============================================================
+   APPLY 제출 버튼 (디자인에 없어 연동용으로 추가 — 페이지 토큰에 맞춤)
+   데스크탑: .mcn7-container(흰 폼, 자식 absolute) 내부 약관 오른쪽으로 절대배치.
+            스타일은 이 페이지 1차버튼 .mcn6-btn(다크 pill) 기준.
+   모바일: .con(flex column) 흐름 마지막 요소. .cta(다크 pill) 기준, --u 스케일.
+   ============================================================ */
+.mcn7-submit {
+  position: absolute;
+  left: 604px;          /* 폼 콘텐츠 우측끝(60+764=824) - 버튼폭(220) */
+  top: 848px;           /* 약관(top:856, h:44) 행과 수직 중앙 정렬 */
+  width: 220px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #212121;
+  border: none;
+  border-radius: 30px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: -0.6px;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+.mcn7-submit:hover { opacity: .9; }
+
+@media (max-width: 768px) {
+  .mo-sec-7 .mo-mcn7-submit {
+    width: calc(288 * var(--u));
+    height: calc(52 * var(--u));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #212121;
+    border: none;
+    border-radius: calc(24 * var(--u));
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: calc(16 * var(--u));
+    line-height: 1.4;
+    color: #fff;
+    cursor: pointer;
+  }
+  .mo-sec-7 .mo-mcn7-submit:hover { opacity: .9; }
+}
+
+/* ============================================================
+   CREATOR PROFILE POPUP — 카드 클릭 시 이미지·소개·플랫폼별 팔로워 노출.
+   스케일 컨테이너(.mcn-container) 밖, document.body 직속이라
+   실제 뷰포트 px 기준으로 작성한다(--mcn-scale 영향 없음).
+   데스크탑·모바일 공용. (SOON ENT 레퍼런스의 작은 팝업 버전)
+   ============================================================ */
+.mcn-pop {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+.mcn-pop.is-open { opacity: 1; visibility: visible; }
+
+.mcn-pop-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.mcn-pop-card {
+  position: relative;
+  display: flex;
+  gap: 32px;
+  width: min(720px, 92vw);
+  max-height: 88vh;
+  padding: 28px;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+  transform: translateY(16px) scale(0.98);
+  transition: transform 0.25s ease;
+  overflow: hidden;
+}
+.mcn-pop.is-open .mcn-pop-card { transform: translateY(0) scale(1); }
+
+/* 닫기 버튼 (우상단) */
+.mcn-pop-close {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Geist', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #212121;
+  z-index: 1;
+}
+.mcn-pop-close:hover { opacity: 0.6; }
+
+/* 좌측 이미지 */
+.mcn-pop-img {
+  width: 240px;
+  height: 300px;
+  flex-shrink: 0;
+  border-radius: 18px;
+  background: #fff center / contain no-repeat;
+}
+
+/* 우측 정보 */
+.mcn-pop-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  padding-top: 28px;
+  overflow-y: auto;
+}
+.mcn-pop-name {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  color: #212121;
+}
+.mcn-pop-intro {
+  margin-top: 12px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.5;
+  letter-spacing: -0.3px;
+  color: #757575;
+  white-space: pre-line;
+}
+.mcn-pop-intro:empty { display: none; }
+
+/* 플랫폼별 팔로워 목록 */
+.mcn-pop-sns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 24px;
+}
+.mcn-pop-sns-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #f5f5f5;
+  text-decoration: none;
+}
+a.mcn-pop-sns-row:hover { background: #ededed; }
+.mcn-pop-plat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.3px;
+  color: #212121;
+}
+.mcn-pop-plat .mcn-pop-ext { font-size: 12px; color: #BDBDBD; }
+.mcn-pop-foll {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 14px;
+  color: #757575;
+  white-space: nowrap;
+}
+.mcn-pop-foll b {
+  font-family: 'Geist', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #212121;
+  margin-right: 4px;
+}
+
+/* 카드를 클릭 가능하게 — 손가락 커서 (그리드/리스트 양쪽) */
+.mcn6-card { cursor: pointer; }
+
+/* 모바일: 세로 스택 */
+@media (max-width: 768px) {
+  .mcn-pop { padding: 20px; }
+  .mcn-pop-card {
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+    max-width: 360px;
+    padding: 22px;
+  }
+  .mcn-pop-img {
+    width: 100%;
+    height: 240px;
+    margin-top: 28px;   /* CLOSE 버튼(우상단)과 겹치지 않게 아래로 */
+  }
+  .mcn-pop-body { padding-top: 4px; }
+  .mcn-pop-name { font-size: 22px; }
+  .mcn-pop-sns { margin-top: 18px; }
+  .mo-sec-6 .con { cursor: pointer; }
+}
+
+/* ── 폴더폰(펼친 넓은 화면, 600~768px) : PC식 배치 ──
+   모바일 레이아웃을 그대로 확대하면 320u 기둥이 가운데 놓여 좌우가 크게
+   비므로, 글자 크기·터치 타겟은 모바일 스펙(--u) 그대로 두고 "배치만"
+   데스크탑처럼 가로로 푼다. (PC 레이아웃 축소(스케일 0.36)는 본문이
+   유효 5~6px 라 판독 불가 → 기각)
+   섹션 높이(100dvh-60u+1px, 한 화면=한 단락)와 스냅 동작은 불변. */
+@media (min-width: 600px) and (max-width: 768px) {
+  /* 크리에이터: 카드가 과하게 커지지 않게 2열 → 3열 */
+  .mo-sec-6 .con-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* MO 3 : AD BUSINESS — PC처럼 제목 왼쪽 / 01~03 리스트 오른쪽 2단 */
+  .mo-sec-3 .frame-wrap {
+    flex-direction: row;
+    align-items: center;
+    gap: calc(28 * var(--u));
+    /* 좌우 40u: 우측 고정 플로팅 레일(문의/지원, ≈28px)에 콘텐츠가 덮이지 않는 여백 */
+    padding: calc(48 * var(--u)) calc(40 * var(--u));
+  }
+  .mo-sec-3 .ad-head {
+    flex: 1 1 42%;
+    width: auto;
+    margin-left: 0;
+    align-self: flex-start;        /* 제목 블록은 상단(PC 구도) */
+    margin-top: calc(24 * var(--u));
+    gap: calc(18 * var(--u));      /* 세로 압축 해제(원래 간격 복원) */
+    word-break: keep-all;          /* 좁은 열에서 "가/치" 같은 글자 단위 줄바꿈 방지 */
+  }
+  .mo-sec-3 .ad-head-top { width: auto; gap: calc(14 * var(--u)); }
+  .mo-sec-3 .con {
+    flex: 1 1 58%;
+    width: auto;
+    margin: 0;
+    min-width: 0;
+    gap: calc(30 * var(--u));      /* 세로 압축 해제 */
+  }
+  .mo-sec-3 .item { gap: calc(18 * var(--u)); }
+  /* 고정폭(256u) 해제 — 열 폭에 맞춰 흐르게 */
+  .mo-sec-3 .item-tit .name { width: auto; flex: 1; }
+  .mo-sec-3 .item-desc p { width: auto; }
+
+  /* MO 4 : CONTENTS PRODUCTION — 세로 슬라이더 → PC처럼 카드 3개 가로 나열 */
+  .mo-sec-4 .frame-wrap { justify-content: flex-start; }
+  .mo-sec-4 .tit { margin-left: calc(40 * var(--u)); width: auto; }
+  .mo-sec-4 .prod-slider {
+    height: auto;
+    margin: auto 0;                /* 제목 아래 남은 공간 세로 중앙 */
+    padding: 0 calc(40 * var(--u));   /* 우측 플로팅 레일 회피 */
+    gap: calc(16 * var(--u));
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+  .mo-sec-4 .prod-slide { flex: 1 1 0; width: auto; min-width: 0; padding: 0; }
+  .mo-sec-4 .prod-slide-img { height: auto; aspect-ratio: 3 / 2; }
+  /* 좁은 카드 폭: 고정 <br> 줄이 다시 꺾일 때 어절 단위로 */
+  .mo-sec-4 .prod-slide-title, .mo-sec-4 .prod-slide-desc { word-break: keep-all; }
+  .mo-sec-4 .mo-prod-dots { display: none; }   /* 3장 모두 보임 → 도트 불필요 */
+
+  /* MO 5 : STUDIO — 동일하게 카드 3개 가로 나열 */
+  .mo-sec-5 .frame-wrap { justify-content: flex-start; }
+  .mo-sec-5 .tit { margin-left: calc(40 * var(--u)); width: auto; }
+  .mo-sec-5 .con-row {
+    margin: auto 0;
+    padding: 0 calc(40 * var(--u));   /* 우측 플로팅 레일 회피 */
+    gap: calc(16 * var(--u));
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+  .mo-sec-5 .con { flex: 1 1 0; width: auto; min-width: 0; padding: 0; gap: calc(20 * var(--u)); }
+  .mo-sec-5 .img { height: auto; aspect-ratio: 3 / 2; }
+  .mo-sec-5 .card-title, .mo-sec-5 .card-desc { word-break: keep-all; }
+  .mo-sec-5 .mo5-dots { display: none; }
+
+  /* MO 6 : CREATOR — 제목(CREATOR~연결합니다)·CTA 를 sec-4/5 와 같은
+     왼쪽 정렬선(40u)으로. 필터/카드 그리드도 같은 선에 맞추고
+     (우측 플로팅 레일 회피 겸) 좌우 40u 로 통일 */
+  .mo-sec-6 .tit { left: calc(40 * var(--u)); width: auto; max-width: calc(430 * var(--u)); word-break: keep-all; }
+  /* 고정 <br> 두 줄(길고 밋밋) 대신 폭에 맞춰 자연 줄바꿈 → 3줄 내외.
+     text-wrap: balance 로 줄 길이 균형(미지원 브라우저는 무시). */
+  .mo-sec-6 .heading br { display: none; }
+  .mo-sec-6 .heading { text-wrap: balance; }
+  /* 폴더블은 헤딩이 3줄이라 CTA 가 위에서 끝나는데 필터 margin-top(310u, 폰 4줄 기준)이
+     그대로면 큰 빈틈이 생긴다. CTA 하단(≈235u) + 24u(헤딩↔CTA 간격과 동일) = 259u 로 올려
+     붙이고, 그만큼 아래 내부 스크롤(그리드) 뷰포트가 위로 확장된다. */
+  .mo-sec-6 .mo-mcn6-filter { margin-top: calc(259 * var(--u)); padding: 0 calc(40 * var(--u)); }
+  .mo-sec-6 .con-list { padding: 0 calc(40 * var(--u)) calc(40 * var(--u)); }
+  /* full-scroll 모드(위 base 참고): 폴더블에서도 제목 왼쪽선 40u 로 맞추고
+     필터는 CTA 아래로 붙인다(고정 제목 자리용 259u 불필요). */
+  .mo-sec-6.is-fullscroll .tit { margin-left: calc(40 * var(--u)); }
+  .mo-sec-6.is-fullscroll .mo-mcn6-filter { margin-top: calc(24 * var(--u)); }
+
+  /* MO 7 : APPLY — 제목은 다른 섹션과 같은 왼쪽 정렬선(40u),
+     폼 카드는 --mo-content-x 중앙 기둥(320u) 대신 좌우 40u까지 넓게 */
+  .mo-sec-7 .tit {
+    left: calc(40 * var(--u));
+    width: auto;
+    word-break: keep-all;
+  }
+  .mo-sec-7 .con {
+    /* 폴더블: 폼 카드를 좌우 40u 인셋으로 넓게(내부 스크롤·상하 인셋은 base 유지) */
+    left: calc(40 * var(--u));
+    right: calc(40 * var(--u));
+    transform: none;
+    width: auto;
+    padding: calc(32 * var(--u)) calc(24 * var(--u));
+  }
+  /* full-scroll 모드: 폴더블 카드는 width:auto(위) 라 margin:auto 로는 좌우 40u 인셋이
+     안 생긴다 → 명시 좌우 마진으로 base 폴더블과 같은 40u 인셋 유지(상/하 마진은 base fullscroll 유지). */
+  .mo-sec-7.is-fullscroll .con {
+    margin-left: calc(40 * var(--u));
+    margin-right: calc(40 * var(--u));
+  }
+  /* 카드 내부 고정폭(288u) 요소들을 카드 폭에 맞춰 흐르게 */
+  .mo-sec-7 .field,
+  .mo-sec-7 .input,
+  .mo-sec-7 .segmented,
+  .mo-sec-7 .platform,
+  .mo-sec-7 .intro,
+  .mo-sec-7 .input-select,
+  .mo-sec-7 .input-url,
+  .mo-sec-7 .mo-mcn7-submit { width: 100%; }
+  .mo-sec-7 .seg { width: 50%; }
+  .mo-sec-7 .add-btn { align-self: center; }   /* flow 레이아웃 → 카드 중앙 */
+}
