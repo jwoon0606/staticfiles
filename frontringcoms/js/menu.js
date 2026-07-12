@@ -147,11 +147,11 @@ function buildGroups(menu, prefix) {
   wrap.innerHTML =
     '<a class="cta-btn cta-inquire" href="/main#contact">' +
       '<div class="cta-text-wrap"><p class="cta-text">문의하기</p></div>' +
-      '<div class="cta-arrow"><img src="/images/main/about/ic-arrow.svg" alt=""></div>' +
+      '<div class="cta-arrow"><img src="https://staticfiles-seven.vercel.app/frontringcoms/images/main/about/ic-arrow.svg" alt=""></div>' +
     '</a>' +
     '<div class="cta-btn cta-apply" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">' +
       '<div class="cta-text-wrap"><p class="cta-text">지원하기</p></div>' +
-      '<div class="cta-arrow"><img src="/images/main/about/ic-arrow.svg" alt=""></div>' +
+      '<div class="cta-arrow"><img src="https://staticfiles-seven.vercel.app/frontringcoms/images/main/about/ic-arrow.svg" alt=""></div>' +
       '<div class="cta-apply-flyout">' +
         '<a class="cta-apply-item" href="/entertainment#audition">ARTIST</a>' +
         '<a class="cta-apply-item" href="/mcn#apply">CREATOR</a>' +

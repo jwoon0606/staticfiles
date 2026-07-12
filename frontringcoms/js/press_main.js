@@ -9,7 +9,7 @@
 (function () {
   var PER = 10;
   var MO_MAX = 3;   // 모바일은 최신 3건만 노출(한 화면, 자유 스크롤 없도록)
-  var ARROW = '/images/main/press/ic-news-arrow.svg';
+  var ARROW = 'https://staticfiles-seven.vercel.app/frontringcoms/images/main/press/ic-news-arrow.svg';
   var deskEl = document.querySelector('.press-list');
   var moEl = document.querySelector('.mo-press-list');
   if (!deskEl && !moEl) return;

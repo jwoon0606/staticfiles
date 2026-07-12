@@ -137,7 +137,7 @@ body {
   height: 1080px;
   left: 0;
   top: 0;
-  background: url('/images/mcn/mcn_hero.png') center / cover no-repeat;
+  background: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/mcn_hero.png') center / cover no-repeat;
   z-index: 1;
 }
 
@@ -558,13 +558,13 @@ body {
   left: 0; top: 0; right: 0; bottom: 0;
 }
 .prod-card-img-1 {
-  background: url('/images/mcn/3_contents_production_1.jpeg') center / cover no-repeat;
+  background: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/3_contents_production_1.jpeg') center / cover no-repeat;
 }
 .prod-card-img-2 {
-  background: url('/images/mcn/3_contents_production_2.jpeg') center / cover no-repeat;
+  background: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/3_contents_production_2.jpeg') center / cover no-repeat;
 }
 .prod-card-img-3 {
-  background: url('/images/mcn/3_contents_production_3.jpeg') center / cover no-repeat;
+  background: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/3_contents_production_3.jpeg') center / cover no-repeat;
 }
 
 /* 카드 제목 — 기존 탭 글자 스타일 계승 */
@@ -718,9 +718,9 @@ body {
   background-position: center;
 }
 
-.mcn5-img-1 { background-image: url('/images/mcn/4_creative_playground_1.jpeg'); }
-.mcn5-img-2 { background-image: url('/images/mcn/4_creative_playground_2.jpeg'); }
-.mcn5-img-3 { background-image: url('/images/mcn/4_creative_playground_3.jpeg'); }
+.mcn5-img-1 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/4_creative_playground_1.jpeg'); }
+.mcn5-img-2 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/4_creative_playground_2.jpeg'); }
+.mcn5-img-3 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/4_creative_playground_3.jpeg'); }
 
 /* Text block */
 .mcn5-txt {
@@ -971,12 +971,12 @@ body {
   background-position: center top;
 }
 
-.mcn6-img-1 { background-image: url('/images/mcn/5_creator_1.jpeg'); }
-.mcn6-img-2 { background-image: url('/images/mcn/5_creator_2.jpeg'); }
-.mcn6-img-3 { background-image: url('/images/mcn/5_creator_3.jpeg'); }
-.mcn6-img-4 { background-image: url('/images/mcn/5_creator_4.jpeg'); }
-.mcn6-img-5 { background-image: url('/images/mcn/5_creator_5.jpeg'); }
-.mcn6-img-6 { background-image: url('/images/mcn/5_creator_6.jpeg'); }
+.mcn6-img-1 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/5_creator_1.jpeg'); }
+.mcn6-img-2 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/5_creator_2.jpeg'); }
+.mcn6-img-3 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/5_creator_3.jpeg'); }
+.mcn6-img-4 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/5_creator_4.jpeg'); }
+.mcn6-img-5 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/5_creator_5.jpeg'); }
+.mcn6-img-6 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/5_creator_6.jpeg'); }
 
 /* Text block */
 .mcn6-txt {
@@ -1050,7 +1050,7 @@ body {
   height: 1081px;
   left: 0;
   top: 0;
-  background: url('/images/mcn/6_voyage.jpeg') center / cover no-repeat;
+  background: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/6_voyage.jpeg') center / cover no-repeat;
 }
 
 /* ── Left text block: 700×245px at (60, 715) ─────────────── */
@@ -2118,9 +2118,9 @@ body .site-menu { right: calc(66px * var(--chrome-scale, var(--mcn-scale, 1))); 
     background-color: #eee;
     flex-shrink: 0;
   }
-  .mo-sec-4 .prod-slide-img-1 { background-image: url('/images/mcn/3_contents_production_1.jpeg'); }
-  .mo-sec-4 .prod-slide-img-2 { background-image: url('/images/mcn/3_contents_production_2.jpeg'); }
-  .mo-sec-4 .prod-slide-img-3 { background-image: url('/images/mcn/3_contents_production_3.jpeg'); }
+  .mo-sec-4 .prod-slide-img-1 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/3_contents_production_1.jpeg'); }
+  .mo-sec-4 .prod-slide-img-2 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/3_contents_production_2.jpeg'); }
+  .mo-sec-4 .prod-slide-img-3 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/3_contents_production_3.jpeg'); }
   .mo-sec-4 .prod-slide-title {
     font-family: 'Pretendard', sans-serif;
     font-weight: 700;
@@ -2244,9 +2244,9 @@ body .site-menu { right: calc(66px * var(--chrome-scale, var(--mcn-scale, 1))); 
     background-position: center;
     background-repeat: no-repeat;
   }
-  .mo-sec-5 .img-1 { background-image: url('/images/mcn/4_creative_playground_1.jpeg'); }
-  .mo-sec-5 .img-2 { background-image: url('/images/mcn/4_creative_playground_2.jpeg'); }
-  .mo-sec-5 .img-3 { background-image: url('/images/mcn/4_creative_playground_3.jpeg'); }
+  .mo-sec-5 .img-1 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/4_creative_playground_1.jpeg'); }
+  .mo-sec-5 .img-2 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/4_creative_playground_2.jpeg'); }
+  .mo-sec-5 .img-3 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/4_creative_playground_3.jpeg'); }
   .mo-sec-5 .txt {
     display: flex;
     flex-direction: column;
@@ -2506,12 +2506,12 @@ body .site-menu { right: calc(66px * var(--chrome-scale, var(--mcn-scale, 1))); 
     background-position: center top;
     background-repeat: no-repeat;
   }
-  .mo-sec-6 .con-img-1 { background-image: url('/images/mcn/5_creator_1.jpeg'); }
-  .mo-sec-6 .con-img-2 { background-image: url('/images/mcn/5_creator_2.jpeg'); }
-  .mo-sec-6 .con-img-3 { background-image: url('/images/mcn/5_creator_3.jpeg'); }
-  .mo-sec-6 .con-img-4 { background-image: url('/images/mcn/5_creator_4.jpeg'); }
-  .mo-sec-6 .con-img-5 { background-image: url('/images/mcn/5_creator_5.jpeg'); }
-  .mo-sec-6 .con-img-6 { background-image: url('/images/mcn/5_creator_6.jpeg'); }
+  .mo-sec-6 .con-img-1 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/5_creator_1.jpeg'); }
+  .mo-sec-6 .con-img-2 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/5_creator_2.jpeg'); }
+  .mo-sec-6 .con-img-3 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/5_creator_3.jpeg'); }
+  .mo-sec-6 .con-img-4 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/5_creator_4.jpeg'); }
+  .mo-sec-6 .con-img-5 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/5_creator_5.jpeg'); }
+  .mo-sec-6 .con-img-6 { background-image: url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/5_creator_6.jpeg'); }
   .mo-sec-6 .con-txt {
     display: flex;
     flex-direction: column;
@@ -2602,8 +2602,8 @@ body .site-menu { right: calc(66px * var(--chrome-scale, var(--mcn-scale, 1))); 
     inset: 0;
     background-color: #fff;
     background-image:
-      url('/images/mcn/6_voyage.jpeg'),
-      url('/images/mcn/6_voyage.jpeg');
+      url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/6_voyage.jpeg'),
+      url('https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/6_voyage.jpeg');
     background-size:
       calc(1637.742 * var(--u)) calc(921.503 * var(--u)),
       calc(2562.796 * var(--u)) calc(1442 * var(--u));

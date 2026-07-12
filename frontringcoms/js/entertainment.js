@@ -118,7 +118,7 @@ function getJSON(url) {
    Vercel 정적 호스트에서 서빙되므로, 표시 직전 호스트 주소를 앞에 붙인다. */
 function assetUrl(p) {
   return (p && p.indexOf('/images/') === 0)
-    ? '' + p
+    ? 'https://staticfiles-seven.vercel.app/frontringcoms' + p
     : p;
 }
 
@@ -608,7 +608,7 @@ function initMobileSlideshow() {
    지원서 다운로드 — 데스크탑/모바일 버튼 모두 오디션 지원서 PDF 내려받기
    ────────────────────────────────────────────────────────────── */
 function initDownloadButtons() {
-  const PDF_URL   = '/files/audition_application.docx';
+  const PDF_URL   = 'https://staticfiles-seven.vercel.app/frontringcoms/files/audition_application.docx';
   const FILE_NAME = '링컴즈_오디션_지원서.docx';
   const btns = document.querySelectorAll('.ent6-btn-download, .moa-btn--download');
   btns.forEach(function (btn) {

@@ -55,7 +55,7 @@ html, body {
   position: relative;
   width: 1920px;
   height: 100%;
-  background: #E9E0CE url('/images/career/career.png') center / cover no-repeat;
+  background: #E9E0CE url('https://staticfiles-seven.vercel.app/frontringcoms/images/career/career.png') center / cover no-repeat;
   overflow: hidden;
 }
 

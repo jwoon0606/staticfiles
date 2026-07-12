@@ -624,7 +624,7 @@ if (mcn3List && mcn3Items.length) {
      연락이 닿지 않아 직접 올린 별도 호스트(ringcoms-nine)의 /images/mcn/ 에서 서빙한다.
      DB 경로 폴더(/images/creator/)와 무관하게 파일명만 떼어 새 호스트로 보낸다. 임시 조치이며,
      원래 호스트가 복구되면 이 예외 처리만 지우면 된다. */
-  var OWN_HOST = '/images/mcn/';
+  var OWN_HOST = 'https://staticfiles-seven.vercel.app/frontringcoms/images/mcn/';
   var OWN_HOST_FILES = ['creator_14', 'creator_22', 'creator_23'];
   function assetUrl(p) {
     if (!p || p.indexOf('/images/') !== 0) return p;
@@ -632,7 +632,7 @@ if (mcn3List && mcn3Items.length) {
     for (var i = 0; i < OWN_HOST_FILES.length; i++) {
       if (file.indexOf(OWN_HOST_FILES[i]) === 0) return OWN_HOST + file;
     }
-    return '' + p;
+    return 'https://staticfiles-seven.vercel.app/frontringcoms' + p;
   }
 
   function bySeq(a, b) {
