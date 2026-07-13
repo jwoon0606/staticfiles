@@ -1542,21 +1542,50 @@ const MO_CONTACT_FULLSCROLL = true;
   var popup = document.getElementById('skinegoPopup');
   if (!popup) return;
   var box = popup.querySelector('.skinego-popup-box');
+  var slidesWrap = popup.querySelector('.skinego-slides');
+  // 영상 페이지를 첫 번째 순서로 이동 (팝업을 열면 영상부터 보이도록)
+  var videoSlide = null;
+  popup.querySelectorAll('.skinego-slide').forEach(function (s) {
+    if (!videoSlide && s.querySelector('video')) videoSlide = s;
+  });
+  if (videoSlide && slidesWrap && slidesWrap.firstElementChild !== videoSlide) {
+    slidesWrap.insertBefore(videoSlide, slidesWrap.firstElementChild);
+  }
   var slides = popup.querySelectorAll('.skinego-slide');
   var dots = popup.querySelectorAll('.skinego-dot');
+  // 제품 라인업(그리드) 페이지 인덱스 — 이 페이지에서만 박스 높이 20px 축소 (순서 변경에 맞춰 동적 계산)
+  var gridIdx = -1;
+  slides.forEach(function (s, k) { if (s.querySelector('.skinego-pop-grid')) gridIdx = k; });
   var idx = 0;
 
   function pauseVideos() {
     popup.querySelectorAll('video').forEach(function (v) { try { v.pause(); } catch (e) {} });
   }
+  // 현재 페이지에 영상이 있으면 처음부터 음소거 자동재생 (소리는 영상 클릭 시)
+  function playActiveVideo() {
+    var v = slides[idx] && slides[idx].querySelector('video');
+    if (!v) return;
+    try { v.currentTime = 0; } catch (e) {}
+    v.muted = true;   // 자동재생 정책상 음소거로 시작 → 클릭하면 소리 재생
+    var p = v.play();
+    if (p && p.catch) p.catch(function () {});
+  }
+  // 영상 클릭 시 소리 재생 (음소거 자동재생 상태에서 클릭하면 언뮤트)
+  popup.querySelectorAll('.skinego-slide video').forEach(function (v) {
+    v.addEventListener('click', function () {
+      v.muted = false;
+      if (v.paused) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+    });
+  });
   function goTo(i) {
     if (!slides.length) return;
     pauseVideos();   // 페이지 전환 시 영상이 숨겨진 채 소리만 재생되는 것 방지
     idx = (i + slides.length) % slides.length;
     slides.forEach(function (s, k) { s.classList.toggle('is-active', k === idx); });
     dots.forEach(function (d, k) { d.classList.toggle('is-active', k === idx); });
-    popup.classList.toggle('skinego-popup--p2', idx === 1);  // 2페이지에선 박스 높이 20px 축소
+    popup.classList.toggle('skinego-popup--p2', idx === gridIdx);  // 제품 라인업 페이지에선 박스 높이 20px 축소
     if (box) box.scrollTop = 0;   // 페이지 전환 시 위로
+    playActiveVideo();            // 영상 페이지면 자동재생 (팝업 열면 첫 페이지=영상)
   }
   function open() {
     goTo(0);                      // 열 때 항상 1페이지부터
