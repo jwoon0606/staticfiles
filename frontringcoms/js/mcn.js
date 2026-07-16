@@ -843,7 +843,13 @@ if (mcn3List && mcn3Items.length) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     }).then(function (r) { if (!r.ok) throw r.status; return r.json(); })
-      .then(function () { alert('신청이 접수되었습니다. 감사합니다.'); if (onOk) onOk(); })
+      .then(function () {
+        // GTM 전환 이벤트. alert 이 스레드를 막는 동안 이탈해도 기록되도록 alert 앞에서 push 한다.
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({ 'event': 'mcn_apply_success', 'applyType': 'mcn' });
+        alert('신청이 접수되었습니다. 감사합니다.');
+        if (onOk) onOk();
+      })
       .catch(function () { alert('접수에 실패했습니다. 잠시 후 다시 시도해주세요.'); });
   }
 

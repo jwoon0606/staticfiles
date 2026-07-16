@@ -150,6 +150,51 @@ updateFloatMenu();
     snapToSection(i + dir, dir);
   }, { passive: false });
 
+  /* ── 터치(아이패드 등): 메인으로 되돌아가는 길만 복원 ────────────────
+     이 페이지의 페이징은 전부 wheel 기반인데 터치 기기는 wheel 을 만들지
+     않는다. 게다가 메인에 iframe 으로 실렸을 땐 iframe 안의 터치가 부모로
+     전파되지 않아(브라우징 컨텍스트 격리) main.js 의 스와이프 내비게이션
+     (window touchstart/touchend)도 닿지 않는다 → Career 에 한번 들어오면
+     Business Contact 로 되돌아갈 방법이 아예 사라진다.
+     상하 스크롤은 .career-container 의 네이티브 스크롤이 이미 처리하므로
+     여기서 섹션 스냅까지 흉내내지 않는다 — 네이티브와 이중으로 움직여 튄다.
+     'career:prev' 복귀 경로만 터치로 열어 준다(wheel 로직은 무변경).
+       · 맨 위에서 아래로 스와이프 → 이전 패널
+       · 오른쪽으로 스와이프       → 이전 패널 (Career 는 마지막이라 '다음'은 없음)
+     방향 부호는 main.js 의 터치 내비와 같은 의미가 되도록 맞췄다.
+     passive:true — 네이티브 스크롤을 절대 막지 않는다. */
+  if (inParentFrame) {
+    const SWIPE_MIN = 60;                  /* px — main.js(50)보다 살짝 보수적 */
+    let sx = 0, sy = 0, startTop = 0, tracking = false;
+
+    container.addEventListener('touchstart', (e) => {
+      tracking = e.touches.length === 1;   /* 핀치 줌 등 멀티터치는 무시 */
+      if (!tracking) return;
+      sx = e.touches[0].clientX;
+      sy = e.touches[0].clientY;
+      startTop = container.scrollTop;
+    }, { passive: true });
+
+    container.addEventListener('touchend', (e) => {
+      if (!tracking) return;
+      tracking = false;
+      const dx = e.changedTouches[0].clientX - sx;
+      const dy = e.changedTouches[0].clientY - sy;
+      const back = () => window.parent.postMessage('career:prev', '*');
+
+      if (Math.abs(dy) > Math.abs(dx)) {
+        /* 세로: 맨 위에서 아래로 당길 때만 (wheel 의 scrollTop<=2 조건과 동일).
+           시작·끝 both 를 보는 건 중간에서 위로 훑어 올라온 관성을 복귀로
+           오인하지 않기 위함. */
+        if (dy > SWIPE_MIN && startTop <= 2 && container.scrollTop <= 2) back();
+        return;
+      }
+      /* 가로: 위치와 무관하게 오른쪽 스와이프 = 이전 패널. FAQ 깊숙한 곳에서도
+         맨 위까지 올라가지 않고 빠져나올 수 있어야 한다. */
+      if (dx > SWIPE_MIN) back();
+    }, { passive: true });
+  }
+
   /* 스냅 정착 후 잠금 해제 (Safari 등 scrollend 미지원 환경 대비 setTimeout 병행) */
   container.addEventListener('scrollend', () => {
     clearTimeout(timer);
